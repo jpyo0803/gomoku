@@ -1,0 +1,41 @@
+# Node.js 관련
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+.pnpm-debug.log
+
+# TypeScript 빌드 결과
+dist/
+build/
+lib/
+
+# TS cache
+*.tsbuildinfo
+
+# 환경 설정
+.env
+.env.local
+.env.*.local
+
+# IDE/편집기 관련
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# OS 관련
+.DS_Store
+Thumbs.db
+
+# 테스트 커버리지
+coverage/
+
+# logs
+logs/
+*.log
