@@ -9,7 +9,7 @@ CONTAINER_NAME="gomoku-dev"
 docker build -t $IMAGE_NAME -f "$PROJECT_DIR/docker/Dockerfile" "$PROJECT_DIR"
 
 # 컨테이너 실행 (top_directory를 /gomoku 으로 마운트)
-docker run --rm -it \
+docker run -it \
   --name $CONTAINER_NAME \
   -v "$PROJECT_DIR":/gomoku \
   -w /gomoku \
