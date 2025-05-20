@@ -11,13 +11,6 @@ set(GOMOKU_LIB_SRC
     gomoku_bot_strategy.cpp
 )
 
-set(GOMOKU_LIB_HEADERS
-    board.h
-    gomoku_bot.h
-    gomoku_bot_strategy.h
-    igomoku_bot_strategy.h
-)
-
 # gomoku_core 라이브러리 정의
 add_library(gomoku_core STATIC ${GOMOKU_LIB_SRC} ${GOMOKU_LIB_HEADERS})
 

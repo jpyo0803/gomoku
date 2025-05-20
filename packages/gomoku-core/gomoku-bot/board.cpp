@@ -6,21 +6,6 @@ namespace gomoku {
 
 Board::Board(int size) : size_(size), board_(size, std::vector<Piece>(size, Piece::kEmpty)) {}
 
-Board::Board(int size, const std::string& board_str) : Board(size) {
-  for (int i = 0; i < size; ++i) {
-    for (int j = 0; j < size; ++j) {
-      char c = board_str.at(i * size + j);
-      if (c == 'B') {
-        board_.at(i).at(j) = Piece::kBlack;
-      } else if (c == 'W') {
-        board_.at(i).at(j) = Piece::kWhite;
-      } else {
-        board_.at(i).at(j) = Piece::kEmpty;
-      }
-    }
-  }
-}
-
 bool Board::IsValidMove(int x, int y) const {
   if (x < 0 || x >= size_ || y < 0 || y >= size_) {
     return false;
@@ -49,6 +34,10 @@ bool Board::IsWin(int x, int y, Piece piece) const {
     }
   }
   return false;
+}
+
+int Board::size() const {
+  return size_;
 }
 
 }  // namespace gomoku

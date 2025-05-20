@@ -15,12 +15,16 @@ class Board {
  public:
   Board(int size);
 
-  Board(int size, const std::string& board_str);
+  void SetCell(int x, int y, Piece piece) {
+    board_.at(x).at(y) = piece;
+  }
 
  private:
   bool IsValidMove(int x, int y) const;
 
   bool IsWin(int x, int y, Piece piece) const;
+
+  int size() const;
 
  private:
   std::vector<std::vector<Piece>> board_;
