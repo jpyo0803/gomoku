@@ -1,0 +1,18 @@
+BasedOnStyle: Google
+Standard: c++17
+
+# Optional customizations (Google Style + tweaks)
+IndentWidth: 2
+ColumnLimit: 100
+AllowShortFunctionsOnASingleLine: Empty
+DerivePointerAlignment: false
+PointerAlignment: Left
+SpacesInAngles: false
+SpacesInContainerLiterals: false
+SpaceAfterCStyleCast: true
+SpaceBeforeParens: ControlStatements
+BreakConstructorInitializers: AfterColon
+
+# Sort includes (requires clang >= 12)
+SortIncludes: true
+IncludeBlocks: Preserve
