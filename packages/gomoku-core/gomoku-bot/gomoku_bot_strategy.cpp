@@ -39,14 +39,16 @@ std::pair<int, int> MinimaxWithAlphaBetaPruning::Solve(Board board, int max_dept
   int alpha = std::numeric_limits<int>::min();
   int beta = std::numeric_limits<int>::max();
 
-  return Minimax(board, max_depth, alpha, beta, true, candidate_map).first;
+  auto result = Minimax(board, max_depth, alpha, beta, true, candidate_map);
+  std::cout << "Returned score: " << result.second << std::endl;
+  return result.first;
 }
 
 std::pair<std::pair<int, int>, int64_t> MinimaxWithAlphaBetaPruning::Minimax(
     Board& board, int depth, int64_t alpha, int64_t beta, bool maximizing_player,
     std::vector<std::vector<int>>& candidate_map) const {
   if (depth == 0) {
-    auto score = board.Evaluate(maximizing_player ? Piece::kBlack : Piece::kWhite);
+    auto score = board.Evaluate(Piece::kBlack) - board.Evaluate(Piece::kWhite);
     return {{-1, -1}, score};
   }
 
@@ -89,9 +91,6 @@ std::pair<std::pair<int, int>, int64_t> MinimaxWithAlphaBetaPruning::Minimax(
           best_move = {i, j};
         }
         alpha = std::max(alpha, eval);
-        if (beta <= alpha) {
-          break;  // beta cut-off
-        }
         // Undo the move
         board.SetCell(i, j, Piece::kEmpty);
 
@@ -112,6 +111,10 @@ std::pair<std::pair<int, int>, int64_t> MinimaxWithAlphaBetaPruning::Minimax(
               candidate_map[x][y]--;  // unmark as candidate
             }
           }
+        }
+
+        if (beta <= alpha) {
+          break;  // beta cut-off
         }
       }
     }
@@ -155,9 +158,6 @@ std::pair<std::pair<int, int>, int64_t> MinimaxWithAlphaBetaPruning::Minimax(
           best_move = {i, j};
         }
         beta = std::min(beta, eval);
-        if (beta <= alpha) {
-          break;  // alpha cut-off
-        }
         // Undo the move
         board.SetCell(i, j, Piece::kEmpty);
 
@@ -178,6 +178,10 @@ std::pair<std::pair<int, int>, int64_t> MinimaxWithAlphaBetaPruning::Minimax(
               candidate_map[x][y]--;  // unmark as candidate
             }
           }
+        }
+
+        if (beta <= alpha) {
+          break;  // alpha cut-off
         }
       }
     }
