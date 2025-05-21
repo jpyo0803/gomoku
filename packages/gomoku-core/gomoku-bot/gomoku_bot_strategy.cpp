@@ -2,6 +2,12 @@
 #include <iostream>
 #include <limits>
 
+#define ALPHA_BETA_PRUNING 1
+
+namespace {
+int64_t call_count = 0;
+}
+
 namespace gomoku {
 
 std::pair<int, int> MinimaxWithAlphaBetaPruning::Solve(Board board, int max_depth) const {
@@ -41,12 +47,14 @@ std::pair<int, int> MinimaxWithAlphaBetaPruning::Solve(Board board, int max_dept
 
   auto result = Minimax(board, max_depth, alpha, beta, true, candidate_map);
   std::cout << "Returned score: " << result.second << std::endl;
+  std::cout << "Call count: " << call_count << std::endl;
   return result.first;
 }
 
 std::pair<std::pair<int, int>, int64_t> MinimaxWithAlphaBetaPruning::Minimax(
     Board& board, int depth, int64_t alpha, int64_t beta, bool maximizing_player,
     std::vector<std::vector<int>>& candidate_map) const {
+  call_count++;
   if (depth == 0) {
     auto score = board.Evaluate(Piece::kBlack) - board.Evaluate(Piece::kWhite);
     return {{-1, -1}, score};
@@ -90,7 +98,6 @@ std::pair<std::pair<int, int>, int64_t> MinimaxWithAlphaBetaPruning::Minimax(
           max_eval = eval;
           best_move = {i, j};
         }
-        alpha = std::max(alpha, eval);
         // Undo the move
         board.SetCell(i, j, Piece::kEmpty);
 
@@ -113,9 +120,12 @@ std::pair<std::pair<int, int>, int64_t> MinimaxWithAlphaBetaPruning::Minimax(
           }
         }
 
+#if ALPHA_BETA_PRUNING == 1
+        alpha = std::max(alpha, eval);
         if (beta <= alpha) {
           break;  // beta cut-off
         }
+#endif
       }
     }
     return {best_move, max_eval};
@@ -157,7 +167,6 @@ std::pair<std::pair<int, int>, int64_t> MinimaxWithAlphaBetaPruning::Minimax(
           min_eval = eval;
           best_move = {i, j};
         }
-        beta = std::min(beta, eval);
         // Undo the move
         board.SetCell(i, j, Piece::kEmpty);
 
@@ -180,9 +189,12 @@ std::pair<std::pair<int, int>, int64_t> MinimaxWithAlphaBetaPruning::Minimax(
           }
         }
 
+#if ALPHA_BETA_PRUNING == 1
+        beta = std::min(beta, eval);
         if (beta <= alpha) {
           break;  // alpha cut-off
         }
+#endif
       }
     }
     return {best_move, min_eval};
