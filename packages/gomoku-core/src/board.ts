@@ -75,4 +75,8 @@ export class Board {
   getBoard(): Player[][] {
     return this.board;
   }
+
+  getBoardRaw(): number[][] {
+    return this.board.map(row => [...row]);
+  }
 }

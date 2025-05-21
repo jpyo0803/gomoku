@@ -21,11 +21,10 @@ int main(int argc, char** argv) {
       auto body = json::parse(req.body);
       int size = body["size"];
       int max_depth = body["max_depth"];
-      auto cells = body["cells"];  // 2D array of cells
-
       cout << endl << "[Request]" << endl;
       cout << "Board size: " << size << endl;
       cout << "Max depth: " << max_depth << endl;
+      auto cells = body["cells"];  // 2D array of cells
 
       // Create a Gomoku board
       gomoku::Board board(size);
