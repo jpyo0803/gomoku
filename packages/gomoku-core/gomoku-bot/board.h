@@ -19,16 +19,18 @@ class Board {
 
   int Play(int x, int y, Piece piece);
 
+  int64_t Evaluate(Piece piece) const;
+
+  std::vector<std::vector<bool>> GetCandidates() const;
+
+  int size() const;
+
  private:
   bool IsValidMove(int x, int y) const;
 
   bool IsWin(int x, int y, Piece piece) const;
 
-  int64_t Evaluate(Piece piece) const;
-
   bool OutOfRange(int x, int y) const;
-
-  int size() const;
 
  private:
   std::vector<std::vector<Piece>> board_;
