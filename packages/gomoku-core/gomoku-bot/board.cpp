@@ -82,7 +82,8 @@ int64_t Board::Evaluate(Piece piece) const {
 
   std::vector<std::vector<bool>> visited_horizontal(size_, std::vector<bool>(size_, false));
   std::vector<std::vector<bool>> visited_vertical(size_, std::vector<bool>(size_, false));
-  std::vector<std::vector<bool>> visited_diagonal(size_, std::vector<bool>(size_, false));
+  std::vector<std::vector<bool>> visited_diagonal_down_right(size_, std::vector<bool>(size_, false));
+  std::vector<std::vector<bool>> visited_diagonal_down_left(size_, std::vector<bool>(size_, false));
 
   for (int x = 0; x < size_; ++x) {
     for (int y = 0; y < size_; ++y) {
@@ -186,15 +187,15 @@ int64_t Board::Evaluate(Piece piece) const {
         }
       }
 
-      // check diagonal
-      if (!visited_diagonal[x][y]) {
+      // check diagonal down-right
+      if (!visited_diagonal_down_right[x][y]) {
         int count = 1;
         // Only check down-right
         for (int j = 1;
              j < size_ && x + j < size_ && y + j < size_ && board_.at(x + j).at(y + j) == piece;
              ++j) {
           count++;
-          visited_diagonal[x + j][y + j] = true;
+          visited_diagonal_down_right[x + j][y + j] = true;
         }
         if (count >= 5) {
           score += kWinScore;
@@ -234,6 +235,60 @@ int64_t Board::Evaluate(Piece piece) const {
           bool down_right_not_valid = OutOfRange(x + count, y + count) ||
                                       board_.at(x + count).at(y + count) != Piece::kEmpty;
           if (up_left_not_valid || down_right_not_valid) {
+            score += kBlockedOneScore;
+          } else {
+            score += kOpenOneScore;
+          }
+        }
+      }
+
+      // check diagonal down-left
+      if (!visited_diagonal_down_left[x][y]) {
+        int count = 1;
+        // Only check down-left
+        for (int j = 1;
+             j < size_ && x + j < size_ && y - j >= 0 && board_.at(x + j).at(y - j) == piece; ++j) {
+          count++;
+          visited_diagonal_down_left[x + j][y - j] = true;
+        }
+        if (count >= 5) {
+          score += kWinScore;
+        } else if (count == 4) {
+          bool up_right_not_valid =
+              OutOfRange(x - 1, y + 1) || board_.at(x - 1).at(y + 1) != Piece::kEmpty;
+          bool down_left_not_valid = OutOfRange(x + count, y - count) ||
+                                     board_.at(x + count).at(y - count) != Piece::kEmpty;
+          if (up_right_not_valid || down_left_not_valid) {
+            score += kBlockedFourScore;
+          } else {
+            score += kOpenFourScore;
+          }
+        } else if (count == 3) {
+          bool up_right_not_valid =
+              OutOfRange(x - 1, y + 1) || board_.at(x - 1).at(y + 1) != Piece::kEmpty;
+          bool down_left_not_valid = OutOfRange(x + count, y - count) ||
+                                     board_.at(x + count).at(y - count) != Piece::kEmpty;
+          if (up_right_not_valid || down_left_not_valid) {
+            score += kBlockedThreeScore;
+          } else {
+            score += kOpenThreeScore;
+          }
+        } else if (count == 2) {
+          bool up_right_not_valid =
+              OutOfRange(x - 1, y + 1) || board_.at(x - 1).at(y + 1) != Piece::kEmpty;
+          bool down_left_not_valid = OutOfRange(x + count, y - count) ||
+                                     board_.at(x + count).at(y - count) != Piece::kEmpty;
+          if (up_right_not_valid || down_left_not_valid) {
+            score += kBlockedTwoScore;
+          } else {
+            score += kOpenTwoScore;
+          }
+        } else if (count == 1) {  // count == 1
+          bool up_right_not_valid =
+              OutOfRange(x - 1, y + 1) || board_.at(x - 1).at(y + 1) != Piece::kEmpty;
+          bool down_left_not_valid = OutOfRange(x + count, y - count) ||
+                                     board_.at(x + count).at(y - count) != Piece::kEmpty;
+          if (up_right_not_valid || down_left_not_valid) {
             score += kBlockedOneScore;
           } else {
             score += kOpenOneScore;
