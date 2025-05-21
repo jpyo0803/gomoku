@@ -14,6 +14,9 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     build-essential \
     ca-certificates \
+    tree \
+    cmake \
+    clang-format \
  && apt-get clean
 
 # locale 설정
