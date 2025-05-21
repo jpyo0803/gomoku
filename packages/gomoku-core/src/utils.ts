@@ -11,14 +11,18 @@ export function printBoard(board: BoardClass): void {
   const size = board.getSize();
   const rawBoard = board.getBoard();
 
-  // 열 인덱스 출력
-  const colHeader = '  ' + Array.from({ length: size }, (_, i) => i.toString().padStart(2, ' ')).join(' ');
+  // 열 인덱스 출력 (간격을 1칸으로 조정)
+  const colHeader = '   ' + Array.from({ length: size }, (_, i) =>
+    i.toString().padStart(2, ' ')
+  ).join(' ');
   console.log(colHeader);
-  console.log('  ' + '-'.repeat(colHeader.length - 2));
+
+  // 헤더 밑줄
+  console.log('   ' + '-'.repeat(colHeader.length - 3));
 
   // 행 출력
   rawBoard.forEach((row, y) => {
-    const rowString = row.map(cell => symbols[cell]).join('  ');
+    const rowString = row.map(cell => symbols[cell]).join(' ');
     console.log(y.toString().padStart(2, ' ') + ' ' + rowString);
   });
 }

@@ -5,7 +5,7 @@ import http from 'http';
 import axios from 'axios';
 
 const boardSize: number = 15;
-const maxDepth: number = 3;
+const maxDepth: number = 4;
 
 var board = createEmptyBoard(boardSize);
 
