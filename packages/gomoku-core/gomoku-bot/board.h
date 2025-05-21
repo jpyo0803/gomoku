@@ -21,8 +21,6 @@ class Board {
 
   int Play(int x, int y, Piece piece);
 
-  int64_t Evaluate(Piece piece) const;
-
   int size() const;
 
  private:
