@@ -70,9 +70,9 @@ bool Board::IsWin(int x, int y, Piece piece) const {
 int64_t Board::Evaluate(Piece piece) const {
   int64_t score = 0;
 
-  constexpr int64_t kWinScore = 1e9;  // 11111
-  constexpr std::array<int, 5> kOpenScores = {0, 10, 1000, 100000, 10000000};
-  constexpr std::array<int, 5> kBlockedScores = {0, 1, 100, 10000, 1000000};
+  constexpr int64_t kWinScore = 1e10;  // 11111
+  constexpr std::array<int, 5> kOpenScores = {0, 10, 1000, 1000000, 100000000};
+  constexpr std::array<int, 5> kBlockedScores = {0, 1, 100, 10000, 10000000};
 
   std::vector<std::vector<bool>> visited_horizontal(size_, std::vector<bool>(size_, false));
   std::vector<std::vector<bool>> visited_vertical(size_, std::vector<bool>(size_, false));
