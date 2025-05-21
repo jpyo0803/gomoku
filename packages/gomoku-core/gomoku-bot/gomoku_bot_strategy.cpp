@@ -1,4 +1,5 @@
 #include "gomoku_bot_strategy.h"
+#include <cassert>
 #include <iostream>
 #include <limits>
 
@@ -13,15 +14,16 @@ namespace gomoku {
 std::pair<int, int> MinimaxWithAlphaBetaPruning::Solve(Board board, int max_depth) const {
   // Find candidates. Candiates are the empty cells +/- 2 from the black or white pieces.
   int board_size = board.size();
-  std::vector<std::vector<int>> candidate_map(board_size, std::vector<int>(board_size, 0));
+  // std::vector<std::vector<bool>> candidate_map(board_size, std::vector<bool>(board_size, false));
+  assert(board_size == kBoardSize);
+  assert(max_depth <= 4);
 
-  for (int i = 0; i < board_size; ++i) {
-    for (int j = 0; j < board_size; ++j) {
-      auto cell = board.GetCell(i, j);
-      if (cell == Piece::kEmpty) {
+  std::vector<std::bitset<kBoardSize>> candidate_map(board_size, std::bitset<kBoardSize>(0));
+  for (int i = 0; i < kBoardSize; ++i) {
+    for (int j = 0; j < kBoardSize; ++j) {
+      if (board.GetCell(i, j) == Piece::kEmpty) {
         continue;
       }
-
       for (int dx = -2; dx <= 2; ++dx) {
         for (int dy = -2; dy <= 2; ++dy) {
           if (dx == 0 && dy == 0) {
@@ -35,7 +37,7 @@ std::pair<int, int> MinimaxWithAlphaBetaPruning::Solve(Board board, int max_dept
             continue;
           }
           if (board.GetCell(x, y) == Piece::kEmpty) {
-            candidate_map[x][y] = 1;  // mark as candidate
+            candidate_map.at(x).set(y);  // mark as candidate
           }
         }
       }
@@ -53,7 +55,7 @@ std::pair<int, int> MinimaxWithAlphaBetaPruning::Solve(Board board, int max_dept
 
 std::pair<std::pair<int, int>, int64_t> MinimaxWithAlphaBetaPruning::Minimax(
     Board& board, int depth, int64_t alpha, int64_t beta, bool maximizing_player,
-    std::vector<std::vector<int>>& candidate_map) const {
+    std::vector<std::bitset<kBoardSize>> candidate_map) const {
   call_count++;
   if (depth == 0) {
     auto score = board.Evaluate(Piece::kBlack) - board.Evaluate(Piece::kWhite);
@@ -66,12 +68,12 @@ std::pair<std::pair<int, int>, int64_t> MinimaxWithAlphaBetaPruning::Minimax(
 
     for (int i = 0; i < board.size(); ++i) {
       for (int j = 0; j < board.size(); ++j) {
-        if (candidate_map[i][j] == 0) {
+        if (candidate_map.at(i).test(j) == false) {
           continue;
         }
-        int tmp_val = candidate_map[i][j];
+        auto next_candidate_map = candidate_map;
+        next_candidate_map.at(i).reset(j);  // mark as not candidate
 
-        candidate_map[i][j] = 0;  // mark as visited
         board.SetCell(i, j, Piece::kBlack);
 
         for (int dx = -2; dx <= 2; ++dx) {
@@ -87,12 +89,12 @@ std::pair<std::pair<int, int>, int64_t> MinimaxWithAlphaBetaPruning::Minimax(
               continue;
             }
             if (board.GetCell(x, y) == Piece::kEmpty) {
-              candidate_map[x][y]++;  // mark as candidate
+              next_candidate_map.at(x).set(y);  // mark as candidate
             }
           }
         }
 
-        auto result = Minimax(board, depth - 1, alpha, beta, false, candidate_map);
+        auto result = Minimax(board, depth - 1, alpha, beta, false, next_candidate_map);
         auto eval = result.second;
         if (eval > max_eval) {
           max_eval = eval;
@@ -100,25 +102,6 @@ std::pair<std::pair<int, int>, int64_t> MinimaxWithAlphaBetaPruning::Minimax(
         }
         // Undo the move
         board.SetCell(i, j, Piece::kEmpty);
-
-        candidate_map[i][j] = tmp_val;  // unmark
-        for (int dx = -2; dx <= 2; ++dx) {
-          for (int dy = -2; dy <= 2; ++dy) {
-            if (dx == 0 && dy == 0) {
-              continue;
-            }
-            int x = i + dx;
-            int y = j + dy;
-
-            // skip if out of range
-            if (x < 0 || x >= board.size() || y < 0 || y >= board.size()) {
-              continue;
-            }
-            if (board.GetCell(x, y) == Piece::kEmpty) {
-              candidate_map[x][y]--;  // unmark as candidate
-            }
-          }
-        }
 
 #if ALPHA_BETA_PRUNING == 1
         alpha = std::max(alpha, eval);
@@ -135,12 +118,13 @@ std::pair<std::pair<int, int>, int64_t> MinimaxWithAlphaBetaPruning::Minimax(
 
     for (int i = 0; i < board.size(); ++i) {
       for (int j = 0; j < board.size(); ++j) {
-        if (candidate_map[i][j] == 0) {
+        if (candidate_map.at(i).test(j) == false) {
           continue;
         }
-        int tmp_val = candidate_map[i][j];
+        auto next_candidate_map = candidate_map;
 
-        candidate_map[i][j] = 0;  // mark as visited
+        next_candidate_map.at(i).reset(j);  // mark as not candidate
+
         board.SetCell(i, j, Piece::kWhite);
 
         for (int dx = -2; dx <= 2; ++dx) {
@@ -156,12 +140,12 @@ std::pair<std::pair<int, int>, int64_t> MinimaxWithAlphaBetaPruning::Minimax(
               continue;
             }
             if (board.GetCell(x, y) == Piece::kEmpty) {
-              candidate_map[x][y]++;  // mark as candidate
+              next_candidate_map.at(x).set(y);  // mark as candidate
             }
           }
         }
 
-        auto result = Minimax(board, depth - 1, alpha, beta, true, candidate_map);
+        auto result = Minimax(board, depth - 1, alpha, beta, true, next_candidate_map);
         auto eval = result.second;
         if (eval < min_eval) {
           min_eval = eval;
@@ -169,25 +153,6 @@ std::pair<std::pair<int, int>, int64_t> MinimaxWithAlphaBetaPruning::Minimax(
         }
         // Undo the move
         board.SetCell(i, j, Piece::kEmpty);
-
-        candidate_map[i][j] = tmp_val;  // unmark
-        for (int dx = -2; dx <= 2; ++dx) {
-          for (int dy = -2; dy <= 2; ++dy) {
-            if (dx == 0 && dy == 0) {
-              continue;
-            }
-            int x = i + dx;
-            int y = j + dy;
-
-            // skip if out of range
-            if (x < 0 || x >= board.size() || y < 0 || y >= board.size()) {
-              continue;
-            }
-            if (board.GetCell(x, y) == Piece::kEmpty) {
-              candidate_map[x][y]--;  // unmark as candidate
-            }
-          }
-        }
 
 #if ALPHA_BETA_PRUNING == 1
         beta = std::min(beta, eval);
