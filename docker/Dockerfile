@@ -17,6 +17,7 @@ RUN apt-get update && apt-get install -y \
     tree \
     cmake \
     clang-format \
+    tmux \
  && apt-get clean
 
 # locale 설정
