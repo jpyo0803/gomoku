@@ -15,13 +15,13 @@ class Board {
  public:
   Board(int size);
 
+  Piece GetCell(int x, int y) const;
+
   void SetCell(int x, int y, Piece piece);  // no restriction
 
   int Play(int x, int y, Piece piece);
 
   int64_t Evaluate(Piece piece) const;
-
-  std::vector<std::vector<bool>> GetCandidates() const;
 
   int size() const;
 

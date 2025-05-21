@@ -8,6 +8,11 @@ namespace gomoku {
 
 Board::Board(int size) : size_(size), board_(size, std::vector<Piece>(size, Piece::kEmpty)) {}
 
+Piece Board::GetCell(int x, int y) const {
+  assert(x >= 0 && x < size_ && y >= 0 && y < size_);
+  return board_.at(x).at(y);
+}
+
 void Board::SetCell(int x, int y, Piece piece) {
   assert(x >= 0 && x < size_ && y >= 0 && y < size_);
   board_.at(x).at(y) = piece;
@@ -238,35 +243,6 @@ int64_t Board::Evaluate(Piece piece) const {
     }
   }
   return score;
-}
-
-std::vector<std::vector<bool>> Board::GetCandidates() const {
-  std::vector<std::vector<bool>> candidates(size_, std::vector<bool>(size_, false));
-  for (auto [x, y] : black_piece_pos_) {
-    for (int dx = -2; dx <= 2; ++dx) {
-      for (int dy = -2; dy <= 2; ++dy) {
-        int nx = x + dx;
-        int ny = y + dy;
-        if (OutOfRange(nx, ny)) continue;
-        if (board_.at(nx).at(ny) != Piece::kEmpty) continue;
-        candidates[nx][ny] = true;
-      }
-    }
-  }
-
-  for (auto [x, y] : white_piece_pos_) {
-    for (int dx = -2; dx <= 2; ++dx) {
-      for (int dy = -2; dy <= 2; ++dy) {
-        int nx = x + dx;
-        int ny = y + dy;
-        if (OutOfRange(nx, ny)) continue;
-        if (board_.at(nx).at(ny) != Piece::kEmpty) continue;
-        candidates[nx][ny] = true;
-      }
-    }
-  }
-
-  return candidates;
 }
 
 bool Board::OutOfRange(int x, int y) const {
