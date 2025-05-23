@@ -13,4 +13,5 @@ docker run -it \
   --name $CONTAINER_NAME \
   -v "$PROJECT_DIR":/gomoku \
   -w /gomoku \
+  -p 3000:3000 \
   $IMAGE_NAME
