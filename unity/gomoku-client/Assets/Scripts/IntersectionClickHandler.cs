@@ -9,7 +9,7 @@ public class IntersectionClickHandler : MonoBehaviour
     {
         x = transform.position.x;
         y = transform.position.y;
-        Debug.Log($"Intersection created at ({x}, {y})");
+        // Debug.Log($"Intersection created at ({x}, {y})");
     }
 
     // Update is called once per frame
