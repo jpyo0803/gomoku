@@ -1,16 +1,36 @@
 import { createGomokuGame } from './gomoku';
 import { printBoardFromString } from './utils';
 import readlineSync from 'readline-sync';
-import http from 'http';
-import axios from 'axios';
+import WebSocket from 'ws';
 
 async function main() {
   const boardSize: number = 15; // Gomoku board size
   const maxDepth: number = 4;
 
   const game = createGomokuGame();
-  const agent = new http.Agent({ keepAlive: false });
+  const socket = new WebSocket('ws://localhost:8080');
 
+  await new Promise<void>((resolve) => socket.on('open', resolve));
+
+  const playerId = 'ts-test-client';
+
+  // 메시지 응답을 기다리는 Promise 래퍼
+  function waitForAIResponse(): Promise<{ x: number; y: number }> {
+    return new Promise((resolve, reject) => {
+      socket.once('message', (data: WebSocket.RawData) => {
+        try {
+          const msg = JSON.parse(data.toString());
+          if (msg.type === 'place_stone_ai' && msg.playerId === playerId) {
+            resolve({ x: msg.x, y: msg.y });
+          } else {
+            reject(new Error('Unexpected message: ' + JSON.stringify(msg)));
+          }
+        } catch (e) {
+          reject(e);
+        }
+      });
+    });
+  }
 
   while (true) {
     console.log("Current board:");
@@ -35,16 +55,17 @@ async function main() {
       }
     } else {
       console.log("White (AI)'s turn...");
-      try {
-        const response = await axios.post('http://localhost:8080/solve', {
-          size: boardSize,
-          max_depth: maxDepth,
-          cells: game.getBoardString(),
-        }, {
-          httpAgent: agent
-        });
 
-        const { x, y } = response.data;
+      const payload = {
+        type: 'your_turn_ai',
+        board: game.getBoardString(),
+        playerId: playerId
+      };
+
+      socket.send(JSON.stringify(payload));
+
+      try {
+        const { x, y } = await waitForAIResponse();
         console.log(`AI chose move: (${x}, ${y})`);
 
         const result = game.play(x, y);
