@@ -24,14 +24,32 @@ int main(int argc, char** argv) {
       cout << endl << "[Request]" << endl;
       cout << "Board size: " << size << endl;
       cout << "Max depth: " << max_depth << endl;
-      auto cells = body["cells"];  // 2D array of cells
+
+      std::string flat = body["cells"];  // 1D 문자열 받기
+      if (flat.size() != size * size) {
+        throw std::runtime_error("Invalid board string length");
+      }
 
       // Create a Gomoku board
       gomoku::Board board(size);
+
       for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
-          int cell_value = cells[i][j];  // 0 = empty, 1 = black, 2 = white
-          gomoku::Piece piece = static_cast<gomoku::Piece>(cell_value);
+          char c = flat[i * size + j];
+          gomoku::Piece piece;
+          switch (c) {
+            case '.':
+              piece = gomoku::Piece::kEmpty;
+              break;
+            case 'B':
+              piece = gomoku::Piece::kBlack;
+              break;
+            case 'W':
+              piece = gomoku::Piece::kWhite;
+              break;
+            default:
+              throw std::runtime_error(std::string("Invalid cell character: ") + c);
+          }
           board.SetCell(i, j, piece);
         }
       }

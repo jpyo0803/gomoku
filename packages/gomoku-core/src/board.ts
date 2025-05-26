@@ -1,8 +1,3 @@
-
-export function createEmptyBoard(size = 15): Board {
-  return new Board(size);
-}
-
 export enum Piece {
   Empty = 0,
   Black = 1,

@@ -1,17 +1,17 @@
-import { Piece } from './board'; // Piece enum 가져오기
-import type { Board as BoardClass } from './board'; // Board 클래스의 타입 지정
+export function printBoardFromString(boardString: string): void {
+  const size = 15;
 
-export function printBoard(board: BoardClass): void {
+  if (boardString.length !== size * size) {
+    throw new Error(`Invalid board string length: expected ${size * size}, got ${boardString.length}`);
+  }
+
   const symbols = {
-    [Piece.Empty]: '·',
-    [Piece.Black]: '●',
-    [Piece.White]: '○',
+    '.': '·',
+    'B': '●',
+    'W': '○',
   };
 
-  const size = board.getSize();
-  const rawBoard = board.getBoard();
-
-  // 열 인덱스 출력 (간격을 1칸으로 조정)
+  // 열 인덱스 출력
   const colHeader = '   ' + Array.from({ length: size }, (_, i) =>
     i.toString().padStart(2, ' ')
   ).join(' ');
@@ -21,8 +21,13 @@ export function printBoard(board: BoardClass): void {
   console.log('   ' + '-'.repeat(colHeader.length - 3));
 
   // 행 출력
-  rawBoard.forEach((row, y) => {
-    const rowString = row.map(cell => symbols[cell]).join(' ');
+  for (let y = 0; y < size; y++) {
+    const start = y * size;
+    const row = boardString.slice(start, start + size);
+    const rowString = row
+      .split('')
+      .map(ch => symbols[ch as '.' | 'B' | 'W'] || '?')
+      .join(' ');
     console.log(y.toString().padStart(2, ' ') + ' ' + rowString);
-  });
+  }
 }
