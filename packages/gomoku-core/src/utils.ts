@@ -1,11 +1,11 @@
-import { Player } from './board'; // Player enum 가져오기
+import { Piece } from './board'; // Piece enum 가져오기
 import type { Board as BoardClass } from './board'; // Board 클래스의 타입 지정
 
 export function printBoard(board: BoardClass): void {
   const symbols = {
-    [Player.Empty]: '·',
-    [Player.Black]: '●',
-    [Player.White]: '○',
+    [Piece.Empty]: '·',
+    [Piece.Black]: '●',
+    [Piece.White]: '○',
   };
 
   const size = board.getSize();

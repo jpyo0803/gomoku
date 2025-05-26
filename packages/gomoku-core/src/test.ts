@@ -1,4 +1,4 @@
-import { createEmptyBoard, Player } from './board';
+import { createEmptyBoard, Piece } from './board';
 import { printBoard } from './utils';
 import readlineSync from 'readline-sync';
 import http from 'http';
@@ -22,12 +22,12 @@ async function main() {
       const x = parseInt(readlineSync.question('Enter x coordinate (0-14): '), 10);
       const y = parseInt(readlineSync.question('Enter y coordinate (0-14): '), 10);
 
-      const result = board.play(x, y, Player.Black);
+      const result = board.play(x, y, Piece.Black);
       if (result === -1) {
         console.log("Invalid move. Try again.");
         continue;
       } else if (result === 1) {
-        console.log("Game over. Player Black wins!");
+        console.log("Game over. Piece Black wins!");
         break;
       } else {
         isBlackTurn = false;
@@ -46,12 +46,12 @@ async function main() {
         const { x, y } = response.data;
         console.log(`AI chose move: (${x}, ${y})`);
 
-        const result = board.play(x, y, Player.White);
+        const result = board.play(x, y, Piece.White);
         if (result === -1) {
           console.log("AI made an invalid move. Aborting.");
           break;
         } else if (result === 1) {
-          console.log("Game over. Player White (AI) wins!");
+          console.log("Game over. Piece White (AI) wins!");
           break;
         } else {
           isBlackTurn = true;
