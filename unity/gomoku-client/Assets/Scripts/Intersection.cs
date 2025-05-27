@@ -3,7 +3,10 @@ using UnityEngine;
 public class Intersection : MonoBehaviour
 {
     private float x, y; // Actual coordinates of the intersection
-    
+
+    public GameObject blackStonePrefab;
+    public GameObject whiteStonePrefab;
+
     [SerializeField]
     private int row_index, col_index; // Row and column indices for the intersection
     private bool alreadyClicked = false;
@@ -64,5 +67,12 @@ public class Intersection : MonoBehaviour
     public float GetY()
     {
         return y;
+    }
+
+    public void SetStone(bool isBlack)
+    {
+        // Set the stone at this intersection
+        GameObject stonePrefab = isBlack ? blackStonePrefab : whiteStonePrefab;
+        Instantiate(stonePrefab, transform.position, Quaternion.identity);
     }
 }

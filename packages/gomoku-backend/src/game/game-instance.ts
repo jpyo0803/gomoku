@@ -1,40 +1,49 @@
-import { Board, Player } from 'gomoku-core';
+import { Gomoku } from 'gomoku-core';
+import { Player } from './player'
 
 export class GameInstance {
-    private board: Board;
+    private game : Gomoku;
+    private blackPlayer: Player;
+    private whitePlayer: Player; // ai
     private currentPlayer: Player;
-    private playerRoles: Record<string, Player>;
 
-    constructor(playerBlackId: string, playerWhiteId: string, size: number = 15) {
-        this.board = new Board(size);
-        this.currentPlayer = Player.Black;
-        this.playerRoles = {
-            [playerBlackId]: Player.Black,
-            [playerWhiteId]: Player.White,
-        };
+    constructor(blackPlayer: Player, whitePlayer: Player) {
+        this.blackPlayer = blackPlayer;
+        this.whitePlayer = whitePlayer;
+        this.currentPlayer = blackPlayer; // Black starts first
+        this.game = new Gomoku();
     }
 
-    play(x: number, y: number, playerId: string): 'ok' | 'invalid' | 'unauthorized' | 'win' {
-        const player = this.playerRoles[playerId];
-        if (player !== this.currentPlayer) {
-            return 'unauthorized'; // Not the player's turn
+    play(x: number, y: number, playerId: string): 'ok' | 'invalid' | 'win' {
+        if (playerId !== this.currentPlayer.getId()) {
+            return 'invalid'; // Not the player's turn
         }
-
-        const result = this.board.play(x, y, player);
-        if (result === -1) {
+        
+        const result = this.game.play(x, y);
+        if (result === 'invalid') {
             return 'invalid'; // Invalid move
-        } else if (result === 1) {
+        } else if (result === 'win') {
             return 'win'; // Player wins
         }
-        this.currentPlayer = this.currentPlayer === Player.Black ? Player.White : Player.Black; // Switch player
+
+        // Switch to the next player
+        this.currentPlayer = this.currentPlayer.getId() === this.blackPlayer.getId() ? this.whitePlayer: this.blackPlayer;
         return 'ok'; // Move accepted
     }
 
-    getCurrentPlayer(): number {
-        return this.currentPlayer === Player.Black ? 1 : 2; // Return 1 for Black, 2 for White
+    getBoardString(): string {
+        return this.game.getBoardString();
     }
 
-    getBoard(): string {
-        return this.board.getBoardString();
+    getCurrentPlayerId(): string {
+        return this.currentPlayer.getId();
+    }
+
+    getHumanPlayerId(): string {
+        return this.blackPlayer.getId(); // Assuming black is always the human player
+    }
+
+    getAIPlayerId(): string {
+        return this.whitePlayer.getId(); // Assuming white is always the AI player
     }
 }

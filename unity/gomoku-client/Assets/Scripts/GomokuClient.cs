@@ -5,12 +5,14 @@
 
 using UnityEngine;
 using SocketIOClient;
+using Newtonsoft.Json.Linq;
 // using SocketIOClient.Newtonsoft.Json;
-// using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 public class GomokuClient : MonoBehaviour
 {
     const int BOARD_SIZE = 15; // Gomoku board size
+    Intersection[,] board = new Intersection[BOARD_SIZE, BOARD_SIZE];
     private SocketIOUnity socket;
 
     void Start()
@@ -18,6 +20,14 @@ public class GomokuClient : MonoBehaviour
         Debug.Log("Starting Gomoku Client...");
 
         ConnectSocket();
+
+        var intersectionObjects = FindObjectsOfType<Intersection>();
+        foreach (var intersection in intersectionObjects)
+        {
+            int row = intersection.GetRowIndex();
+            int col = intersection.GetColIndex();
+            board[row, col] = intersection;
+        }
     }
 
     private void ConnectSocket()
@@ -44,6 +54,13 @@ public class GomokuClient : MonoBehaviour
             Debug.Log("Match success received: " + response.GetValue());
         });
 
+        socket.OnUnityThread("board_state", res =>
+        {
+            var map = res.GetValue<Dictionary<string, string>>();
+            string boardStr = map["board_state"];
+            Debug.Log(boardStr);
+            UpdateBoard(boardStr);
+        });
         // 연결
         socket.Connect();
     }
@@ -53,7 +70,8 @@ public class GomokuClient : MonoBehaviour
         Debug.Log("Sending match request...");
         socket.Emit("match_request", new
         {
-            playerId = "player123"
+            playerId = "player123",
+            wantAiOpponent = true // AI opponent 여부
         });
     }
 
@@ -67,5 +85,29 @@ public class GomokuClient : MonoBehaviour
             y = col_index,  // 예시 좌표
             playerId = "player123" // 플레이어 ID
         });
+    }
+
+    private void UpdateBoard(string boardStr)
+    {
+        // 보드 상태를 업데이트하는 로직
+        // 예시: 각 칸에 대해 클릭 이벤트를 설정
+        for (int i = 0; i < BOARD_SIZE; i++)
+        {
+            for (int j = 0; j < BOARD_SIZE; j++)
+            {
+                char stone = boardStr[i * BOARD_SIZE + j];
+                // 여기서 stone에 따라 UI를 업데이트하거나 게임 상태를 변경할 수 있음
+                if (stone == 'B')
+                {
+                    // 흑돌을 놓는 로직
+                    board[i, j].SetStone(true);
+                }
+                else if (stone == 'W')
+                {
+                    // 백돌을 놓는 로직
+                    board[i, j].SetStone(false);
+                }
+            }
+        }
     }
 }
