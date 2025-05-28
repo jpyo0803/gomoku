@@ -18,6 +18,8 @@ public class GomokuClient : MonoBehaviour
     private string opponentId;
     private bool isBlackStone;
     private string gameId;
+
+    private bool isGameDone = false; // 게임 종료 여부
     private void Start()
     {
         Debug.Log("[Log] GomokuClient Start() called");
@@ -66,6 +68,17 @@ public class GomokuClient : MonoBehaviour
             UpdateBoard(boardStr);
             
             Debug.Log("[Log] Board state updated successfully.");
+        });
+
+        socket.On("place_stone_resp", res =>
+        {
+            var map = res.GetValue<Dictionary<string, string>>();
+            string result = map["result"];
+            if (result == "win" || result == "lose")
+            {
+                this.isGameDone = true; // 게임 종료 상태로 설정
+            }
+            Debug.Log($"[Log] Place stone response: {result}");
         });
 
         socket.Connect(); // 소켓 서버에 연결
@@ -134,6 +147,11 @@ public class GomokuClient : MonoBehaviour
 
     public void SendPlaceStone(int row_index, int col_index)
     {
+        if (isGameDone)
+        {
+            Debug.LogWarning("[Log] Game is already done. Cannot place stone.");
+            return;
+        }
         Debug.Log($"[Log] Sending place_stone event at ({row_index}, {col_index})");
 
         socket.Emit("place_stone", new

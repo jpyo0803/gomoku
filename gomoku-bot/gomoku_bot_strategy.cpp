@@ -205,8 +205,8 @@ std::pair<int, int> MinimaxWithAlphaBetaPruning::Solve(Board board, int max_dept
     }
   }
 
-  int alpha = std::numeric_limits<int>::min();
-  int beta = std::numeric_limits<int>::max();
+  double alpha = -std::numeric_limits<double>::infinity();
+  double beta = std::numeric_limits<double>::infinity();
 
   auto result = Minimax(board, max_depth, alpha, beta, true, candidate_map);
   std::cout << "Returned score: " << result.second << std::endl;
@@ -224,7 +224,7 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
   }
 
   if (maximizing_player) {
-    double max_eval = std::numeric_limits<double>::min();
+    double max_eval = -std::numeric_limits<double>::infinity();
     std::pair<int, int> best_move = {-1, -1};
 
     for (int i = 0; i < kBoardSize; ++i) {
@@ -279,7 +279,7 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
     }
     return {best_move, max_eval};
   } else {
-    double min_eval = std::numeric_limits<double>::max();
+    double min_eval = std::numeric_limits<double>::infinity();
     std::pair<int, int> best_move = {-1, -1};
 
     for (int i = 0; i < kBoardSize; ++i) {

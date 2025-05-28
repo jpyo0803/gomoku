@@ -75,6 +75,6 @@ export class SocketIoGateway implements GatewayInterface {
   sendPlaceStoneResp(playerId: string, result: 'ok' | 'invalid' | 'win' | 'lose'): void {
     console.log(`[Log] Send \'place_stone_resp\' to \'${playerId}\' (playerId), result: ${result}`);
     const socket = this.playerIdToSocket.get(playerId);
-    socket?.emit('place_stone_resp', { result });
+    socket?.emit('place_stone_resp', { result: result });
   }
 }
