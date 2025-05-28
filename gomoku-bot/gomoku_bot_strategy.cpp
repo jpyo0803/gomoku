@@ -186,7 +186,9 @@ std::pair<int, int> MinimaxWithAlphaBetaPruning::Solve(Board board, int max_dept
   assert(board.size() == kBoardSize);
   assert(max_depth <= 4);
 
-  std::vector<std::bitset<kBoardSize>> candidate_map(kBoardSize, std::bitset<kBoardSize>(0));
+  // std::vector<std::bitset<kBoardSize>> candidate_map(kBoardSize, std::bitset<kBoardSize>(0));
+  BitBoard candidate_map;
+
   for (int i = 0; i < kBoardSize; ++i) {
     for (int j = 0; j < kBoardSize; ++j) {
       if (board.GetCell(i, j) == Piece::kEmpty) {
@@ -205,7 +207,7 @@ std::pair<int, int> MinimaxWithAlphaBetaPruning::Solve(Board board, int max_dept
             continue;
           }
           if (board.GetCell(x, y) == Piece::kEmpty) {
-            candidate_map.at(x).set(y);  // mark as candidate
+            candidate_map.Set(x, y);  // mark as candidate
           }
         }
       }
@@ -223,7 +225,7 @@ std::pair<int, int> MinimaxWithAlphaBetaPruning::Solve(Board board, int max_dept
 
 std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
     Board board, int depth, double alpha, double beta, bool maximizing_player,
-    std::vector<std::bitset<kBoardSize>> candidate_map) const {
+    BitBoard candidate_map) const {
   call_count++;
   if (depth == 0) {
     auto score = EvaluateBoard(board, Piece::kWhite) - EvaluateBoard(board, Piece::kBlack);
@@ -236,14 +238,14 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
 
     for (int i = 0; i < kBoardSize; ++i) {
       for (int j = 0; j < kBoardSize; ++j) {
-        if (candidate_map.at(i).test(j) == false) {
+        if (candidate_map.Test(i, j) == false) {
           continue;
         }
 
         auto next_candidate_map = candidate_map;
         auto next_board = board;
 
-        next_candidate_map.at(i).reset(j);  // mark as not candidate
+        next_candidate_map.Reset(i, j);  // mark as not candidate
         next_board.SetCell(i, j, Piece::kWhite);
 
         // check if the move is winning
@@ -264,7 +266,7 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
               continue;
             }
             if (next_board.GetCell(x, y) == Piece::kEmpty) {
-              next_candidate_map.at(x).set(y);  // mark as candidate
+              next_candidate_map.Set(x, y);  // mark as candidate
             }
           }
         }
@@ -291,13 +293,13 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
 
     for (int i = 0; i < kBoardSize; ++i) {
       for (int j = 0; j < kBoardSize; ++j) {
-        if (candidate_map.at(i).test(j) == false) {
+        if (candidate_map.Test(i, j) == false) {
           continue;
         }
         auto next_candidate_map = candidate_map;
         auto next_board = board;
 
-        next_candidate_map.at(i).reset(j);  // mark as not candidate
+        next_candidate_map.Reset(i, j);  // mark as not candidate
         next_board.SetCell(i, j, Piece::kBlack);
 
         if (IsWin(next_board, i, j, Piece::kBlack)) {
@@ -317,7 +319,7 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
               continue;
             }
             if (next_board.GetCell(x, y) == Piece::kEmpty) {
-              next_candidate_map.at(x).set(y);  // mark as candidate
+              next_candidate_map.Set(x, y);  // mark as candidate
             }
           }
         }

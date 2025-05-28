@@ -11,6 +11,10 @@ namespace gomoku {
 
 class BitBoard {
   public:
+    BitBoard() {
+        Clear();
+    }
+
     void Clear() {
         for (auto& row : bit_board_) {
             row = 0;

@@ -1,7 +1,8 @@
 #pragma once
 
-#include <bitset>
+// #include <bitset>
 #include "igomoku_bot_strategy.h"
+#include "bitboard.h"
 
 namespace gomoku {
 
@@ -12,7 +13,7 @@ class MinimaxWithAlphaBetaPruning : public IGomokuBotStrategy {
  private:
   std::pair<std::pair<int, int>, double> Minimax(
       Board board, int depth, double alpha, double beta, bool maximizing_player,
-      std::vector<std::bitset<kBoardSize>> candidate_map) const;
+      BitBoard candidate_map) const;
 };
 
 }  // namespace gomoku
