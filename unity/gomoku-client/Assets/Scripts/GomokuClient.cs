@@ -14,6 +14,7 @@ public class GomokuClient : MonoBehaviour
     const int BOARD_SIZE = 15; // Gomoku board size
     Intersection[,] board = new Intersection[BOARD_SIZE, BOARD_SIZE];
     private SocketIOUnity socket;
+    private bool matchRequested = false;
 
     void Start()
     {
@@ -38,7 +39,8 @@ public class GomokuClient : MonoBehaviour
         socket = new SocketIOUnity(uri, new SocketIOOptions
         {
             EIO = EngineIO.V4, // 엔진IO 버전
-            Transport = SocketIOClient.Transport.TransportProtocol.WebSocket
+            Transport = SocketIOClient.Transport.TransportProtocol.WebSocket,
+            Reconnection = false, // 소켓 라이브러리가 자의로 재연결하지 않도록 설정
         });
 
         // 연결 이벤트 핸들러
@@ -54,6 +56,7 @@ public class GomokuClient : MonoBehaviour
             Debug.Log("Match success received: " + response.GetValue());
         });
 
+        // OnUnityThread를 사용해야 Unity API 호출 가능
         socket.OnUnityThread("board_state", res =>
         {
             var map = res.GetValue<Dictionary<string, string>>();
@@ -67,6 +70,12 @@ public class GomokuClient : MonoBehaviour
 
     void SendMatchRequest()
     {
+        if (matchRequested)
+        {
+            return;
+        }
+        matchRequested = true;
+
         Debug.Log("Sending match request...");
         socket.Emit("match_request", new
         {
@@ -109,5 +118,13 @@ public class GomokuClient : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        if (socket == null) return;
+        socket.Disconnect();
+        socket.Dispose();
+        socket = null;
     }
 }
