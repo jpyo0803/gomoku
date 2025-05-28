@@ -2,27 +2,25 @@ using UnityEngine;
 
 public class Intersection : MonoBehaviour
 {
-    private float x, y; // Actual coordinates of the intersection
-
-    public GameObject blackStonePrefab;
-    public GameObject whiteStonePrefab;
+    private float x, y; // Intersection의 실제 좌표 
 
     [SerializeField]
-    private int row_index, col_index; // Row and column indices for the intersection
-    private bool alreadyClicked = false;
+    private GameObject blackStonePrefab, whiteStonePrefab; // 교차점에 놓을 돌 프리팹
 
-    void Start()
+    [SerializeField]
+    private int row_index, col_index; // 15 x 15 보드상에서 교차점의 행과 열 인덱스
+
+    private void Start()
     {
         x = transform.position.x;
         y = transform.position.y;
-        // Debug.Log($"Intersection created at ({x}, {y})");
     }
 
     // Update is called once per frame
     private void OnMouseDown()
     {
         // Check if the mouse button is pressed
-        Debug.Log($"Intersection clicked at ({row_index}, {col_index})");
+        Debug.Log($"[Log] Intersection clicked at ({row_index}, {col_index})");
         // Find gomoku client and send the click event
         GomokuClient gomokuClient = FindFirstObjectByType<GomokuClient>();
         if (gomokuClient == null)
@@ -30,14 +28,8 @@ public class Intersection : MonoBehaviour
             Debug.LogError("GomokuClient not found in the scene.");
             return;
         }
-        if (alreadyClicked)
-        {
-            Debug.Log("This intersection has already been clicked.");
-            return;
-        }
-        alreadyClicked = true;
+
         gomokuClient.SendPlaceStone(row_index, col_index);
-        // GameManager.Instance.PlaceStone(row, col);
     }
     public int GetRowIndex()
     {
@@ -57,16 +49,6 @@ public class Intersection : MonoBehaviour
     public void SetColIndex(int col_index)
     {
         this.col_index = col_index;
-    }
-
-    public float GetX()
-    {
-        return x;
-    }
-
-    public float GetY()
-    {
-        return y;
     }
 
     public void SetStone(bool isBlack)
