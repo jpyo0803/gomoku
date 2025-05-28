@@ -42,6 +42,22 @@ bool IsWin(const gomoku::Board& board, int x, int y, gomoku::Piece piece) {
   return false;
 }
 
+namespace {
+  std::array<std::bitset<kBoardSize>, kBoardSize> visited_horizontal;
+  std::array<std::bitset<kBoardSize>, kBoardSize> visited_vertical;
+  std::array<std::bitset<kBoardSize>, kBoardSize> visited_diagonal_down_right;
+  std::array<std::bitset<kBoardSize>, kBoardSize> visited_diagonal_down_left;
+
+  void ResetVisited() {
+    for (int i = 0; i < kBoardSize; ++i) {
+      visited_horizontal[i].reset();
+      visited_vertical[i].reset();
+      visited_diagonal_down_right[i].reset();
+      visited_diagonal_down_left[i].reset();
+    }
+  }
+}
+
 double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
   double score = 0.0;
 
@@ -61,13 +77,8 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
       1e10  // [4] blocked 4
   };
 
-  std::vector<std::vector<bool>> visited_horizontal(kBoardSize,
-                                                    std::vector<bool>(kBoardSize, false));
-  std::vector<std::vector<bool>> visited_vertical(kBoardSize, std::vector<bool>(kBoardSize, false));
-  std::vector<std::vector<bool>> visited_diagonal_down_right(kBoardSize,
-                                                             std::vector<bool>(kBoardSize, false));
-  std::vector<std::vector<bool>> visited_diagonal_down_left(kBoardSize,
-                                                            std::vector<bool>(kBoardSize, false));
+  // Reset visited arrays
+  ResetVisited();
 
   const Piece kOpponent = (piece == Piece::kBlack) ? Piece::kWhite : Piece::kBlack;
 
@@ -76,12 +87,12 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
       if (board.GetCell(x, y) != piece) continue;
 
       // check horizontal
-      if (!visited_horizontal[x][y]) {
+      if (!visited_horizontal.at(x).test(y)) {
         int count = 1;
         // Only check to the right
         for (int j = y + 1; j < kBoardSize && board.GetCell(x, j) == piece; ++j) {
           count++;
-          visited_horizontal[x][j] = true;
+          visited_horizontal.at(x).set(j);
         }
         if (count >= 5) {
           score += kWinScore;
@@ -98,12 +109,12 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
       }
 
       // check vertical
-      if (!visited_vertical[x][y]) {
+      if (!visited_vertical.at(x).test(y)) {
         int count = 1;
         // Only check down
         for (int j = x + 1; j < kBoardSize && board.GetCell(j, y) == piece; ++j) {
           count++;
-          visited_vertical[j][y] = true;
+          visited_vertical.at(j).set(y);
         }
         if (count >= 5) {
           score += kWinScore;
@@ -120,14 +131,14 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
       }
 
       // check diagonal down-right
-      if (!visited_diagonal_down_right[x][y]) {
+      if (!visited_diagonal_down_right.at(x).test(y)) {
         int count = 1;
         // Only check down-right
         for (int j = 1; j < kBoardSize && x + j < kBoardSize && y + j < kBoardSize &&
                         board.GetCell(x + j, y + j) == piece;
              ++j) {
           count++;
-          visited_diagonal_down_right[x + j][y + j] = true;
+          visited_diagonal_down_right.at(x + j).set(y + j);
         }
         if (count >= 5) {
           score += kWinScore;
@@ -145,14 +156,14 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
       }
 
       // check diagonal down-left
-      if (!visited_diagonal_down_left[x][y]) {
+      if (!visited_diagonal_down_left.at(x).test(y)) {
         int count = 1;
         // Only check down-left
         for (int j = 1; j < kBoardSize && x + j < kBoardSize && y - j >= 0 &&
                         board.GetCell(x + j, y - j) == piece;
              ++j) {
           count++;
-          visited_diagonal_down_left[x + j][y - j] = true;
+          visited_diagonal_down_left.at(x + j).set(y - j);
         }
         if (count >= 5) {
           score += kWinScore;
@@ -219,7 +230,7 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
     std::vector<std::bitset<kBoardSize>> candidate_map) const {
   call_count++;
   if (depth == 0) {
-    auto score = EvaluateBoard(board, Piece::kBlack) - EvaluateBoard(board, Piece::kWhite);
+    auto score = EvaluateBoard(board, Piece::kWhite) - EvaluateBoard(board, Piece::kBlack);
     return {{-1, -1}, score};
   }
 
@@ -237,10 +248,10 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
         auto next_board = board;
 
         next_candidate_map.at(i).reset(j);  // mark as not candidate
-        next_board.SetCell(i, j, Piece::kBlack);
+        next_board.SetCell(i, j, Piece::kWhite);
 
         // check if the move is winning
-        if (IsWin(next_board, i, j, Piece::kBlack)) {
+        if (IsWin(next_board, i, j, Piece::kWhite)) {
           return {{i, j}, kEarlyWinScore};
         }
 
@@ -291,9 +302,9 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
         auto next_board = board;
 
         next_candidate_map.at(i).reset(j);  // mark as not candidate
-        next_board.SetCell(i, j, Piece::kWhite);
+        next_board.SetCell(i, j, Piece::kBlack);
 
-        if (IsWin(next_board, i, j, Piece::kWhite)) {
+        if (IsWin(next_board, i, j, Piece::kBlack)) {
           return {{i, j}, -kEarlyWinScore};
         }
 
