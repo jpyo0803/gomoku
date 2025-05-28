@@ -3,6 +3,7 @@
 #include <cassert>
 #include <iostream>
 #include <limits>
+#include "bitboard.h"
 
 #define ALPHA_BETA_PRUNING 1
 
@@ -43,23 +44,11 @@ bool IsWin(const gomoku::Board& board, int x, int y, gomoku::Piece piece) {
 }
 
 namespace {
-  std::array<std::bitset<kBoardSize>, kBoardSize> visited_horizontal;
-  std::array<std::bitset<kBoardSize>, kBoardSize> visited_vertical;
-  std::array<std::bitset<kBoardSize>, kBoardSize> visited_diagonal_down_right;
-  std::array<std::bitset<kBoardSize>, kBoardSize> visited_diagonal_down_left;
-
-  void ResetVisited() {
-    for (int i = 0; i < kBoardSize; ++i) {
-      visited_horizontal[i].reset();
-      visited_vertical[i].reset();
-      visited_diagonal_down_right[i].reset();
-      visited_diagonal_down_left[i].reset();
-    }
-  }
-}
-
-double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
-  double score = 0.0;
+  // anonymous namespace for EvaluateBoard
+  BitBoard visited_horizontal;
+  BitBoard visited_vertical;
+  BitBoard visited_diagonal_down_right;
+  BitBoard visited_diagonal_down_left;
 
   constexpr std::array<double, 5> kOpenScores = {
       0.0,  // [0] unused
@@ -68,7 +57,7 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
       1e9,  // [3] open 3
       1e12  // [4] open 4
   };
-
+  
   constexpr std::array<double, 5> kBlockedScores = {
       0.0,  // [0] unused
       1e1,  // [1] blocked 1
@@ -76,9 +65,16 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
       1e7,  // [3] blocked 3
       1e10  // [4] blocked 4
   };
+}
+
+double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
+  double score = 0.0;
 
   // Reset visited arrays
-  ResetVisited();
+  visited_horizontal.Clear();
+  visited_vertical.Clear();
+  visited_diagonal_down_right.Clear();
+  visited_diagonal_down_left.Clear();
 
   const Piece kOpponent = (piece == Piece::kBlack) ? Piece::kWhite : Piece::kBlack;
 
@@ -87,12 +83,12 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
       if (board.GetCell(x, y) != piece) continue;
 
       // check horizontal
-      if (!visited_horizontal.at(x).test(y)) {
+      if (!visited_horizontal.Test(x, y)) {
         int count = 1;
         // Only check to the right
         for (int j = y + 1; j < kBoardSize && board.GetCell(x, j) == piece; ++j) {
           count++;
-          visited_horizontal.at(x).set(j);
+          visited_horizontal.Set(x, j);
         }
         if (count >= 5) {
           score += kWinScore;
@@ -109,12 +105,12 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
       }
 
       // check vertical
-      if (!visited_vertical.at(x).test(y)) {
+      if (!visited_vertical.Test(x, y)) {
         int count = 1;
         // Only check down
         for (int j = x + 1; j < kBoardSize && board.GetCell(j, y) == piece; ++j) {
           count++;
-          visited_vertical.at(j).set(y);
+          visited_vertical.Set(j, y);
         }
         if (count >= 5) {
           score += kWinScore;
@@ -131,14 +127,14 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
       }
 
       // check diagonal down-right
-      if (!visited_diagonal_down_right.at(x).test(y)) {
+      if (!visited_diagonal_down_right.Test(x, y)) {
         int count = 1;
         // Only check down-right
         for (int j = 1; j < kBoardSize && x + j < kBoardSize && y + j < kBoardSize &&
                         board.GetCell(x + j, y + j) == piece;
              ++j) {
           count++;
-          visited_diagonal_down_right.at(x + j).set(y + j);
+          visited_diagonal_down_right.Set(x + j, y + j);
         }
         if (count >= 5) {
           score += kWinScore;
@@ -156,14 +152,14 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
       }
 
       // check diagonal down-left
-      if (!visited_diagonal_down_left.at(x).test(y)) {
+      if (!visited_diagonal_down_left.Test(x, y)) {
         int count = 1;
         // Only check down-left
         for (int j = 1; j < kBoardSize && x + j < kBoardSize && y - j >= 0 &&
                         board.GetCell(x + j, y - j) == piece;
              ++j) {
           count++;
-          visited_diagonal_down_left.at(x + j).set(y - j);
+          visited_diagonal_down_left.Set(x + j, y - j);
         }
         if (count >= 5) {
           score += kWinScore;
