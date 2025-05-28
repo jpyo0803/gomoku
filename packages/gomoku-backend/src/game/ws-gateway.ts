@@ -17,6 +17,8 @@ export class WsGateway implements GatewayInterface, OnModuleDestroy {
      턴 알림 – 소켓 상태에 따라 분기
   ---------------------------------------------------------------- */
   sendYourTurn(playerId: string, board: string): void {
+    // console.log(`[Log] Send \'your_turn_ai\' to \'${playerId}\' (AI playerId), board: ${board}`);
+    console.log(`[Log] Send \'your_turn_ai\' to \'${playerId}\' (AI playerId)`);
     const payload = JSON.stringify({ type: 'your_turn_ai', playerId, board });
 
     // 1) 소켓이 없거나 이미 종료 → 새로 만들고 열린 뒤 전송
@@ -32,7 +34,6 @@ export class WsGateway implements GatewayInterface, OnModuleDestroy {
     }
 
     // 3) 이미 OPEN → 즉시 전송
-    console.log('[AI] sending your_turn to AI');
     this.socket.send(payload);
   }
 
@@ -59,10 +60,10 @@ export class WsGateway implements GatewayInterface, OnModuleDestroy {
   private connect(): Promise<void> {
     return new Promise<void>(resolve => {
       this.socket = new WebSocket(this.AI_ENDPOINT);
-      console.log('[AI] connecting →', this.AI_ENDPOINT);
+      console.log('[Log] connect WebSocket to ', this.AI_ENDPOINT);
 
       this.socket.once('open', () => {
-        console.log('[AI] WebSocket OPEN');
+        console.log('[Log] WebSocket is established');
         resolve();
       });
 
@@ -71,15 +72,16 @@ export class WsGateway implements GatewayInterface, OnModuleDestroy {
           const msg = JSON.parse(raw.toString());
           if (msg.type === 'place_stone_ai') {
             const { playerId, x, y } = msg;
+            console.log(`[Log] Receive \'place_stone_ai\' from ${playerId} (AI playerId), x: ${x}, y: ${y}`);
             await this.gameService.handlePlaceStoneAI(playerId, x, y);
           }
         } catch {
-          console.error('[AI] invalid message:', raw.toString());
+          console.error('[Log] invalid message:', raw.toString());
         }
       });
 
       this.socket.on('close', () => (this.socket = undefined));
-      this.socket.on('error', err => console.error('[AI] socket error:', err));
+      this.socket.on('error', err => console.error('[Log] socket error:', err));
     });
   }
 }
