@@ -53,6 +53,12 @@ export class SocketIoGateway implements GatewayInterface {
     await this.gameService.handlePlaceStone(data.playerId, data.x, data.y);
   }
 
+  sendMatchMakingSuccess(playerId: string, opponentId: string, gameId: string, stoneColor: string): void {
+    console.log(`[Log] Send 'match_making_success' to \'${playerId}\' (playerId), \'${opponentId}\' (opponentId), gameId: ${gameId}, stone_color: ${stoneColor}`);
+    const socket = this.playerIdToSocket.get(playerId);
+    socket?.emit('match_making_success', { opponent_id: opponentId , game_id: gameId, stone_color: stoneColor });
+  }
+
   sendYourTurn(playerId: string, timeLimit: number): void {
     console.log(`[Log] Send \'your_turn\' to \'${playerId}\' (playerId), time_limit: ${timeLimit}`);
     const socket = this.playerIdToSocket.get(playerId);

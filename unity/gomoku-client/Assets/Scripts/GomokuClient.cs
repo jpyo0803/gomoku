@@ -14,7 +14,10 @@ public class GomokuClient : MonoBehaviour
     private Intersection[,] board = new Intersection[BOARD_SIZE, BOARD_SIZE];
     private SocketIOUnity socket;
     private bool matchRequested = false; // 매치 요청 여부
-
+    private string playerId = "player123"; // 플레이
+    private string opponentId;
+    private bool isBlackStone;
+    private string gameId;
     private void Start()
     {
         Debug.Log("[Log] GomokuClient Start() called");
@@ -27,7 +30,7 @@ public class GomokuClient : MonoBehaviour
         // 연결 대상 주소
         var uri = new System.Uri(uri_base);
 
-        socket = new SocketIOUnity(uri, new SocketIOOptions
+        this.socket = new SocketIOUnity(uri, new SocketIOOptions
         {
             EIO = EngineIO.V4, // 엔진IO 버전
             Transport = SocketIOClient.Transport.TransportProtocol.WebSocket,
@@ -41,11 +44,18 @@ public class GomokuClient : MonoBehaviour
             SendMatchRequest();
         };
 
-        // match_success 응답 수신
-        // socket.On("match_success", response =>
-        // {
-        //     Debug.Log("Match success received: " + response.GetValue());
-        // });
+        // match_making_success 응답 수신
+        socket.On("match_making_success", res =>
+        {
+            // gameId(string)와 stone color(string)를 받아옴
+            var data = res.GetValue<Dictionary<string, string>>();
+            // this.playerId = data["player_id"]; // 플레이어 ID
+            this.opponentId = data["opponent_id"]; // 상대 플레이어 ID
+            this.gameId = data["game_id"];
+            this.isBlackStone = data["stone_color"] == "black"; // 흑돌 여부 확인
+
+            Debug.Log($"[Log] Match making success! Opponent Id: {opponentId} Game ID: {gameId}, Stone Color: {(isBlackStone ? "Black" : "White")}");
+        });
 
         // OnUnityThread를 사용해야 Unity API 안전하게 호출 가능
         socket.OnUnityThread("board_state", res =>
@@ -54,6 +64,8 @@ public class GomokuClient : MonoBehaviour
             string boardStr = map["board_state"];
             Debug.Log(boardStr);
             UpdateBoard(boardStr);
+            
+            Debug.Log("[Log] Board state updated successfully.");
         });
 
         socket.Connect(); // 소켓 서버에 연결
@@ -83,7 +95,7 @@ public class GomokuClient : MonoBehaviour
 
         socket.Emit("match_request", new
         {
-            playerId = "player123", // 요청 플레이어 ID (유일함 보장할 것)
+            playerId = this.playerId, // 요청 플레이어 ID (유일함 보장할 것)
             wantAiOpponent = true // AI 상대 희망 여부
         });
     }
@@ -128,7 +140,7 @@ public class GomokuClient : MonoBehaviour
         {
             x = row_index, // x 좌표 (행 인덱스)
             y = col_index,  // y 좌표 (열 인덱스)
-            playerId = "player123" // 플레이어 ID (유일함 보장할 것)
+            playerId = this.playerId // 플레이어 ID (유일함 보장할 것)
         });
     }
 }

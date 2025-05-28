@@ -40,6 +40,7 @@ export class WsGateway implements GatewayInterface, OnModuleDestroy {
   /* ----------------------------------------------------------------
      필요 없는 인터페이스 메서드 (AI 쪽)
   ---------------------------------------------------------------- */
+  sendMatchMakingSuccess(): void {}
   sendBoardState(): void {}
   sendPlaceStoneResp(): void {}
   init(): void {}

@@ -47,6 +47,7 @@ export class GameService {
 
     console.log(`[Log] Game created, gameId: ${gameId}, blackPlayerId: ${blackPlayer.getId()}, whitePlayerId: ${whitePlayer.getId()}`);
 
+    this.socketGateway.sendMatchMakingSuccess(blackPlayer.getId(), whitePlayer.getId(), gameId, "black");
     // Notify black to start turn
     this.socketGateway.sendYourTurn(blackPlayer.getId(), 30); // time limit is not used for now
     return gameId;
