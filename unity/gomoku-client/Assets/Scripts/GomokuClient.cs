@@ -5,36 +5,27 @@
 
 using UnityEngine;
 using SocketIOClient;
-using Newtonsoft.Json.Linq;
-// using SocketIOClient.Newtonsoft.Json;
 using System.Collections.Generic;
 
 public class GomokuClient : MonoBehaviour
 {
-    const int BOARD_SIZE = 15; // Gomoku board size
-    Intersection[,] board = new Intersection[BOARD_SIZE, BOARD_SIZE];
+    private const string uri_base = "http://localhost:3000";
+    private const int BOARD_SIZE = 15; // 오목판 크기, 15로 고정
+    private Intersection[,] board = new Intersection[BOARD_SIZE, BOARD_SIZE];
     private SocketIOUnity socket;
-    private bool matchRequested = false;
+    private bool matchRequested = false; // 매치 요청 여부
 
-    void Start()
+    private void Start()
     {
-        Debug.Log("Starting Gomoku Client...");
-
+        Debug.Log("[Log] GomokuClient Start() called");
         ConnectSocket();
-
-        var intersectionObjects = FindObjectsOfType<Intersection>();
-        foreach (var intersection in intersectionObjects)
-        {
-            int row = intersection.GetRowIndex();
-            int col = intersection.GetColIndex();
-            board[row, col] = intersection;
-        }
+        MapIntersectionsToBoard();
     }
 
     private void ConnectSocket()
     {
         // 연결 대상 주소
-        var uri = new System.Uri("http://localhost:3000");
+        var uri = new System.Uri(uri_base);
 
         socket = new SocketIOUnity(uri, new SocketIOOptions
         {
@@ -46,17 +37,17 @@ public class GomokuClient : MonoBehaviour
         // 연결 이벤트 핸들러
         socket.OnConnected += (sender, e) =>
         {
-            Debug.Log("Connected to server!");
+            Debug.Log("[Log] Connected to server!");
             SendMatchRequest();
         };
 
         // match_success 응답 수신
-        socket.On("match_success", response =>
-        {
-            Debug.Log("Match success received: " + response.GetValue());
-        });
+        // socket.On("match_success", response =>
+        // {
+        //     Debug.Log("Match success received: " + response.GetValue());
+        // });
 
-        // OnUnityThread를 사용해야 Unity API 호출 가능
+        // OnUnityThread를 사용해야 Unity API 안전하게 호출 가능
         socket.OnUnityThread("board_state", res =>
         {
             var map = res.GetValue<Dictionary<string, string>>();
@@ -64,57 +55,56 @@ public class GomokuClient : MonoBehaviour
             Debug.Log(boardStr);
             UpdateBoard(boardStr);
         });
-        // 연결
-        socket.Connect();
+
+        socket.Connect(); // 소켓 서버에 연결
     }
 
-    void SendMatchRequest()
+    private void MapIntersectionsToBoard()
     {
+        Debug.Log("[Log] Mapping intersections to board...");
+        // Intersection 오브젝트를 찾아서 board 배열에 매핑
+        var intersectionObjects = FindObjectsOfType<Intersection>();
+        foreach (var intersection in intersectionObjects)
+        {
+            int row = intersection.GetRowIndex();
+            int col = intersection.GetColIndex();
+            board[row, col] = intersection;
+        }
+    }
+
+    private void SendMatchRequest()
+    {
+        Debug.Log("[Log] Sending match request...");
         if (matchRequested)
         {
             return;
         }
         matchRequested = true;
 
-        Debug.Log("Sending match request...");
         socket.Emit("match_request", new
         {
-            playerId = "player123",
-            wantAiOpponent = true // AI opponent 여부
-        });
-    }
-
-    public void SendPlaceStone(int row_index, int col_index)
-    {
-        // 예시: 클릭 시 match_request 이벤트 전송
-        Debug.Log("Mouse clicked, sending desired stone location...");
-        socket.Emit("place_stone", new
-        {
-            x = row_index, // 예시 좌표
-            y = col_index,  // 예시 좌표
-            playerId = "player123" // 플레이어 ID
+            playerId = "player123", // 요청 플레이어 ID (유일함 보장할 것)
+            wantAiOpponent = true // AI 상대 희망 여부
         });
     }
 
     private void UpdateBoard(string boardStr)
     {
-        // 보드 상태를 업데이트하는 로직
-        // 예시: 각 칸에 대해 클릭 이벤트를 설정
+        Debug.Log("[Log] Updating board state...");
+        // 보드 상태 업데이트 
+        // TODO(jpyo0803): 변화가 있는 부분만 업데이트하도록 최적화 필요
         for (int i = 0; i < BOARD_SIZE; i++)
         {
             for (int j = 0; j < BOARD_SIZE; j++)
             {
                 char stone = boardStr[i * BOARD_SIZE + j];
-                // 여기서 stone에 따라 UI를 업데이트하거나 게임 상태를 변경할 수 있음
                 if (stone == 'B')
                 {
-                    // 흑돌을 놓는 로직
-                    board[i, j].SetStone(true);
+                    board[i, j].SetStone(true); // 흑돌 착수
                 }
                 else if (stone == 'W')
                 {
-                    // 백돌을 놓는 로직
-                    board[i, j].SetStone(false);
+                    board[i, j].SetStone(false); // 백돌 착수
                 }
             }
         }
@@ -122,9 +112,23 @@ public class GomokuClient : MonoBehaviour
 
     private void OnDestroy()
     {
+        Debug.Log("[Log] GomokuClient OnDestroy() called");
+
         if (socket == null) return;
-        socket.Disconnect();
-        socket.Dispose();
-        socket = null;
+        socket.Disconnect(); // 소켓 연결 해제
+        socket.Dispose(); // 소켓 리소스 해제
+        socket = null; // 소켓 객체 초기화
+    }
+
+    public void SendPlaceStone(int row_index, int col_index)
+    {
+        Debug.Log($"[Log] Sending place_stone event at ({row_index}, {col_index})");
+
+        socket.Emit("place_stone", new
+        {
+            x = row_index, // x 좌표 (행 인덱스)
+            y = col_index,  // y 좌표 (열 인덱스)
+            playerId = "player123" // 플레이어 ID (유일함 보장할 것)
+        });
     }
 }
