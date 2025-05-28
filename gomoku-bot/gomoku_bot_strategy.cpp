@@ -194,23 +194,8 @@ std::pair<int, int> MinimaxWithAlphaBetaPruning::Solve(Board board, int max_dept
       if (board.GetCell(i, j) == Piece::kEmpty) {
         continue;
       }
-      for (int dx = -2; dx <= 2; ++dx) {
-        for (int dy = -2; dy <= 2; ++dy) {
-          if (dx == 0 && dy == 0) {
-            continue;
-          }
-          int x = i + dx;
-          int y = j + dy;
-
-          // skip if out of range
-          if (x < 0 || x >= kBoardSize || y < 0 || y >= kBoardSize) {
-            continue;
-          }
-          if (board.GetCell(x, y) == Piece::kEmpty) {
-            candidate_map.Set(x, y);  // mark as candidate
-          }
-        }
-      }
+      
+      candidate_map.SetSquare(i, j, 2);  // mark as candidate for next moves
     }
   }
 
@@ -241,35 +226,21 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
         if (candidate_map.Test(i, j) == false) {
           continue;
         }
+        if (board.GetCell(i, j) != Piece::kEmpty) {
+          continue;  // skip if not empty
+        }
 
         auto next_candidate_map = candidate_map;
         auto next_board = board;
 
-        next_candidate_map.Reset(i, j);  // mark as not candidate
         next_board.SetCell(i, j, Piece::kWhite);
-
+        
         // check if the move is winning
         if (IsWin(next_board, i, j, Piece::kWhite)) {
           return {{i, j}, kEarlyWinScore};
         }
-
-        for (int dx = -2; dx <= 2; ++dx) {
-          for (int dy = -2; dy <= 2; ++dy) {
-            if (dx == 0 && dy == 0) {
-              continue;
-            }
-            int x = i + dx;
-            int y = j + dy;
-
-            // skip if out of range
-            if (x < 0 || x >= kBoardSize || y < 0 || y >= kBoardSize) {
-              continue;
-            }
-            if (next_board.GetCell(x, y) == Piece::kEmpty) {
-              next_candidate_map.Set(x, y);  // mark as candidate
-            }
-          }
-        }
+        
+        next_candidate_map.SetSquare(i, j, 2);  // mark as candidate for next moves
 
         auto result = Minimax(next_board, depth - 1, alpha, beta, false, next_candidate_map);
         auto eval = result.second;
@@ -296,33 +267,20 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
         if (candidate_map.Test(i, j) == false) {
           continue;
         }
+        if (board.GetCell(i, j) != Piece::kEmpty) {
+          continue;  // skip if not empty
+        }
+
         auto next_candidate_map = candidate_map;
         auto next_board = board;
 
-        next_candidate_map.Reset(i, j);  // mark as not candidate
         next_board.SetCell(i, j, Piece::kBlack);
 
         if (IsWin(next_board, i, j, Piece::kBlack)) {
           return {{i, j}, -kEarlyWinScore};
         }
 
-        for (int dx = -2; dx <= 2; ++dx) {
-          for (int dy = -2; dy <= 2; ++dy) {
-            if (dx == 0 && dy == 0) {
-              continue;
-            }
-            int x = i + dx;
-            int y = j + dy;
-
-            // skip if out of range
-            if (x < 0 || x >= kBoardSize || y < 0 || y >= kBoardSize) {
-              continue;
-            }
-            if (next_board.GetCell(x, y) == Piece::kEmpty) {
-              next_candidate_map.Set(x, y);  // mark as candidate
-            }
-          }
-        }
+        next_candidate_map.SetSquare(i, j, 2);  // mark as candidate for next moves
 
         auto result = Minimax(next_board, depth - 1, alpha, beta, true, next_candidate_map);
         auto eval = result.second;
