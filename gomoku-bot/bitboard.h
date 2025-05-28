@@ -33,6 +33,10 @@ class BitBoard {
         return (bit_board_[x] & (1 << y)) != 0;
     }
 
+    uint16_t GetRow(int x) const {
+        return bit_board_[x];
+    }
+
     void SetSquare(int x, int y, int d) {
         // x와 y을 중심으로 2d x 2d 정사각형 영역을 set
         int lower_x = std::max(0, x - d);

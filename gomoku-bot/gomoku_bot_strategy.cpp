@@ -222,6 +222,9 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
     std::pair<int, int> best_move = {-1, -1};
 
     for (int i = 0; i < kBoardSize; ++i) {
+      if (candidate_map.GetRow(i) == 0) {
+        continue;  // skip rows with no candidates
+      }
       for (int j = 0; j < kBoardSize; ++j) {
         if (candidate_map.Test(i, j) == false) {
           continue;
@@ -263,6 +266,9 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
     std::pair<int, int> best_move = {-1, -1};
 
     for (int i = 0; i < kBoardSize; ++i) {
+      if (candidate_map.GetRow(i) == 0) {
+        continue;  // skip rows with no candidates
+      }
       for (int j = 0; j < kBoardSize; ++j) {
         if (candidate_map.Test(i, j) == false) {
           continue;
