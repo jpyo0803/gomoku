@@ -252,7 +252,7 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
 #if ALPHA_BETA_PRUNING == 1
         alpha = std::max(alpha, eval);
         if (beta <= alpha) {
-          break;  // beta cut-off
+          return {best_move, max_eval};  // beta cut-off 
         }
 #endif
       }
@@ -292,7 +292,7 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
 #if ALPHA_BETA_PRUNING == 1
         beta = std::min(beta, eval);
         if (beta <= alpha) {
-          break;  // alpha cut-off
+          return {best_move, min_eval};  // alpha cut-off
         }
 #endif
       }
