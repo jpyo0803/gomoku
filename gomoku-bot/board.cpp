@@ -6,15 +6,15 @@
 
 namespace gomoku {
 
-Board::Board(int size) : size_(size), board_(size, std::vector<Piece>(size, Piece::kEmpty)) {}
+Board::Board() : board_(kBoardSize, std::vector<Piece>(kBoardSize, Piece::kEmpty)) {}
 
 Piece Board::GetCell(int x, int y) const {
-  assert(x >= 0 && x < size_ && y >= 0 && y < size_);
+  assert(x >= 0 && x < kBoardSize && y >= 0 && y < kBoardSize);
   return board_.at(x).at(y);
 }
 
 void Board::SetCell(int x, int y, Piece piece) {
-  assert(x >= 0 && x < size_ && y >= 0 && y < size_);
+  assert(x >= 0 && x < kBoardSize && y >= 0 && y < kBoardSize);
   board_.at(x).at(y) = piece;
 }
 
@@ -38,7 +38,7 @@ int Board::Play(int x, int y, Piece piece) {
 }
 
 bool Board::IsValidMove(int x, int y) const {
-  if (x < 0 || x >= size_ || y < 0 || y >= size_) {
+  if (x < 0 || x >= kBoardSize || y < 0 || y >= kBoardSize) {
     return false;
   }
   return board_.at(x).at(y) == Piece::kEmpty;
@@ -54,7 +54,8 @@ bool Board::IsWin(int x, int y, Piece piece) const {
       int nx = x + dx * dir;
       int ny = y + dy * dir;
 
-      while (nx >= 0 && nx < size_ && ny >= 0 && ny < size_ && board_.at(nx).at(ny) == piece) {
+      while (nx >= 0 && nx < kBoardSize && ny >= 0 && ny < kBoardSize &&
+             board_.at(nx).at(ny) == piece) {
         count++;
         nx += dx * dir;
         ny += dy * dir;
@@ -68,11 +69,11 @@ bool Board::IsWin(int x, int y, Piece piece) const {
 }
 
 bool Board::OutOfRange(int x, int y) const {
-  return x < 0 || x >= size_ || y < 0 || y >= size_;
+  return x < 0 || x >= kBoardSize || y < 0 || y >= kBoardSize;
 }
 
-int Board::size() const {
-  return size_;
+int Board::GetSize() const {
+  return kBoardSize;
 }
 
 }  // namespace gomoku

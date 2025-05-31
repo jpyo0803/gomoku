@@ -5,6 +5,8 @@
 
 namespace gomoku {
 
+constexpr int kBoardSize = 15;
+
 enum class Piece {
   kEmpty = 0,
   kBlack,
@@ -13,7 +15,7 @@ enum class Piece {
 
 class Board {
  public:
-  Board(int size);
+  Board();
 
   Piece GetCell(int x, int y) const;
 
@@ -21,7 +23,7 @@ class Board {
 
   int Play(int x, int y, Piece piece);
 
-  int size() const;
+  int GetSize() const;
 
  private:
   bool IsValidMove(int x, int y) const;
@@ -32,7 +34,6 @@ class Board {
 
  private:
   std::vector<std::vector<Piece>> board_;
-  int size_;
 
   std::vector<std::pair<int, int>> black_piece_pos_;
   std::vector<std::pair<int, int>> white_piece_pos_;
