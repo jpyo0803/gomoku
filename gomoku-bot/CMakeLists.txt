@@ -23,3 +23,20 @@ target_include_directories(gomoku_server PRIVATE
 
 # server가 gomoku_core를 링크하도록 설정
 target_link_libraries(gomoku_server PRIVATE gomoku_core)
+
+
+# GTest기반 단위 테스트 설정
+add_executable(unittest unittest.cpp)
+add_subdirectory(external/googletest)
+
+target_include_directories(unittest PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+target_link_libraries(unittest
+    PRIVATE
+        gomoku_core
+        gtest
+        gtest_main
+        pthread
+)
