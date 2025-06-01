@@ -44,28 +44,28 @@ bool IsWin(const gomoku::Board& board, int x, int y, gomoku::Piece piece) {
 }
 
 namespace {
-  // anonymous namespace for EvaluateBoard
-  BitBoard visited_horizontal;
-  BitBoard visited_vertical;
-  BitBoard visited_diagonal_down_right;
-  BitBoard visited_diagonal_down_left;
+// anonymous namespace for EvaluateBoard
+BitBoard visited_horizontal;
+BitBoard visited_vertical;
+BitBoard visited_diagonal_down_right;
+BitBoard visited_diagonal_down_left;
 
-  constexpr std::array<double, 5> kOpenScores = {
-      0.0,  // [0] unused
-      1e3,  // [1] open 1
-      1e6,  // [2] open 2
-      1e9,  // [3] open 3
-      1e12  // [4] open 4
-  };
-  
-  constexpr std::array<double, 5> kBlockedScores = {
-      0.0,  // [0] unused
-      1e1,  // [1] blocked 1
-      1e4,  // [2] blocked 2
-      1e7,  // [3] blocked 3
-      1e10  // [4] blocked 4
-  };
-}
+constexpr std::array<double, 5> kOpenScores = {
+    0.0,  // [0] unused
+    1e3,  // [1] open 1
+    1e6,  // [2] open 2
+    1e9,  // [3] open 3
+    1e12  // [4] open 4
+};
+
+constexpr std::array<double, 5> kBlockedScores = {
+    0.0,  // [0] unused
+    1e1,  // [1] blocked 1
+    1e4,  // [2] blocked 2
+    1e7,  // [3] blocked 3
+    1e10  // [4] blocked 4
+};
+}  // namespace
 
 double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
   double score = 0.0;
@@ -93,13 +93,13 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
         if (count >= 5) {
           score += kWinScore;
         } else {
-          bool left_not_valid = OutOfRange(x, y - 1) || board.GetCell(x, y - 1) == kOpponent;
-          bool right_not_valid =
-              OutOfRange(x, y + count) || board.GetCell(x, y + count) == kOpponent;
-          if (left_not_valid || right_not_valid) {
-            score += kBlockedScores[count];
-          } else {
+          bool left_valid = !OutOfRange(x, y - 1) && board.GetCell(x, y - 1) == Piece::kEmpty;
+          bool right_valid =
+              !OutOfRange(x, y + count) && board.GetCell(x, y + count) == Piece::kEmpty;
+          if (left_valid && right_valid) {
             score += kOpenScores[count];
+          } else if (left_valid || right_valid) {
+            score += kBlockedScores[count];
           }
         }
       }
@@ -115,13 +115,14 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
         if (count >= 5) {
           score += kWinScore;
         } else {
-          bool up_not_valid = OutOfRange(x - 1, y) || board.GetCell(x - 1, y) == kOpponent;
-          bool down_not_valid =
-              OutOfRange(x + count, y) || board.GetCell(x + count, y) == kOpponent;
-          if (up_not_valid || down_not_valid) {
-            score += kBlockedScores[count];
-          } else {
+          bool up_valid = !OutOfRange(x - 1, y) && board.GetCell(x - 1, y) == Piece::kEmpty;
+          bool down_valid =
+              !OutOfRange(x + count, y) && board.GetCell(x + count, y) == Piece::kEmpty;
+
+          if (up_valid && down_valid) {
             score += kOpenScores[count];
+          } else if (up_valid || down_valid) {
+            score += kBlockedScores[count];
           }
         }
       }
@@ -139,14 +140,15 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
         if (count >= 5) {
           score += kWinScore;
         } else {
-          bool up_left_not_valid =
-              OutOfRange(x - 1, y - 1) || board.GetCell(x - 1, y - 1) == kOpponent;
-          bool down_right_not_valid =
-              OutOfRange(x + count, y + count) || board.GetCell(x + count, y + count) == kOpponent;
-          if (up_left_not_valid || down_right_not_valid) {
-            score += kBlockedScores[count];
-          } else {
+          bool up_left_valid =
+              !OutOfRange(x - 1, y - 1) && board.GetCell(x - 1, y - 1) == Piece::kEmpty;
+          bool down_right_valid = !OutOfRange(x + count, y + count) &&
+                                  board.GetCell(x + count, y + count) == Piece::kEmpty;
+
+          if (up_left_valid && down_right_valid) {
             score += kOpenScores[count];
+          } else if (up_left_valid || down_right_valid) {
+            score += kBlockedScores[count];
           }
         }
       }
@@ -164,14 +166,15 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
         if (count >= 5) {
           score += kWinScore;
         } else {
-          bool up_right_not_valid =
-              OutOfRange(x - 1, y + 1) || board.GetCell(x - 1, y + 1) == kOpponent;
-          bool down_left_not_valid =
-              OutOfRange(x + count, y - count) || board.GetCell(x + count, y - count) == kOpponent;
-          if (up_right_not_valid || down_left_not_valid) {
-            score += kBlockedScores[count];
-          } else {
+          bool up_right_valid =
+              !OutOfRange(x - 1, y + 1) && board.GetCell(x - 1, y + 1) == Piece::kEmpty;
+          bool down_left_valid = !OutOfRange(x + count, y - count) &&
+                                 board.GetCell(x + count, y - count) == Piece::kEmpty;
+
+          if (up_right_valid && down_left_valid) {
             score += kOpenScores[count];
+          } else if (up_right_valid || down_left_valid) {
+            score += kBlockedScores[count];
           }
         }
       }
@@ -183,7 +186,6 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
 std::pair<int, int> MinimaxWithAlphaBetaPruning::Solve(Board board, int max_depth) const {
   // Find candidates. Candiates are the empty cells +/- 2 from the black or white pieces.
   // std::vector<std::vector<bool>> candidate_map(kBoardSize, std::vector<bool>(kBoardSize, false));
-  assert(board.size() == kBoardSize);
   assert(max_depth <= 4);
 
   // std::vector<std::bitset<kBoardSize>> candidate_map(kBoardSize, std::bitset<kBoardSize>(0));
@@ -194,7 +196,7 @@ std::pair<int, int> MinimaxWithAlphaBetaPruning::Solve(Board board, int max_dept
       if (board.GetCell(i, j) == Piece::kEmpty) {
         continue;
       }
-      
+
       candidate_map.SetSquare(i, j, 2);  // mark as candidate for next moves
     }
   }
@@ -237,12 +239,12 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
         auto next_board = board;
 
         next_board.SetCell(i, j, Piece::kWhite);
-        
+
         // check if the move is winning
         if (IsWin(next_board, i, j, Piece::kWhite)) {
           return {{i, j}, kEarlyWinScore};
         }
-        
+
         next_candidate_map.SetSquare(i, j, 2);  // mark as candidate for next moves
 
         auto result = Minimax(next_board, depth - 1, alpha, beta, false, next_candidate_map);
@@ -255,7 +257,7 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
 #if ALPHA_BETA_PRUNING == 1
         alpha = std::max(alpha, eval);
         if (beta <= alpha) {
-          return {best_move, max_eval};  // beta cut-off 
+          return {best_move, max_eval};  // beta cut-off
         }
 #endif
       }

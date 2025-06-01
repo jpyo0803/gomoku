@@ -36,12 +36,12 @@ class GomokuServer {
         std::string flat = req["board"];
         std::string playerId = req["playerId"];
 
-        const int size = 15;
+        const int size = kBoardSize;
         if (flat.size() != size * size) {
           throw std::runtime_error("Invalid board string length");
         }
 
-        gomoku::Board board(size);
+        gomoku::Board board;
         for (int i = 0; i < size; ++i) {
           for (int j = 0; j < size; ++j) {
             char c = flat[i * size + j];
