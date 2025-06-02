@@ -16,7 +16,7 @@ namespace gomoku {
 constexpr double kWinScore = 1e70;  // open 5 or blocked 5
 
 constexpr std::array<double, 5> kOpenScores = {
-    0.0,  // no open
+    0.0,   // no open
     1e25,  // open 1
     1e35,  // open 2
     1e45,  // open 3
@@ -24,14 +24,14 @@ constexpr std::array<double, 5> kOpenScores = {
 };
 
 constexpr std::array<double, 5> kHalfOpenScores = {
-    0.0,  // no half open
+    0.0,   // no half open
     1e20,  // half open 1
     1e30,  // half open 2
     1e40,  // half open 3
-    1e50  // half open 4
+    1e50   // half open 4
 };
 
-constexpr double kDoubleOpen3Score = 1e60; // win 2 steps
+constexpr double kDoubleOpen3Score = 1e60;  // win 2 steps
 
 bool OutOfRange(int x, int y) {
   return y < 0 || y >= kBoardSize || x < 0 || x >= kBoardSize;
@@ -63,7 +63,6 @@ bool IsWin(const gomoku::Board& board, int x, int y, gomoku::Piece piece) {
 namespace {
 // anonymous namespace for EvaluateBoard
 
-
 }  // namespace
 
 double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
@@ -78,15 +77,15 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
   // Horizontal evaluation
   auto valid_rows = board.GetOccupiedRows();
   for (auto x : valid_rows) {
-  // for (int x = 0; x < kBoardSize; ++x) {
+    // for (int x = 0; x < kBoardSize; ++x) {
     int cnt = 0;
     for (int y = 0; y < kBoardSize; ++y) {
       auto curr_piece = board.GetCell(x, y);
       if (curr_piece == piece) {
         cnt++;
       } else {
-        bool is_start_open = !OutOfRange(x, y - cnt - 1) &&
-                             board.GetCell(x, y - cnt - 1) == Piece::kEmpty;
+        bool is_start_open =
+            !OutOfRange(x, y - cnt - 1) && board.GetCell(x, y - cnt - 1) == Piece::kEmpty;
         bool is_end_open = !OutOfRange(x, y) && board.GetCell(x, y) == Piece::kEmpty;
 
         if (cnt >= 5) {
@@ -135,7 +134,8 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
       if (curr_piece == piece) {
         cnt++;
       } else {
-        bool is_start_open = !OutOfRange(x - cnt - 1, y) && board.GetCell(x - cnt - 1, y) == Piece::kEmpty;
+        bool is_start_open =
+            !OutOfRange(x - cnt - 1, y) && board.GetCell(x - cnt - 1, y) == Piece::kEmpty;
         bool is_end_open = !OutOfRange(x, y) && board.GetCell(x, y) == Piece::kEmpty;
         if (cnt >= 5) {
           win++;
@@ -180,7 +180,7 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
     int j_len = i == 0 ? kBoardSize : 1;
     for (int j = 0; j < j_len; ++j) {
       int x = i;
-      int y = j; 
+      int y = j;
 
       if (i >= kBoardSize || j >= kBoardSize) {
         break;  // out of range
@@ -215,8 +215,9 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
     }
 
     if (cnt > 0) {
-      bool is_start_open = !OutOfRange(kBoardSize - cnt - 1, kBoardSize - cnt - 1) &&
-                           board.GetCell(kBoardSize - cnt - 1, kBoardSize - cnt - 1) == Piece::kEmpty;
+      bool is_start_open =
+          !OutOfRange(kBoardSize - cnt - 1, kBoardSize - cnt - 1) &&
+          board.GetCell(kBoardSize - cnt - 1, kBoardSize - cnt - 1) == Piece::kEmpty;
       bool is_end_open = false;  // end is always closed in this case
       if (cnt >= 5) {
         win++;

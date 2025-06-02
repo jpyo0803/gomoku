@@ -6,8 +6,10 @@
 
 namespace gomoku {
 
-Board::Board() : board_(kBoardSize, std::vector<Piece>(kBoardSize, Piece::kEmpty)),
-  row_occupied_{false}, col_occupied_{false} {}
+Board::Board() :
+    board_(kBoardSize, std::vector<Piece>(kBoardSize, Piece::kEmpty)),
+    row_occupied_{false},
+    col_occupied_{false} {}
 
 Piece Board::GetCell(int x, int y) const {
   // assert(x >= 0 && x < kBoardSize && y >= 0 && y < kBoardSize);
