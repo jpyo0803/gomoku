@@ -13,11 +13,28 @@ int64_t call_count = 0;
 
 namespace gomoku {
 
-constexpr double kEarlyWinScore = 3e15;
-constexpr double kWinScore = 1e15;  // open 5 or blocked 5
+constexpr double kWinScore = 1e70;  // open 5 or blocked 5
+
+constexpr std::array<double, 5> kOpenScores = {
+    0.0,  // no open
+    1e25,  // open 1
+    1e35,  // open 2
+    1e45,  // open 3
+    1e65   // open 4
+};
+
+constexpr std::array<double, 5> kHalfOpenScores = {
+    0.0,  // no half open
+    1e20,  // half open 1
+    1e30,  // half open 2
+    1e40,  // half open 3
+    1e50  // half open 4
+};
+
+constexpr double kDoubleOpen3Score = 1e60; // win 2 steps
 
 bool OutOfRange(int x, int y) {
-  return x < 0 || x >= kBoardSize || y < 0 || y >= kBoardSize;
+  return y < 0 || y >= kBoardSize || x < 0 || x >= kBoardSize;
 }
 
 bool IsWin(const gomoku::Board& board, int x, int y, gomoku::Piece piece) {
@@ -45,141 +62,247 @@ bool IsWin(const gomoku::Board& board, int x, int y, gomoku::Piece piece) {
 
 namespace {
 // anonymous namespace for EvaluateBoard
-BitBoard visited_horizontal;
-BitBoard visited_vertical;
-BitBoard visited_diagonal_down_right;
-BitBoard visited_diagonal_down_left;
 
-constexpr std::array<double, 5> kOpenScores = {
-    0.0,  // [0] unused
-    1e3,  // [1] open 1
-    1e6,  // [2] open 2
-    1e9,  // [3] open 3
-    1e12  // [4] open 4
-};
 
-constexpr std::array<double, 5> kBlockedScores = {
-    0.0,  // [0] unused
-    1e1,  // [1] blocked 1
-    1e4,  // [2] blocked 2
-    1e7,  // [3] blocked 3
-    1e10  // [4] blocked 4
-};
 }  // namespace
 
 double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
   double score = 0.0;
 
-  // Reset visited arrays
-  visited_horizontal.Clear();
-  visited_vertical.Clear();
-  visited_diagonal_down_right.Clear();
-  visited_diagonal_down_left.Clear();
-
   const Piece kOpponent = (piece == Piece::kBlack) ? Piece::kWhite : Piece::kBlack;
 
-  for (int x = 0; x < kBoardSize; ++x) {
+  int win = 0;
+  std::array<int, 5> open_count_arr = {0, 0, 0, 0, 0};
+  std::array<int, 5> half_open_count_arr = {0, 0, 0, 0, 0};
+
+  // Horizontal evaluation
+  auto valid_rows = board.GetOccupiedRows();
+  for (auto x : valid_rows) {
+  // for (int x = 0; x < kBoardSize; ++x) {
+    int cnt = 0;
     for (int y = 0; y < kBoardSize; ++y) {
-      if (board.GetCell(x, y) != piece) continue;
+      auto curr_piece = board.GetCell(x, y);
+      if (curr_piece == piece) {
+        cnt++;
+      } else {
+        bool is_start_open = !OutOfRange(x, y - cnt - 1) &&
+                             board.GetCell(x, y - cnt - 1) == Piece::kEmpty;
+        bool is_end_open = !OutOfRange(x, y) && board.GetCell(x, y) == Piece::kEmpty;
 
-      // check horizontal
-      if (!visited_horizontal.Test(x, y)) {
-        int count = 1;
-        // Only check to the right
-        for (int j = y + 1; j < kBoardSize && board.GetCell(x, j) == piece; ++j) {
-          count++;
-          visited_horizontal.Set(x, j);
-        }
-        if (count >= 5) {
+        if (cnt >= 5) {
+          win++;
           score += kWinScore;
-        } else {
-          bool left_valid = !OutOfRange(x, y - 1) && board.GetCell(x, y - 1) == Piece::kEmpty;
-          bool right_valid =
-              !OutOfRange(x, y + count) && board.GetCell(x, y + count) == Piece::kEmpty;
-          if (left_valid && right_valid) {
-            score += kOpenScores[count];
-          } else if (left_valid || right_valid) {
-            score += kBlockedScores[count];
+        } else if (cnt > 0) {
+          if (is_start_open && is_end_open) {
+            open_count_arr[cnt]++;
+            score += kOpenScores[cnt];
+          } else if (is_start_open || is_end_open) {
+            half_open_count_arr[cnt]++;
+            score += kHalfOpenScores[cnt];
           }
         }
+
+        // reset count
+        cnt = 0;
       }
+    }
 
-      // check vertical
-      if (!visited_vertical.Test(x, y)) {
-        int count = 1;
-        // Only check down
-        for (int j = x + 1; j < kBoardSize && board.GetCell(j, y) == piece; ++j) {
-          count++;
-          visited_vertical.Set(j, y);
-        }
-        if (count >= 5) {
-          score += kWinScore;
-        } else {
-          bool up_valid = !OutOfRange(x - 1, y) && board.GetCell(x - 1, y) == Piece::kEmpty;
-          bool down_valid =
-              !OutOfRange(x + count, y) && board.GetCell(x + count, y) == Piece::kEmpty;
-
-          if (up_valid && down_valid) {
-            score += kOpenScores[count];
-          } else if (up_valid || down_valid) {
-            score += kBlockedScores[count];
-          }
-        }
-      }
-
-      // check diagonal down-right
-      if (!visited_diagonal_down_right.Test(x, y)) {
-        int count = 1;
-        // Only check down-right
-        for (int j = 1; j < kBoardSize && x + j < kBoardSize && y + j < kBoardSize &&
-                        board.GetCell(x + j, y + j) == piece;
-             ++j) {
-          count++;
-          visited_diagonal_down_right.Set(x + j, y + j);
-        }
-        if (count >= 5) {
-          score += kWinScore;
-        } else {
-          bool up_left_valid =
-              !OutOfRange(x - 1, y - 1) && board.GetCell(x - 1, y - 1) == Piece::kEmpty;
-          bool down_right_valid = !OutOfRange(x + count, y + count) &&
-                                  board.GetCell(x + count, y + count) == Piece::kEmpty;
-
-          if (up_left_valid && down_right_valid) {
-            score += kOpenScores[count];
-          } else if (up_left_valid || down_right_valid) {
-            score += kBlockedScores[count];
-          }
-        }
-      }
-
-      // check diagonal down-left
-      if (!visited_diagonal_down_left.Test(x, y)) {
-        int count = 1;
-        // Only check down-left
-        for (int j = 1; j < kBoardSize && x + j < kBoardSize && y - j >= 0 &&
-                        board.GetCell(x + j, y - j) == piece;
-             ++j) {
-          count++;
-          visited_diagonal_down_left.Set(x + j, y - j);
-        }
-        if (count >= 5) {
-          score += kWinScore;
-        } else {
-          bool up_right_valid =
-              !OutOfRange(x - 1, y + 1) && board.GetCell(x - 1, y + 1) == Piece::kEmpty;
-          bool down_left_valid = !OutOfRange(x + count, y - count) &&
-                                 board.GetCell(x + count, y - count) == Piece::kEmpty;
-
-          if (up_right_valid && down_left_valid) {
-            score += kOpenScores[count];
-          } else if (up_right_valid || down_left_valid) {
-            score += kBlockedScores[count];
-          }
+    if (cnt > 0) {
+      bool is_start_open = !OutOfRange(x, kBoardSize - cnt - 1) &&
+                           board.GetCell(x, kBoardSize - cnt - 1) == Piece::kEmpty;
+      bool is_end_open = false;  // end is always closed in this case
+      if (cnt >= 5) {
+        win++;
+        score += kWinScore;
+      } else if (cnt > 0) {
+        if (is_start_open && is_end_open) {
+          open_count_arr[cnt]++;
+          score += kOpenScores[cnt];
+        } else if (is_start_open || is_end_open) {
+          half_open_count_arr[cnt]++;
+          score += kHalfOpenScores[cnt];
         }
       }
     }
   }
+
+  // Vertical evaluation
+  auto valid_cols = board.GetOccupiedCols();
+  for (auto y : valid_cols) {
+    int cnt = 0;
+    for (int x = 0; x < kBoardSize; ++x) {
+      auto curr_piece = board.GetCell(x, y);
+      if (curr_piece == piece) {
+        cnt++;
+      } else {
+        bool is_start_open = !OutOfRange(x - cnt - 1, y) && board.GetCell(x - cnt - 1, y) == Piece::kEmpty;
+        bool is_end_open = !OutOfRange(x, y) && board.GetCell(x, y) == Piece::kEmpty;
+        if (cnt >= 5) {
+          win++;
+          score += kWinScore;
+        } else if (cnt > 0) {
+          if (is_start_open && is_end_open) {
+            open_count_arr[cnt]++;
+            score += kOpenScores[cnt];
+          } else if (is_start_open || is_end_open) {
+            half_open_count_arr[cnt]++;
+            score += kHalfOpenScores[cnt];
+          }
+        }
+
+        // reset count
+        cnt = 0;
+      }
+    }
+
+    if (cnt > 0) {
+      bool is_start_open = !OutOfRange(kBoardSize - cnt - 1, y) &&
+                           board.GetCell(kBoardSize - cnt - 1, y) == Piece::kEmpty;
+      bool is_end_open = false;  // end is always closed in this case
+      if (cnt >= 5) {
+        win++;
+        score += kWinScore;
+      } else if (cnt > 0) {
+        if (is_start_open && is_end_open) {
+          open_count_arr[cnt]++;
+          score += kOpenScores[cnt];
+        } else if (is_start_open || is_end_open) {
+          half_open_count_arr[cnt]++;
+          score += kHalfOpenScores[cnt];
+        }
+      }
+    }
+  }
+
+  // Diagonal evaluation (top-left to bottom-right)
+  for (int i = 0; i < kBoardSize; ++i) {
+    int cnt = 0;
+    int j_len = i == 0 ? kBoardSize : 1;
+    for (int j = 0; j < j_len; ++j) {
+      int x = i;
+      int y = j; 
+
+      if (i >= kBoardSize || j >= kBoardSize) {
+        break;  // out of range
+      }
+      auto curr_piece = board.GetCell(x, y);
+
+      if (curr_piece == piece) {
+        cnt++;
+      } else {
+        bool is_start_open = !OutOfRange(x - cnt - 1, y - cnt - 1) &&
+                             board.GetCell(x - cnt - 1, y - cnt - 1) == Piece::kEmpty;
+        bool is_end_open = !OutOfRange(x, y) && board.GetCell(x, y) == Piece::kEmpty;
+        if (cnt >= 5) {
+          win++;
+          score += kWinScore;
+        } else if (cnt > 0) {
+          if (is_start_open && is_end_open) {
+            open_count_arr[cnt]++;
+            score += kOpenScores[cnt];
+          } else if (is_start_open || is_end_open) {
+            half_open_count_arr[cnt]++;
+            score += kHalfOpenScores[cnt];
+          }
+        }
+
+        // reset count
+        cnt = 0;
+      }
+
+      x++;
+      y++;
+    }
+
+    if (cnt > 0) {
+      bool is_start_open = !OutOfRange(kBoardSize - cnt - 1, kBoardSize - cnt - 1) &&
+                           board.GetCell(kBoardSize - cnt - 1, kBoardSize - cnt - 1) == Piece::kEmpty;
+      bool is_end_open = false;  // end is always closed in this case
+      if (cnt >= 5) {
+        win++;
+      } else if (cnt > 0) {
+        if (is_start_open && is_end_open) {
+          open_count_arr[cnt]++;
+          score += kOpenScores[cnt];
+        } else if (is_start_open || is_end_open) {
+          half_open_count_arr[cnt]++;
+          score += kHalfOpenScores[cnt];
+        }
+      }
+    }
+  }
+
+  // Diagonal evaluation (top-right to bottom-left)
+  for (int i = 0; i < kBoardSize; ++i) {
+    int cnt = 0;
+    int j_len = i == 0 ? kBoardSize : 1;
+    for (int j = 0; j < j_len; ++j) {
+      int x = i;
+      int y = kBoardSize - 1 - j;
+
+      if (i >= kBoardSize || y < 0) {
+        break;  // out of range
+      }
+      auto curr_piece = board.GetCell(x, y);
+
+      if (curr_piece == piece) {
+        cnt++;
+      } else {
+        bool is_start_open = !OutOfRange(x - cnt - 1, y + cnt + 1) &&
+                             board.GetCell(x - cnt - 1, y + cnt + 1) == Piece::kEmpty;
+        bool is_end_open = !OutOfRange(x, y) && board.GetCell(x, y) == Piece::kEmpty;
+        if (cnt >= 5) {
+          win++;
+          score += kWinScore;
+        } else if (cnt > 0) {
+          if (is_start_open && is_end_open) {
+            open_count_arr[cnt]++;
+            score += kOpenScores[cnt];
+          } else if (is_start_open || is_end_open) {
+            half_open_count_arr[cnt]++;
+            score += kHalfOpenScores[cnt];
+          }
+        }
+
+        // reset count
+        cnt = 0;
+      }
+
+      x++;
+      y--;
+    }
+
+    if (cnt > 0) {
+      bool is_start_open = !OutOfRange(kBoardSize - cnt - 1, cnt + 1) &&
+                           board.GetCell(kBoardSize - cnt - 1, cnt + 1) == Piece::kEmpty;
+      bool is_end_open = false;  // end is always closed in this case
+      if (cnt >= 5) {
+        win++;
+        score += kWinScore;
+      } else if (cnt > 0) {
+        if (is_start_open && is_end_open) {
+          open_count_arr[cnt]++;
+          score += kOpenScores[cnt];
+        } else if (is_start_open || is_end_open) {
+          half_open_count_arr[cnt]++;
+          score += kHalfOpenScores[cnt];
+        }
+      }
+    }
+  }
+  // Calculate score
+
+  if (open_count_arr[3] >= 2) {
+    score += kDoubleOpen3Score;  // double open 3
+  }
+  if (half_open_count_arr[4] >= 2) {
+    score += kOpenScores[4];
+  }
+
+  if (half_open_count_arr[4] >= 1 && open_count_arr[3] >= 1) {
+    score += kDoubleOpen3Score;
+  }
+
   return score;
 }
 
@@ -242,7 +365,7 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
 
         // check if the move is winning
         if (IsWin(next_board, i, j, Piece::kWhite)) {
-          return {{i, j}, kEarlyWinScore};
+          return {{i, j}, kWinScore};
         }
 
         next_candidate_map.SetSquare(i, j, 2);  // mark as candidate for next moves
@@ -285,7 +408,7 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
         next_board.SetCell(i, j, Piece::kBlack);
 
         if (IsWin(next_board, i, j, Piece::kBlack)) {
-          return {{i, j}, -kEarlyWinScore};
+          return {{i, j}, -kWinScore};
         }
 
         next_candidate_map.SetSquare(i, j, 2);  // mark as candidate for next moves

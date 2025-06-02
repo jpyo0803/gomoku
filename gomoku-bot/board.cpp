@@ -6,42 +6,53 @@
 
 namespace gomoku {
 
-Board::Board() : board_(kBoardSize, std::vector<Piece>(kBoardSize, Piece::kEmpty)) {}
+Board::Board() : board_(kBoardSize, std::vector<Piece>(kBoardSize, Piece::kEmpty)),
+  row_occupied_{false}, col_occupied_{false} {}
 
 Piece Board::GetCell(int x, int y) const {
-  assert(x >= 0 && x < kBoardSize && y >= 0 && y < kBoardSize);
-  return board_.at(x).at(y);
+  // assert(x >= 0 && x < kBoardSize && y >= 0 && y < kBoardSize);
+  return board_[x][y];
 }
 
 void Board::SetCell(int x, int y, Piece piece) {
-  assert(x >= 0 && x < kBoardSize && y >= 0 && y < kBoardSize);
-  board_.at(x).at(y) = piece;
+  // assert(x >= 0 && x < kBoardSize && y >= 0 && y < kBoardSize);
+  board_[x][y] = piece;
+  if (piece == Piece::kEmpty) {
+    row_occupied_[x] = col_occupied_[y] = false;
+  } else {
+    row_occupied_[x] = col_occupied_[y] = true;
+  }
 }
 
-int Board::Play(int x, int y, Piece piece) {
-  if (!IsValidMove(x, y)) {
-    return -1;  // Invalid move
-  }
+bool Board::IsRowEmpty(int row) const {
+  return row_occupied_[row] == false;
+}
 
-  board_.at(x).at(y) = piece;
-  if (piece == Piece::kBlack) {
-    black_piece_pos_.emplace_back(x, y);
-  } else {
-    white_piece_pos_.emplace_back(x, y);
-  }
+bool Board::IsColEmpty(int col) const {
+  return col_occupied_[col] == false;
+}
 
-  if (IsWin(x, y, piece)) {
-    return 1;  // Win
+std::vector<int> Board::GetOccupiedRows() const {
+  std::vector<int> ret;
+  for (int i = 0; i < kBoardSize; ++i) {
+    if (row_occupied_[i]) ret.push_back(i);
   }
+  return ret;
+}
 
-  return 0;  // Continue playing
+std::vector<int> Board::GetOccupiedCols() const {
+  std::vector<int> ret;
+  for (int i = 0; i < kBoardSize; ++i) {
+    if (col_occupied_[i]) ret.push_back(i);
+  }
+  return ret;
 }
 
 bool Board::IsValidMove(int x, int y) const {
   if (x < 0 || x >= kBoardSize || y < 0 || y >= kBoardSize) {
     return false;
   }
-  return board_.at(x).at(y) == Piece::kEmpty;
+  return board_[x][y] == Piece::kEmpty;
 }
 
 bool Board::IsWin(int x, int y, Piece piece) const {

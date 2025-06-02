@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <array>
 
 namespace gomoku {
 
@@ -21,9 +22,15 @@ class Board {
 
   void SetCell(int x, int y, Piece piece);  // no restriction
 
-  int Play(int x, int y, Piece piece);
-
   int GetSize() const;
+
+  bool IsRowEmpty(int row) const;
+
+  bool IsColEmpty(int col) const;
+
+  std::vector<int> GetOccupiedRows() const;
+
+  std::vector<int> GetOccupiedCols() const;
 
  private:
   bool IsValidMove(int x, int y) const;
@@ -37,6 +44,9 @@ class Board {
 
   std::vector<std::pair<int, int>> black_piece_pos_;
   std::vector<std::pair<int, int>> white_piece_pos_;
+
+  std::array<bool, kBoardSize> row_occupied_;
+  std::array<bool, kBoardSize> col_occupied_;
 };
 
 }  // namespace gomoku
