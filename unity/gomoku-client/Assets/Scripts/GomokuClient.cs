@@ -14,7 +14,7 @@ public class GomokuClient : MonoBehaviour
     private Intersection[,] board = new Intersection[BOARD_SIZE, BOARD_SIZE];
     private SocketIOUnity socket;
     private bool matchRequested = false; // 매치 요청 여부
-    private string playerId = "player123"; // 플레이
+    private string playerId; // 플레이
     private string opponentId;
     private bool isBlackStone;
     private string gameId;
@@ -25,6 +25,9 @@ public class GomokuClient : MonoBehaviour
         Debug.Log("[Log] GomokuClient Start() called");
         ConnectSocket();
         MapIntersectionsToBoard();
+
+        // 랜덤 스트링을 생성하여 playerId로 사용
+        playerId = System.Guid.NewGuid().ToString(); // 예시로 GUID 사용
     }
 
     private void ConnectSocket()
