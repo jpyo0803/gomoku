@@ -11,6 +11,21 @@ Board::Board() :
     row_occupied_{false},
     col_occupied_{false} {}
 
+Board::Board(const std::string& board_str) :
+    board_(kBoardSize, std::vector<Piece>(kBoardSize, Piece::kEmpty)),
+    row_occupied_{false},
+    col_occupied_{false} {
+  for (int i = 0; i < kBoardSize; ++i) {
+    for (int j = 0; j < kBoardSize; ++j) {
+      char piece_ch = board_str[i * kBoardSize + j];
+      if (piece_ch == 'B')
+        SetCell(i, j, Piece::kBlack);
+      else if (piece_ch == 'W')
+        SetCell(i, j, Piece::kWhite);
+    }
+  }
+}
+
 Piece Board::GetCell(int x, int y) const {
   // assert(x >= 0 && x < kBoardSize && y >= 0 && y < kBoardSize);
   return board_[x][y];

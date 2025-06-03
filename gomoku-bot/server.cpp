@@ -1,88 +1,96 @@
 #include <iostream>
-#include <websocketpp/config/asio_no_tls.hpp>
-#include <websocketpp/server.hpp>
+#include <mutex>
 #include "gomoku_bot.h"
 #include "gomoku_bot_strategy.h"
+#include "httplib.h"
 #include "json.hpp"
+#include "thread_pool.h"
+#include "uuid.h"
 
 using json = nlohmann::json;
-typedef websocketpp::server<websocketpp::config::asio> server;
+using namespace std;
 
-class GomokuServer {
+namespace {
+constexpr int kPortNumber = 8080;  // 서버가 리스닝할 포트 번호
+
+constexpr int kNumThreads = 4;
+}  // namespace
+
+class GomokuBotServer {
  public:
-  GomokuServer() {
-    ws_server.init_asio();
-    ws_server.set_message_handler([this](websocketpp::connection_hdl hdl, server::message_ptr msg) {
-      handle_message(hdl, msg);
+  GomokuBotServer() : pool_(kNumThreads) {
+    svr_.Post("/solve", [this](const httplib::Request& req, httplib::Response& res) {
+      try {
+        json body = json::parse(req.body);
+        std::string flat_board = body["board"];
+        std::string task_id = GenerateUUID();  // Unique task id 생성후 client에게 식별자로서 제공
+
+        // thread pool에 request 테스크 추가
+        pool_.Enqueue([flat_board, task_id, this]() {
+          try {
+            gomoku::Board board(flat_board);
+            gomoku::GomokuBot bot;
+            bot.set_strategy(std::make_unique<gomoku::MinimaxWithAlphaBetaPruning>());
+            auto [x, y] = bot.Solve(board, 4);
+
+            std::cout << "Task ID: " << task_id << ", Move: (" << x << ", " << y << ")"
+                      << std::endl;
+            std::lock_guard<std::mutex> lock(task_mutex_);
+            task_results_[task_id] = {true, {x, y}};
+          } catch (...) {
+            // ...
+          }
+        });
+
+        json resp = {{"task_id", task_id}};
+        res.set_content(resp.dump(), "application/json");
+
+      } catch (const std::exception& e) {
+        res.status = 400;
+        res.set_content(json({{"error", e.what()}}).dump(), "application/json");
+      }
+    });
+
+    svr_.Get(R"(/result/([-\w]+))", [this](const httplib::Request& req, httplib::Response& res) {
+      std::string task_id =
+          req.matches[1];  // Client쪽에서는 주기적으로 결과 확인시 task_id도 같이 보냄
+      std::lock_guard<std::mutex> lock(task_mutex_);
+
+      // std::cout << "Checking result for task ID: " << task_id << std::endl;
+      if (task_results_.count(task_id)) {
+        auto [done, result] = task_results_[task_id];
+        if (done) {
+          res.set_content(
+              json({{"status", "done"}, {"x", result.first}, {"y", result.second}}).dump(),
+              "application/json");
+          // task 삭제
+          task_results_.erase(task_id);
+        } else {
+          res.set_content(json({{"status", "pending"}}).dump(), "application/json");
+        }
+      } else {
+        res.status = 404;
+        res.set_content(json({{"error", "task not found"}}).dump(), "application/json");
+      }
     });
   }
 
-  void run(uint16_t port) {
-    ws_server.listen(port);
-    ws_server.start_accept();
-    std::cout << "WebSocket server started at ws://localhost:" << port << std::endl;
-    ws_server.run();
-  }
+  void Run() {
+    std::cout << "Server is running on http://localhost:" << kPortNumber << std::endl;
+    svr_.listen("0.0.0.0", kPortNumber);
+  };
 
  private:
-  server ws_server;
+  httplib::Server svr_;
 
-  void handle_message(websocketpp::connection_hdl hdl, server::message_ptr msg) {
-    try {
-      json req = json::parse(msg->get_payload());
-      std::string type = req["type"];
+  ThreadPool pool_;
 
-      if (type == "your_turn_ai") {
-        std::string flat = req["board"];
-        std::string playerId = req["playerId"];
-
-        const int size = kBoardSize;
-        if (flat.size() != size * size) {
-          throw std::runtime_error("Invalid board string length");
-        }
-
-        gomoku::Board board;
-        for (int i = 0; i < size; ++i) {
-          for (int j = 0; j < size; ++j) {
-            char c = flat[i * size + j];
-            gomoku::Piece piece;
-            switch (c) {
-              case 'B':
-                piece = gomoku::Piece::kBlack;
-                break;
-              case 'W':
-                piece = gomoku::Piece::kWhite;
-                break;
-              case '.':
-                piece = gomoku::Piece::kEmpty;
-                break;
-              default:
-                throw std::runtime_error(std::string("Invalid cell character: ") + c);
-            }
-            board.SetCell(i, j, piece);
-          }
-        }
-
-        gomoku::GomokuBot bot;
-        bot.set_strategy(std::make_unique<gomoku::MinimaxWithAlphaBetaPruning>());
-        auto [x, y] = bot.Solve(board, /*max_depth=*/4);
-
-        json resp = {{"type", "place_stone_ai"}, {"x", x}, {"y", y}, {"playerId", playerId}};
-        ws_server.send(hdl, resp.dump(), msg->get_opcode());
-
-      } else {
-        std::cerr << "⚠️ Unknown message type: " << type << std::endl;
-      }
-
-    } catch (const std::exception& e) {
-      json err = {{"type", "error"}, {"message", e.what()}};
-      ws_server.send(hdl, err.dump(), msg->get_opcode());
-    }
-  }
+  std::unordered_map<std::string, std::pair<bool, std::pair<int, int>>> task_results_;
+  std::mutex task_mutex_;
 };
 
 int main() {
-  GomokuServer server;
-  server.run(8080);
+  GomokuBotServer bot_server;
+  bot_server.Run();
   return 0;
 }

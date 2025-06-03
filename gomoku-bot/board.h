@@ -18,6 +18,8 @@ class Board {
  public:
   Board();
 
+  explicit Board(const std::string& board_str);
+
   Piece GetCell(int x, int y) const;
 
   void SetCell(int x, int y, Piece piece);  // no restriction

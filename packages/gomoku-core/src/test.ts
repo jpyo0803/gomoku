@@ -1,35 +1,47 @@
 import { createGomokuGame } from './gomoku';
 import { printBoardFromString } from './utils';
 import readlineSync from 'readline-sync';
-import WebSocket from 'ws';
+
+import http from 'http';
+import axios from 'axios';
 
 async function main() {
-  const boardSize: number = 15; // Gomoku board size
-  const maxDepth: number = 4;
-
   const game = createGomokuGame();
-  const socket = new WebSocket('ws://localhost:8080');
-
-  await new Promise<void>((resolve) => socket.on('open', resolve));
-
   const playerId = 'ts-test-client';
+  const serverBaseUrl = 'http://localhost:8080';
+  const maxRetries = 1000;
+  const pollingInterval = 500; // 500ms
 
-  // 메시지 응답을 기다리는 Promise 래퍼
-  function waitForAIResponse(): Promise<{ x: number; y: number }> {
-    return new Promise((resolve, reject) => {
-      socket.once('message', (data: WebSocket.RawData) => {
+  async function requestAI(board: string): Promise<{ x: number; y: number }> {
+    try {
+      const agent = new http.Agent({ keepAlive: false }); // 매 요청마다 새로운 연결
+
+      const solveRes = await axios.post(`${serverBaseUrl}/solve`, { board }, 
+        {httpAgent: agent}  // keepAlive false로 설정
+      );
+      const taskId = solveRes.data.task_id;
+
+      // Poll until result is ready
+      for (let i = 0; i < maxRetries; ++i) { // up to 1000 tries
         try {
-          const msg = JSON.parse(data.toString());
-          if (msg.type === 'place_stone_ai' && msg.playerId === playerId) {
-            resolve({ x: msg.x, y: msg.y });
-          } else {
-            reject(new Error('Unexpected message: ' + JSON.stringify(msg)));
+          const resultRes = await axios.get(`${serverBaseUrl}/result/${taskId}`);
+          const data = resultRes.data;
+          if (data.status === 'done') {
+            return { x: data.x, y: data.y };
+          } 
+        } catch (err: any) {
+          if (err.response && err.response.status === 404) {
+            // 서버쪽에서 아직 task 등록을 못했을 수도 있음. 
           }
-        } catch (e) {
-          reject(e);
         }
-      });
-    });
+
+        await new Promise((resolve) => setTimeout(resolve, pollingInterval));
+      }
+
+      throw new Error('Timeout waiting for AI response');
+    } catch (err: any) {
+      throw new Error(err.message);
+    }
   }
 
   while (true) {
@@ -50,22 +62,12 @@ async function main() {
       } else if (result === 'win') {
         console.log("Game over. Piece Black wins!");
         break;
-      } else {
-        isBlackTurn = false;
       }
     } else {
       console.log("White (AI)'s turn...");
 
-      const payload = {
-        type: 'your_turn_ai',
-        board: game.getBoardString(),
-        playerId: playerId
-      };
-
-      socket.send(JSON.stringify(payload));
-
       try {
-        const { x, y } = await waitForAIResponse();
+        const { x, y } = await requestAI(game.getBoardString());
         console.log(`AI chose move: (${x}, ${y})`);
 
         const result = game.play(x, y);
@@ -75,11 +77,9 @@ async function main() {
         } else if (result === 'win') {
           console.log("Game over. Piece White (AI) wins!");
           break;
-        } else {
-          isBlackTurn = true;
         }
-      } catch (error: any) {
-        console.error("Failed to contact AI server:", error.message);
+      } catch (err: any) {
+        console.error("Failed to get AI move:", err.message);
         break;
       }
     }
