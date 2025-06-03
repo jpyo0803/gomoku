@@ -86,4 +86,10 @@ export class Board {
       }
     }).join('');
   }
+
+  static fromJSON(json_data: any): Board {
+    const board = new Board(json_data.size);
+    board.board = json_data.board.map((row: number[]) => row.map((cell: number) => cell as Piece));
+    return board;
+  }
 }

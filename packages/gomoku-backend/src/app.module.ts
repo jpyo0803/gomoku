@@ -6,6 +6,8 @@ import { SocketIoGateway } from './game/socketio-gateway';
 import { WsGateway } from './game/ws-gateway';
 import { GameService } from './game/game-service';
 
+import { RedisService } from './game/redis.service';
+
 @Module({
   imports: [],
   controllers: [AppController],
@@ -14,6 +16,7 @@ import { GameService } from './game/game-service';
     SocketIoGateway, 
     GameService, 
     WsGateway,
+    RedisService,
   ],
 })
 export class AppModule {}

@@ -39,3 +39,5 @@ coverage/
 # logs
 logs/
 *.log
+
+dump.rdb

@@ -14,4 +14,8 @@ export class Player {
     isAIPlayer(): boolean {
         return this.isAI;
     }
+
+    static fromJSON(json_data: any): Player {
+        return new Player(json_data.id, json_data.isAI);
+    }
 }

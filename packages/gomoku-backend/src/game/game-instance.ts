@@ -46,4 +46,14 @@ export class GameInstance {
     getAIPlayerId(): string {
         return this.whitePlayer.getId(); // Assuming white is always the AI player
     }
+
+    static fromJSON(json_data: any): GameInstance {
+        const blackPlayer = Player.fromJSON(json_data.blackPlayer);
+        const whitePlayer = Player.fromJSON(json_data.whitePlayer);
+
+        const gameInstance = new GameInstance(blackPlayer, whitePlayer);
+        gameInstance.game = Gomoku.fromJSON(json_data.game); // Assuming Gomoku has a fromJSON method
+        gameInstance.currentPlayer = json_data.currentPlayer.id === blackPlayer.getId() ? blackPlayer : whitePlayer;
+        return gameInstance;
+    }
 }

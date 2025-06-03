@@ -33,4 +33,11 @@ export class Gomoku {
     getBoardString(): string {
         return this.board.getBoardString();
     }
+
+    static fromJSON(json_data: any): Gomoku {
+        const gomoku = new Gomoku();
+        gomoku.board = Board.fromJSON(json_data.board); // Assuming Board has a fromJSON method
+        gomoku.currentPiece = json_data.currentPiece === 1 ? Piece.Black : Piece.White; // Determine current player based on ID
+        return gomoku;
+    }
 }
