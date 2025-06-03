@@ -16,8 +16,7 @@ export class GameService {
   constructor(
     @Inject(forwardRef(() => SocketIoGateway))
     private readonly socketGateway: GatewayInterface,
-    @Inject(forwardRef(() => WsGateway))
-    private readonly aiGateway: GatewayInterface,
+    private readonly aiGateway: WsGateway,
   ) {
     console.log('GameService initialized');
   }
@@ -74,7 +73,17 @@ export class GameService {
 
     // AI에 다음 턴 알림
     const aiPlayerId = game.getAIPlayerId();
-    this.aiGateway.sendYourTurn(aiPlayerId, board); // AI에게 턴 알림
+    const { x: x_ai, y: y_ai } = await this.aiGateway.sendYourTurn(board);
+    const result_after_ai_turn = game.play(x_ai, y_ai, aiPlayerId);
+    const board_after_ai_turn = game.getBoardString();
+
+    this.socketGateway.sendBoardState(playerId, board_after_ai_turn);
+    if (result_after_ai_turn === 'win') {
+        this.socketGateway.sendPlaceStoneResp(playerId, 'lose'); // AI가 이겼을 때
+        return;
+    }
+
+    this.socketGateway.sendYourTurn(playerId, 30); // 다음 턴 알림
   }
 
   async handlePlaceStoneAI(playerId: string, x: number, y: number) {

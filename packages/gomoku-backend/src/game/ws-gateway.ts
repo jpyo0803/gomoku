@@ -1,88 +1,51 @@
-import { Injectable, OnModuleDestroy, Inject, forwardRef } from '@nestjs/common';
-import { WebSocket } from 'ws';
-import { GameService } from './game-service';
-import { GatewayInterface } from './gateway-interface';
+import { Injectable } from '@nestjs/common';
+
+import * as http from 'http';
+import axios from 'axios';
+
+const maxRetries = 1000;
+const pollingInterval = 500; // 500ms
+
+async function requestAI(board: string, serverBaseUrl: string): Promise<{ x: number; y: number }> {
+  try {
+    const agent = new http.Agent({ keepAlive: false }); // 매 요청마다 새로운 연결
+
+    const solveRes = await axios.post(`${serverBaseUrl}/solve`, { board }, 
+      {httpAgent: agent}  // keepAlive false로 설정
+    );
+    const taskId = solveRes.data.task_id;
+
+    // Poll until result is ready
+    for (let i = 0; i < maxRetries; ++i) { // up to 1000 tries
+      try {
+        const resultRes = await axios.get(`${serverBaseUrl}/result/${taskId}`);
+        const data = resultRes.data;
+        if (data.status === 'done') {
+          return { x: data.x, y: data.y };
+        } 
+      } catch (err: any) {
+        if (err.response && err.response.status === 404) {
+          // 서버쪽에서 아직 task 등록을 못했을 수도 있음. 
+        }
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, pollingInterval));
+    }
+
+    throw new Error('Timeout waiting for AI response');
+  } catch (err: any) {
+    throw new Error(err.message);
+  }
+}
 
 @Injectable()
-export class WsGateway implements GatewayInterface, OnModuleDestroy {
-  private socket?: WebSocket;
-  private readonly AI_ENDPOINT = 'ws://localhost:8080';
+export class WsGateway {
+  private readonly AI_ENDPOINT = 'http://localhost:8080';
+  
+  constructor() {}
 
-  constructor(
-    @Inject(forwardRef(() => GameService))
-    private readonly gameService: GameService,
-  ) {}
-
-  /* ----------------------------------------------------------------
-     턴 알림 – 소켓 상태에 따라 분기
-  ---------------------------------------------------------------- */
-  sendYourTurn(playerId: string, board: string): void {
-    // console.log(`[Log] Send \'your_turn_ai\' to \'${playerId}\' (AI playerId), board: ${board}`);
-    console.log(`[Log] Send \'your_turn_ai\' to \'${playerId}\' (AI playerId)`);
-    const payload = JSON.stringify({ type: 'your_turn_ai', playerId, board });
-
-    // 1) 소켓이 없거나 이미 종료 → 새로 만들고 열린 뒤 전송
-    if (!this.socket || this.socket.readyState >= WebSocket.CLOSING) {
-      this.connect().then(() => this.socket!.send(payload));
-      return;
-    }
-
-    // 2) 연결 중( CONNECTING ) → open 이벤트 후 전송
-    if (this.socket.readyState === WebSocket.CONNECTING) {
-      this.socket.once('open', () => this.socket!.send(payload));
-      return;
-    }
-
-    // 3) 이미 OPEN → 즉시 전송
-    this.socket.send(payload);
-  }
-
-  /* ----------------------------------------------------------------
-     필요 없는 인터페이스 메서드 (AI 쪽)
-  ---------------------------------------------------------------- */
-  sendMatchMakingSuccess(): void {}
-  sendBoardState(): void {}
-  sendPlaceStoneResp(): void {}
-  init(): void {}
-  deinit(): void {}
-
-  /* ----------------------------------------------------------------
-     애플리케이션 종료 시 소켓 정리
-  ---------------------------------------------------------------- */
-  onModuleDestroy() {
-    if (this.socket && this.socket.readyState < WebSocket.CLOSING) {
-      this.socket.terminate();
-    }
-  }
-
-  /* ----------------------------------------------------------------
-     소켓 생성 + 리스너 등록. open 시 resolve.
-  ---------------------------------------------------------------- */
-  private connect(): Promise<void> {
-    return new Promise<void>(resolve => {
-      this.socket = new WebSocket(this.AI_ENDPOINT);
-      console.log('[Log] connect WebSocket to ', this.AI_ENDPOINT);
-
-      this.socket.once('open', () => {
-        console.log('[Log] WebSocket is established');
-        resolve();
-      });
-
-      this.socket.on('message', async raw => {
-        try {
-          const msg = JSON.parse(raw.toString());
-          if (msg.type === 'place_stone_ai') {
-            const { playerId, x, y } = msg;
-            console.log(`[Log] Receive \'place_stone_ai\' from ${playerId} (AI playerId), x: ${x}, y: ${y}`);
-            await this.gameService.handlePlaceStoneAI(playerId, x, y);
-          }
-        } catch {
-          console.error('[Log] invalid message:', raw.toString());
-        }
-      });
-
-      this.socket.on('close', () => (this.socket = undefined));
-      this.socket.on('error', err => console.error('[Log] socket error:', err));
-    });
+  async sendYourTurn(board: string): Promise<{ x: number; y: number }> {
+    const { x, y } = await requestAI(board, this.AI_ENDPOINT);
+    return { x, y };
   }
 }
