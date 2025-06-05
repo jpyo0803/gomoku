@@ -65,11 +65,11 @@ export class SocketIoGateway implements GatewayInterface {
     socket?.emit('your_turn', { time_limit: timeLimit });
   }
 
-  sendBoardState(playerId: string, board: string): void {
+  sendBoardState(playerId: string, board: string, lastMove: {x: number, y: number}): void {
     // console.log(`[Log] Send \'board_state\' to \'${playerId}\' (playerId), board: ${board}`);
     console.log(`[Log] Send \'board_state\' to \'${playerId}\' (playerId)`);
     const socket = this.playerIdToSocket.get(playerId);
-    socket?.emit('board_state', { board_state: board });
+    socket?.emit('board_state', { board_state: board, last_move_x: lastMove.x, last_move_y: lastMove.y });
   }
 
   sendPlaceStoneResp(playerId: string, result: 'ok' | 'invalid' | 'win' | 'lose'): void {

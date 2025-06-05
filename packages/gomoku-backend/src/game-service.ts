@@ -112,7 +112,7 @@ export class GameService {
       const board = game.getBoardString();
 
       // 보드 상태 업데이트 전송
-      this.socketGateway.sendBoardState(playerId, board);
+      this.socketGateway.sendBoardState(playerId, board, { x, y });
       
       // AI에 다음 턴 알림
       const aiPlayerId = game.getAIPlayerId();
@@ -120,7 +120,7 @@ export class GameService {
       const result_after_ai_turn = game.play(x_ai, y_ai, aiPlayerId);
       const board_after_ai_turn = game.getBoardString();
       
-      this.socketGateway.sendBoardState(playerId, board_after_ai_turn);
+      this.socketGateway.sendBoardState(playerId, board_after_ai_turn, { x: x_ai, y: y_ai });
       // Game session을 Redis에 업데이트, playerId는 굳이 업데이트 필요없음
       await redis.set(`game:${gameId}`, JSON.stringify(game));
 

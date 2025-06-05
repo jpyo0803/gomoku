@@ -6,6 +6,8 @@
 using UnityEngine;
 using SocketIOClient;
 using System.Collections.Generic;
+using System;
+using System.Text.Json;
 
 public class GomokuClient : MonoBehaviour
 {
@@ -65,10 +67,13 @@ public class GomokuClient : MonoBehaviour
         // OnUnityThread를 사용해야 Unity API 안전하게 호출 가능
         socket.OnUnityThread("board_state", res =>
         {
-            var map = res.GetValue<Dictionary<string, string>>();
-            string boardStr = map["board_state"];
+            var map = res.GetValue<Dictionary<string, JsonElement>>();
+
+            string boardStr = map["board_state"].GetString();
+            int lastMoveX = map["last_move_x"].GetInt32();
+            int lastMoveY = map["last_move_y"].GetInt32();
             Debug.Log(boardStr);
-            UpdateBoard(boardStr);
+            UpdateBoard(boardStr, lastMoveX, lastMoveY);
             
             Debug.Log("[Log] Board state updated successfully.");
         });
@@ -148,7 +153,7 @@ public class GomokuClient : MonoBehaviour
         });
     }
 
-    private void UpdateBoard(string boardStr)
+    private void UpdateBoard(string boardStr, int lastMoveX, int lastMoveY)
     {
         Debug.Log("[Log] Updating board state...");
         // 보드 상태 업데이트 
@@ -158,14 +163,12 @@ public class GomokuClient : MonoBehaviour
             for (int j = 0; j < BOARD_SIZE; j++)
             {
                 char stone = boardStr[i * BOARD_SIZE + j];
-                if (stone == 'B')
-                {
-                    board[i, j].SetStone(true); // 흑돌 착수
-                }
-                else if (stone == 'W')
-                {
-                    board[i, j].SetStone(false); // 백돌 착수
-                }
+                if (stone == '.') continue; // 빈 칸은 무시
+
+                bool isLastMove = (i == lastMoveX && j == lastMoveY);
+                bool isBlackStone = (stone == 'B'); // 흑돌 여부 확인
+
+                board[i, j].SetStone(isBlackStone, isLastMove); // 흑돌 착수
             }
         }
     }

@@ -171,6 +171,182 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 121189253305079430, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 121189253305079430, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 166536128453240827, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 166536128453240827, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 229966068235722298, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 229966068235722298, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 233758233663958666, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 233758233663958666, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 236179911221433431, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 236179911221433431, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 332619039013524711, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 332619039013524711, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 345730835643622010, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 345730835643622010, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 458718832724320852, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 458718832724320852, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 589972231835329770, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 589972231835329770, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 610122238206620797, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 610122238206620797, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 658364231589502237, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 658364231589502237, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 726743191460982649, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 726743191460982649, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 837816512935508738, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 837816512935508738, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 857704525167726866, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 857704525167726866, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1043957955074872495, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1043957955074872495, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1063070757292788301, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1063070757292788301, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1094766655260352213, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1094766655260352213, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1158808967340762075, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1158808967340762075, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1165208335058843076, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1165208335058843076, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1193981510542485271, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1193981510542485271, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1213574213112212065, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1213574213112212065, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1310573953197328640, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1310573953197328640, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
     - target: {fileID: 1356628263680357499, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.004630059
@@ -211,6 +387,534 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1434531817992484083, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1434531817992484083, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1613242877735112230, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1613242877735112230, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1635949365817334633, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1635949365817334633, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1666238618256510216, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1666238618256510216, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1716182087287307064, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1716182087287307064, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1732032025782881663, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1732032025782881663, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1813614118914610899, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1813614118914610899, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1830211198003274436, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1830211198003274436, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1848198669329010347, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1848198669329010347, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1882356410969690251, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1882356410969690251, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1926672583091727625, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1926672583091727625, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 1947956712761807135, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 1947956712761807135, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2005399043891659290, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2005399043891659290, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2049358382849771922, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2049358382849771922, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2069181466673982222, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2069181466673982222, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2153126616602825211, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2153126616602825211, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2180690944312357177, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2180690944312357177, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2195241617853401031, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2195241617853401031, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2241482627130034630, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2241482627130034630, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2255433217355779136, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2255433217355779136, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2295516514402518905, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2295516514402518905, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2335475995025275446, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2335475995025275446, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2389464352721329637, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2389464352721329637, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2396212879117367772, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2396212879117367772, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2493542715423413937, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2493542715423413937, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2497798543548100952, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2497798543548100952, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2592397729819987013, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2592397729819987013, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2594041566617299618, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2594041566617299618, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2610680096869970500, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2610680096869970500, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2714425290003635086, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2714425290003635086, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2715890505328412175, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2715890505328412175, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2744266153954468472, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2744266153954468472, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2751527023512119270, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2751527023512119270, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2768792434249289326, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2768792434249289326, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2803220914576053331, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2803220914576053331, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2870558592922216909, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2870558592922216909, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2909051449841290918, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2909051449841290918, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2916811155579252430, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2916811155579252430, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2918534817921885504, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2918534817921885504, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2957085140438300733, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2957085140438300733, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2974575278062837239, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2974575278062837239, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2977744892108269704, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2977744892108269704, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 2984883294141724740, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 2984883294141724740, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3044315608539922909, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3044315608539922909, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3048061523268831014, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3048061523268831014, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3063454290250841522, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3063454290250841522, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3067480526863600573, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3067480526863600573, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3179458223101304218, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3179458223101304218, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3183679101257215504, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3183679101257215504, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3203581718841711468, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3203581718841711468, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3220866950712941688, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3220866950712941688, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3297650433148433605, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3297650433148433605, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3331972470296593525, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3331972470296593525, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3359388883890649091, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3359388883890649091, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3394999404073374593, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3394999404073374593, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3441204784337266645, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3441204784337266645, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3479992741514066616, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3479992741514066616, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3480902883577307750, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3480902883577307750, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3522947502542367914, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3522947502542367914, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3545709442954980580, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3545709442954980580, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3562126112778751355, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3562126112778751355, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3659736861946735185, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3659736861946735185, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3704627547713029420, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3704627547713029420, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3760515608468892474, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3760515608468892474, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3817582688145830396, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3817582688145830396, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3886756239425840574, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3886756239425840574, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
     - target: {fileID: 3919394329139729220, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
       propertyPath: blackStonePrefab
       value: 
@@ -219,10 +923,266 @@ PrefabInstance:
       propertyPath: whiteStonePrefab
       value: 
       objectReference: {fileID: 31290031546643158, guid: 5b4e53f577d1f104ebe0cb4e977ce325, type: 3}
+    - target: {fileID: 3919394329139729220, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3919394329139729220, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3933978136100306779, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3933978136100306779, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 3979340809093386358, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 3979340809093386358, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4002740225570581666, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4002740225570581666, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4016429218609616549, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4016429218609616549, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4090548458775572166, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4090548458775572166, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4101754534476641038, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4101754534476641038, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4142015807045549516, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4142015807045549516, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4196428728384750736, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4196428728384750736, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4281747864989647525, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4281747864989647525, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4290614209653413012, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4290614209653413012, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4345973671038667803, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4345973671038667803, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4380321681023986682, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4380321681023986682, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4392410329434233189, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4392410329434233189, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4457506783557832775, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4457506783557832775, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4486935366863845843, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4486935366863845843, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4533718970400832381, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4533718970400832381, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4702064391963208736, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4702064391963208736, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
     - target: {fileID: 4703735927693329519, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
       propertyPath: m_Name
       value: gomoku_board
       objectReference: {fileID: 0}
+    - target: {fileID: 4710843446326725538, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4710843446326725538, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4736727949003412987, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4736727949003412987, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4739196949526331758, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4739196949526331758, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4743008459937474316, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4743008459937474316, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4761073311832022245, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4761073311832022245, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4812893803538951306, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4812893803538951306, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4871214050039737732, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4871214050039737732, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4880460428045759296, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4880460428045759296, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4937930900917051611, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4937930900917051611, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 4971136746220373805, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 4971136746220373805, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5008688021730718025, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5008688021730718025, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5032082949807034562, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5032082949807034562, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5076095051490741702, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5076095051490741702, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5099799402221328427, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5099799402221328427, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
     - target: {fileID: 5131740209537249649, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
       propertyPath: blackStonePrefab
       value: 
@@ -231,6 +1191,110 @@ PrefabInstance:
       propertyPath: whiteStonePrefab
       value: 
       objectReference: {fileID: 31290031546643158, guid: 5b4e53f577d1f104ebe0cb4e977ce325, type: 3}
+    - target: {fileID: 5131740209537249649, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5131740209537249649, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5139558805944187188, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5139558805944187188, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5170438241962800112, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5170438241962800112, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5369955364094279707, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5369955364094279707, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5375087536194957674, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5375087536194957674, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5415713318060759065, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5415713318060759065, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5452991608973833021, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5452991608973833021, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5463921130721943990, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5463921130721943990, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5493207802380188359, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5493207802380188359, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5527797610746954721, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5527797610746954721, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5534048700599967311, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5534048700599967311, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5561235612007873307, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5561235612007873307, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5609840985254679365, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5609840985254679365, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
     - target: {fileID: 5646837622103020663, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
       propertyPath: blackStonePrefab
       value: 
@@ -239,6 +1303,742 @@ PrefabInstance:
       propertyPath: whiteStonePrefab
       value: 
       objectReference: {fileID: 31290031546643158, guid: 5b4e53f577d1f104ebe0cb4e977ce325, type: 3}
+    - target: {fileID: 5646837622103020663, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5646837622103020663, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5660730510865647363, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5660730510865647363, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5705866361318576559, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5705866361318576559, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5738125262731715123, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5738125262731715123, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5858508303246640720, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5858508303246640720, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5867832007472983541, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5867832007472983541, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5914101956324621458, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5914101956324621458, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5942003683548279364, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5942003683548279364, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5942323724564886572, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5942323724564886572, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 5968508771904698112, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 5968508771904698112, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6002958888497690796, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6002958888497690796, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6016733955291007725, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6016733955291007725, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6037618021649226261, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6037618021649226261, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6077570317887155023, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6077570317887155023, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6094206974935914824, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6094206974935914824, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6108846619570937632, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6108846619570937632, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6111539795003382683, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6111539795003382683, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6170664895869932322, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6170664895869932322, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6172892979224606754, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6172892979224606754, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6172915170220071625, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6172915170220071625, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6200108065036520255, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6200108065036520255, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6250787412174823998, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6250787412174823998, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6288102380175625652, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6288102380175625652, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6348998214321281321, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6348998214321281321, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6376967956500826297, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6376967956500826297, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6400720917944208790, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6400720917944208790, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6415080132986438038, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6415080132986438038, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6426549458338818630, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6426549458338818630, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6477097404815256382, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6477097404815256382, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6544990546145511833, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6544990546145511833, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6570286620124492483, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6570286620124492483, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6598166977329721935, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6598166977329721935, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6672396901441446667, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6672396901441446667, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6730558870411713645, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6730558870411713645, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6824841924497436479, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6824841924497436479, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6930167987636068580, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6930167987636068580, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 6967619246134093465, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 6967619246134093465, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7057927098461682917, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7057927098461682917, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7077805682929676396, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7077805682929676396, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7093197121122185125, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7093197121122185125, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7121390097576181428, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7121390097576181428, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7179831337607211700, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7179831337607211700, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7182175642293687203, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7182175642293687203, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7183845102044786479, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7183845102044786479, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7241887481980308758, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7241887481980308758, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7266318540025607046, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7266318540025607046, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7361989340144743243, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7361989340144743243, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7462836169289075476, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7462836169289075476, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7475358833774633266, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7475358833774633266, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7582288841391287661, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7582288841391287661, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7671381234494832250, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7671381234494832250, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7700944442221886470, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7700944442221886470, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7704259502698037836, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7704259502698037836, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7714251297138279791, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7714251297138279791, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7751681410558531282, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7751681410558531282, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7773718775962459155, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7773718775962459155, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7810899074974473377, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7810899074974473377, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7858377525614954442, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7858377525614954442, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 7978529517977035634, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 7978529517977035634, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8011057649261631169, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8011057649261631169, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8043571381076497264, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8043571381076497264, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8099555414853454820, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8099555414853454820, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8116388452213902393, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8116388452213902393, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8129574222448716579, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8129574222448716579, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8176562004621152831, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8176562004621152831, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8217937069706984398, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8217937069706984398, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8254096262750976783, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8254096262750976783, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8312082109779512536, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8312082109779512536, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8348880820393864829, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8348880820393864829, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8370195836491048074, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8370195836491048074, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8381694723530710163, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8381694723530710163, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8398764872875102483, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8398764872875102483, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8428900600606546923, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8428900600606546923, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8436855182905422355, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8436855182905422355, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8478264076979347973, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8478264076979347973, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8505512088246850280, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8505512088246850280, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8520722318865017579, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8520722318865017579, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8572391742848834710, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8572391742848834710, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8625838099647547797, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8625838099647547797, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8673862967162189120, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8673862967162189120, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8699760612754489605, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8699760612754489605, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8709630622214243754, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8709630622214243754, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8834164115186860900, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8834164115186860900, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8929390282585271159, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8929390282585271159, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8971738659083864787, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8971738659083864787, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 8987608304803412969, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 8987608304803412969, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 9000901762417597147, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 9000901762417597147, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 9067256622021093438, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 9067256622021093438, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 9127768516046714010, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 9127768516046714010, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 9130710212304715428, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 9130710212304715428, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 9149922814476662290, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 9149922814476662290, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
+    - target: {fileID: 9160340633718451108, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: blackStoneNewPrefab
+      value: 
+      objectReference: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+    - target: {fileID: 9160340633718451108, guid: 4681299e450bd79428d57e3a5edeed2d, type: 3}
+      propertyPath: whiteStoneNewPrefab
+      value: 
+      objectReference: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

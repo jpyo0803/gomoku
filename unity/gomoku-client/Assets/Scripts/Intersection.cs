@@ -5,7 +5,9 @@ public class Intersection : MonoBehaviour
     private float x, y; // Intersection의 실제 좌표 
 
     [SerializeField]
-    private GameObject blackStonePrefab, whiteStonePrefab; // 교차점에 놓을 돌 프리팹
+    private GameObject blackStonePrefab, blackStoneNewPrefab; // 교차점에 놓을 돌 프리팹
+    [SerializeField]
+    private GameObject whiteStonePrefab, whiteStoneNewPrefab; // 교차점에 놓을 돌 프리팹
 
     [SerializeField]
     private int row_index, col_index; // 15 x 15 보드상에서 교차점의 행과 열 인덱스
@@ -51,10 +53,19 @@ public class Intersection : MonoBehaviour
         this.col_index = col_index;
     }
 
-    public void SetStone(bool isBlack)
+    public void SetStone(bool isBlackStone, bool isLastMove = false)
     {
         // Set the stone at this intersection
-        GameObject stonePrefab = isBlack ? blackStonePrefab : whiteStonePrefab;
+        GameObject stonePrefab;
+        if (isLastMove) 
+        {
+            stonePrefab = isBlackStone ? blackStoneNewPrefab : whiteStoneNewPrefab;
+        }
+        else
+        {
+            stonePrefab = isBlackStone ? blackStonePrefab : whiteStonePrefab;
+        }
+
         Instantiate(stonePrefab, transform.position, Quaternion.identity);
     }
 }
