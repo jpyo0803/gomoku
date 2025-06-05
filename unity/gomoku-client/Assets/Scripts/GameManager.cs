@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,6 +9,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private Image resultImage;
+
+    [SerializeField]
+    private GameObject playAgainButton;
 
     [SerializeField]
     private Sprite winSprite;
@@ -26,10 +30,17 @@ public class GameManager : MonoBehaviour
     {
         // Initialize the result image to be inactive at the start
         resultImage.gameObject.SetActive(false);
+        playAgainButton.SetActive(false);
+    }
+
+    public void SetGameResult(bool isWin)
+    {
+        // Display the result image based on the game outcome
+        DisplayResultImage(isWin);
     }
 
     // Update is called once per frame
-    public void DisplayResultImage(bool isWin)
+    private void DisplayResultImage(bool isWin)
     {
 
         if (isWin)
@@ -42,5 +53,11 @@ public class GameManager : MonoBehaviour
         }
 
         resultImage.gameObject.SetActive(true);
+        playAgainButton.SetActive(true);
+    }
+
+    public void PlayAgain()
+    {
+        SceneManager.LoadScene("SampleScene");
     }
 }

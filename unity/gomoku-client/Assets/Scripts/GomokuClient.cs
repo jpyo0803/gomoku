@@ -91,7 +91,7 @@ public class GomokuClient : MonoBehaviour
                     if (gameManager != null)
                     {
                         bool isClientWin = result == "win";
-                        gameManager.DisplayResultImage(isClientWin); // 게임 결과 이미지 표시
+                        gameManager.SetGameResult(isClientWin); // 게임 결과 이미지 표시
                         Debug.Log("[Log] Game result displayed successfully.");
                     }
                     else
