@@ -73,15 +73,47 @@ public class GomokuClient : MonoBehaviour
             Debug.Log("[Log] Board state updated successfully.");
         });
 
-        socket.On("place_stone_resp", res =>
+        socket.OnUnityThread("place_stone_resp", res =>
         {
             var map = res.GetValue<Dictionary<string, string>>();
             string result = map["result"];
+            Debug.Log($"[Log] Place stone response: {result}");
             if (result == "win" || result == "lose")
             {
                 this.isGameDone = true; // 게임 종료 상태로 설정
+
+                // ResultUI 컴포넌트에 게임 결과 통보
+
+                try
+                {
+                    // GameManager 찾기
+                    GameManager gameManager = FindObjectOfType<GameManager>();
+                    if (gameManager != null)
+                    {
+                        bool isClientWin = result == "win";
+                        gameManager.DisplayResultImage(isClientWin); // 게임 결과 이미지 표시
+                        Debug.Log("[Log] Game result displayed successfully.");
+                    }
+                    else
+                    {
+                        Debug.LogWarning("[Log] GameManager component not found in the scene.");
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError("Exception occurred: " + ex.Message);
+                }
+                // if (resultUI != null)
+                // {
+                //     bool isClientWin = result == "win";
+                //     resultUI.NotifyGameResult(isClientWin);
+                // }
+                // else
+                // {
+                //     Debug.LogWarning("[Log] ResultUI component not found in the scene.");
+                // }
+
             }
-            Debug.Log($"[Log] Place stone response: {result}");
         });
 
         socket.Connect(); // 소켓 서버에 연결
