@@ -15,8 +15,8 @@ export class RedisService {
     this.redlock = new Redlock(
       [this.redisClient],
       {
-        retryCount: 10,             // 락 획득 재시도 횟수
-        retryDelay: 200,            // 재시도 간격(ms)
+        retryCount: 60,             // 락 획득 재시도 횟수
+        retryDelay: 1000,            // 재시도 간격(ms)
         retryJitter: 100,           // 지연 랜덤화
       }
     );

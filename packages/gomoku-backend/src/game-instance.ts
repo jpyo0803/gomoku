@@ -4,7 +4,7 @@ import { Player } from './player'
 export class GameInstance {
     private game : Gomoku;
     private blackPlayer: Player;
-    private whitePlayer: Player; // ai
+    private whitePlayer: Player;
     private currentPlayer: Player;
 
     constructor(blackPlayer: Player, whitePlayer: Player) {
@@ -22,29 +22,34 @@ export class GameInstance {
         const result = this.game.play(x, y);
         if (result === 'invalid') {
             return 'invalid'; // Invalid move
-        } else if (result === 'win') {
-            return 'win'; // Player wins
-        }
+        } 
 
         // Switch to the next player
         this.currentPlayer = this.currentPlayer.getId() === this.blackPlayer.getId() ? this.whitePlayer: this.blackPlayer;
-        return 'ok'; // Move accepted
+        return result; // Move accepted
     }
 
     getBoardString(): string {
         return this.game.getBoardString();
     }
 
-    getCurrentPlayerId(): string {
-        return this.currentPlayer.getId();
+    getCurrentPlayer(): Player {
+        return this.currentPlayer;
     }
 
-    getHumanPlayerId(): string {
-        return this.blackPlayer.getId(); // Assuming black is always the human player
+    getOpponentPlayer(): Player {
+        if (this.currentPlayer.getId() === this.blackPlayer.getId()) {
+            return this.whitePlayer; // If current player is black, opponent is white
+        }
+        return this.blackPlayer; // If current player is white, opponent is black
     }
 
-    getAIPlayerId(): string {
-        return this.whitePlayer.getId(); // Assuming white is always the AI player
+    getBlackPlayer(): Player {
+        return this.blackPlayer; // Assuming black is always the human player
+    }
+
+    getWhitePlayer(): Player {
+        return this.whitePlayer; // Assuming white is always the AI player
     }
 
     static fromJSON(json_data: any): GameInstance {
