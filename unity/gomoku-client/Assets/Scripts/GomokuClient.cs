@@ -12,8 +12,6 @@ using System.Text.Json;
 public class GomokuClient : MonoBehaviour
 {
     private const string uri_base = "http://localhost:3000";
-    private const int BOARD_SIZE = 15; // 오목판 크기, 15로 고정
-    private Intersection[,] board = new Intersection[BOARD_SIZE, BOARD_SIZE];
     private SocketIOUnity socket;
     private bool matchRequested = false; // 매치 요청 여부
     private string playerId; // 플레이
@@ -26,7 +24,6 @@ public class GomokuClient : MonoBehaviour
     {
         Debug.Log("[Log] GomokuClient Start() called");
         ConnectSocket();
-        MapIntersectionsToBoard();
 
         // 랜덤 스트링을 생성하여 playerId로 사용
         playerId = System.Guid.NewGuid().ToString(); // 예시로 GUID 사용
@@ -72,8 +69,16 @@ public class GomokuClient : MonoBehaviour
             string boardStr = map["board_state"].GetString();
             int lastMoveX = map["last_move_x"].GetInt32();
             int lastMoveY = map["last_move_y"].GetInt32();
-            Debug.Log(boardStr);
-            UpdateBoard(boardStr, lastMoveX, lastMoveY);
+            // Debug.Log(boardStr);
+
+            // GameManager 찾기
+            GameManager gameManager = FindObjectOfType<GameManager>();
+            if (gameManager == null)
+            {
+                Debug.LogError("[Log] GameManager component not found in the scene.");
+                return;
+            }
+            gameManager.UpdateBoard(boardStr, lastMoveX, lastMoveY); // 보드 상태 업데이트 
             
             Debug.Log("[Log] Board state updated successfully.");
         });
@@ -108,33 +113,10 @@ public class GomokuClient : MonoBehaviour
                 {
                     Debug.LogError("Exception occurred: " + ex.Message);
                 }
-                // if (resultUI != null)
-                // {
-                //     bool isClientWin = result == "win";
-                //     resultUI.NotifyGameResult(isClientWin);
-                // }
-                // else
-                // {
-                //     Debug.LogWarning("[Log] ResultUI component not found in the scene.");
-                // }
-
             }
         });
 
         socket.Connect(); // 소켓 서버에 연결
-    }
-
-    private void MapIntersectionsToBoard()
-    {
-        Debug.Log("[Log] Mapping intersections to board...");
-        // Intersection 오브젝트를 찾아서 board 배열에 매핑
-        var intersectionObjects = FindObjectsOfType<Intersection>();
-        foreach (var intersection in intersectionObjects)
-        {
-            int row = intersection.GetRowIndex();
-            int col = intersection.GetColIndex();
-            board[row, col] = intersection;
-        }
     }
 
     private void SendMatchRequest()
@@ -151,26 +133,6 @@ public class GomokuClient : MonoBehaviour
             playerId = this.playerId, // 요청 플레이어 ID (유일함 보장할 것)
             wantAiOpponent = true // AI 상대 희망 여부
         });
-    }
-
-    private void UpdateBoard(string boardStr, int lastMoveX, int lastMoveY)
-    {
-        Debug.Log("[Log] Updating board state...");
-        // 보드 상태 업데이트 
-        // TODO(jpyo0803): 변화가 있는 부분만 업데이트하도록 최적화 필요
-        for (int i = 0; i < BOARD_SIZE; i++)
-        {
-            for (int j = 0; j < BOARD_SIZE; j++)
-            {
-                char stone = boardStr[i * BOARD_SIZE + j];
-                if (stone == '.') continue; // 빈 칸은 무시
-
-                bool isLastMove = (i == lastMoveX && j == lastMoveY);
-                bool isBlackStone = (stone == 'B'); // 흑돌 여부 확인
-
-                board[i, j].SetStone(isBlackStone, isLastMove); // 흑돌 착수
-            }
-        }
     }
 
     private void OnDestroy()

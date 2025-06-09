@@ -2759,6 +2759,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a71d57fd6cf6ff4d8bd0909126a2f77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blackStonePrefab: {fileID: 8110477178279534724, guid: b1296ce6c36f7174ca82b2faca02e003, type: 3}
+  blackStoneNewPrefab: {fileID: 8110477178279534724, guid: 267eddad97a83994194cb5b710b4c59e, type: 3}
+  whiteStonePrefab: {fileID: 31290031546643158, guid: 5b4e53f577d1f104ebe0cb4e977ce325, type: 3}
+  whiteStoneNewPrefab: {fileID: 31290031546643158, guid: 4c89ba58cd4334342b7f9b47cc597999, type: 3}
   resultImage: {fileID: 1520939195}
   playAgainButton: {fileID: 1420319290}
   winSprite: {fileID: -7514678078973763014, guid: 6a130f536e47d4e4c8c2769068f6b618, type: 3}
