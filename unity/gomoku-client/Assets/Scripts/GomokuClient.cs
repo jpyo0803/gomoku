@@ -45,7 +45,6 @@ public class GomokuClient : MonoBehaviour
         socket.OnConnected += (sender, e) =>
         {
             Debug.Log("[Log] Connected to server!");
-            SendMatchRequest();
         };
 
         // match_making_success 응답 수신
@@ -119,7 +118,7 @@ public class GomokuClient : MonoBehaviour
         socket.Connect(); // 소켓 서버에 연결
     }
 
-    private void SendMatchRequest()
+    public void SendMatchRequest(bool wantAiOpponent)
     {
         Debug.Log("[Log] Sending match request...");
         if (matchRequested)
@@ -131,18 +130,8 @@ public class GomokuClient : MonoBehaviour
         socket.Emit("match_request", new
         {
             playerId = this.playerId, // 요청 플레이어 ID (유일함 보장할 것)
-            wantAiOpponent = true // AI 상대 희망 여부
+            wantAiOpponent = wantAiOpponent // AI 상대 희망 여부
         });
-    }
-
-    private void OnDestroy()
-    {
-        Debug.Log("[Log] GomokuClient OnDestroy() called");
-
-        if (socket == null) return;
-        socket.Disconnect(); // 소켓 연결 해제
-        socket.Dispose(); // 소켓 리소스 해제
-        socket = null; // 소켓 객체 초기화
     }
 
     public void SendPlaceStone(int row_index, int col_index)
@@ -160,5 +149,15 @@ public class GomokuClient : MonoBehaviour
             y = col_index,  // y 좌표 (열 인덱스)
             playerId = this.playerId // 플레이어 ID (유일함 보장할 것)
         });
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log("[Log] GomokuClient OnDestroy() called");
+
+        if (socket == null) return;
+        socket.Disconnect(); // 소켓 연결 해제
+        socket.Dispose(); // 소켓 리소스 해제
+        socket = null; // 소켓 객체 초기화
     }
 }

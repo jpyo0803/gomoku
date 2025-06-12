@@ -28,6 +28,11 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Sprite loseSprite;
 
+    // 게임 설정 패널
+    public GameObject gameSettingPanel; // 게임 설정 패널 오브젝트
+    public Toggle wantAiOpponentToggle; // AI 상대 희망 여부 토글
+    public Button okButton; // 게임 설정 패널의 확인 버튼
+
     private void Awake()
     {
         if (instance == null)
@@ -42,6 +47,8 @@ public class GameManager : MonoBehaviour
         // Initialize the result image to be inactive at the start
         resultImage.gameObject.SetActive(false);
         playAgainButton.SetActive(false);
+
+        okButton.onClick.AddListener(OnOkClicked);
     }
 
     private void InitBoard()
@@ -71,7 +78,7 @@ public class GameManager : MonoBehaviour
             {
                 char stoneType = boardStr[i * BOARD_SIZE + j];
                 bool isLastMove = (i == lastMoveX && j == lastMoveY);
-                
+
                 if (stoneType == 'B') // 검은 돌
                 {
                     board[i, j].SetStone(isLastMove ? blackStoneNewPrefab : blackStonePrefab);
@@ -115,5 +122,24 @@ public class GameManager : MonoBehaviour
     public void PlayAgain()
     {
         SceneManager.LoadScene("SampleScene");
+    }
+
+    void OnOkClicked()
+    {
+        bool wantAiOpponent = wantAiOpponentToggle.isOn; // 토글 상태에 따라 AI 상대 희망 여부 설정
+        Debug.Log($"[Log] Want AI opponent: {wantAiOpponent}");
+
+        // 매치 요청을 보내는 메소드 호출
+        var gomokuClient = FindObjectOfType<GomokuClient>();
+        if (gomokuClient == null)
+        {
+            Debug.LogError("GomokuClient not found in the scene.");
+            return;
+        }
+
+        gomokuClient.SendMatchRequest(wantAiOpponent);
+
+        // GameSettingPanel을 비활성화
+        gameSettingPanel.SetActive(false);
     }
 }
