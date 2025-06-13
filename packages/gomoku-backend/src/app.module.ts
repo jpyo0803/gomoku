@@ -6,7 +6,7 @@ import { SocketIoGateway } from './socketio-gateway';
 import { WsGateway } from './ws-gateway';
 import { GameService } from './game-service';
 
-import { RedisService } from './redis.service';
+import { NoSqlRedisImpl } from './nosql-redis-impl';
 
 @Module({
   imports: [],
@@ -16,7 +16,10 @@ import { RedisService } from './redis.service';
     SocketIoGateway, 
     GameService, 
     WsGateway,
-    RedisService,
+    {
+      provide: 'NoSqlInterface',
+      useClass: NoSqlRedisImpl,
+    },
   ],
 })
 export class AppModule {}
