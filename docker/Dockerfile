@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
     cmake \
     clang-format \
     tmux \
+    redis \
  && apt-get clean
 
 # locale 설정
