@@ -19,6 +19,8 @@ RUN apt-get update && apt-get install -y \
     clang-format \
     tmux \
     redis \
+    postgresql \
+    postgresql-contrib \
  && apt-get clean
 
 # locale 설정

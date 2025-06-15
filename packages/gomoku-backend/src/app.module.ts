@@ -7,9 +7,23 @@ import { WsGateway } from './ws-gateway';
 import { GameService } from './game-service';
 
 import { NoSqlRedisImpl } from './nosql-redis-impl';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './users/users.module';
 
 @Module({
-  imports: [],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: '1234',
+      database: 'gomoku',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true, // 개발용일 때만 true
+    }),
+    UsersModule,
+  ],
   controllers: [AppController],
   providers: [
     AppService, 
