@@ -8,7 +8,7 @@ import { GameService } from './game-service';
 
 import { NoSqlRedisImpl } from './nosql-redis-impl';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersModule } from './users/users.module';
+import { DBModule } from './db/db.module';
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import { UsersModule } from './users/users.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true, // 개발용일 때만 true
     }),
-    UsersModule,
+    DBModule,
   ],
   controllers: [AppController],
   providers: [
