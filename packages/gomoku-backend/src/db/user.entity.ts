@@ -9,7 +9,7 @@ export class User {
   username: string;
 
   @Column()
-  password: string;
+  password: string; // hashed 
 
   @Column({ default: 0 })
   totalGames: number;
