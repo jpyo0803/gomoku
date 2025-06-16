@@ -10,6 +10,7 @@ import { forwardRef } from '@nestjs/common'; // forwardRef 사용을 위해 추�
 
 // import { RedisService } from './redis.service'; // RedisService 추가
 import { NoSqlInterface } from './nosql-interface';
+import { DBService } from './db/db.service';
 
 @Injectable()
 export class GameService {
@@ -20,8 +21,18 @@ export class GameService {
     
     @Inject('NoSqlInterface')
     private readonly noSqlService: NoSqlInterface,
+    private readonly dbService: DBService,
   ) {
     console.log('GameService initialized');
+  }
+
+  async updateUserResult(playerId: string, result: 'win' | 'draw' | 'loss') {
+    // DBService를 통해 유저 결과 업데이트
+    const user = await this.dbService.findByUsername(playerId);
+    if (!user) {
+      throw new Error(`[Log] User with ID ${playerId} not found`);
+    }
+    await this.dbService.updateResult(user.id, result);
   }
 
   async handleMatchRequest(playerId: string, wantAiOpponent: boolean) {
@@ -105,6 +116,9 @@ export class GameService {
       // 상대 플레이어에게 패배 알림
       this.socketGateway.sendPlaceStoneResp(opponentPlayer.getId(), 'lose'); // 상대 플레이어에게 패배 알림
       this.socketGateway.sendBoardState(opponentPlayer.getId(), board, { x, y });
+
+      // 게임 결과를 DB에 업데이트
+      await this.updateUserResult(playerId, 'win');
       return;
     } else { // result === 'ok'
       const board = game.getBoardString();
@@ -126,6 +140,9 @@ export class GameService {
         // AI가 이겼을 때
         this.socketGateway.sendBoardState(playerId, board_after_ai_turn, { x: x_ai, y: y_ai });
         this.socketGateway.sendPlaceStoneResp(playerId, 'lose'); // 플레이어가 졌을 때
+
+        // 패배 결과를 DB에 업데이트
+        await this.updateUserResult(playerId, 'loss');
       } else if (result_after_ai_turn === 'invalid') {
         // AI는 항상 유효한 돌을 놓는다고 가정
         assert.fail('AI made an invalid move, which should not happen');

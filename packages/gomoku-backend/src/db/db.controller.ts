@@ -1,3 +1,8 @@
+/*
+  db.controller.ts는 직접 테스트용으로 존재
+  game-service.ts에서 DBService를 주입받아 사용 
+*/
+
 import { Controller, Post, Body, Patch, Param, ParseIntPipe, Get } from '@nestjs/common';
 import { DBService } from './db.service';
 
