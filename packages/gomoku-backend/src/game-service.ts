@@ -128,6 +128,8 @@ export class GameService {
       this.socketGateway.sendPlaceStoneResp(playerId, 'ok'); // 플레이어가 돌을 놓았을 때
     }
 
+    this.noSqlService.setGameInstance(playerId, game);
+
     // ok 상태일 때 상대 플레이어에게 돌을 놓은 후 보드 상태 전어
     if (opponentPlayer.isAIPlayer()) {
       const board = game.getBoardString();
