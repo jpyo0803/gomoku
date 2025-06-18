@@ -14,7 +14,7 @@ public class GomokuClient : MonoBehaviour
     private const string uri_base = "http://localhost:3000";
     private SocketIOUnity socket;
     private bool matchRequested = false; // 매치 요청 여부
-    private string playerId; // 플레이
+    private string playerId; // 플레이어 ID
     private string opponentId;
     private bool isBlackStone;
     private string gameId;
@@ -26,7 +26,8 @@ public class GomokuClient : MonoBehaviour
         ConnectSocket();
 
         // 랜덤 스트링을 생성하여 playerId로 사용
-        playerId = System.Guid.NewGuid().ToString(); // 예시로 GUID 사용
+        // playerId = System.Guid.NewGuid().ToString(); // 예시로 GUID 사용
+        playerId = "test1"; // 예시로 GUID 사용
     }
 
     private void ConnectSocket()

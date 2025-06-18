@@ -33,6 +33,8 @@ public class GameManager : MonoBehaviour
     public Toggle wantAiOpponentToggle; // AI 상대 희망 여부 토글
     public Button okButton; // 게임 설정 패널의 확인 버튼
 
+    private AuthInterface authClient;
+
     private void Awake()
     {
         if (instance == null)
@@ -43,6 +45,14 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        // authClient를 찾아 의존성 주입
+        authClient = FindObjectOfType<AuthClient>();
+        if (authClient == null)
+        {
+            Debug.LogError("AuthClient not found in the scene. Please add it to the scene.");
+            return;
+        }
+
         InitBoard();
         // Initialize the result image to be inactive at the start
         resultImage.gameObject.SetActive(false);
@@ -142,4 +152,5 @@ public class GameManager : MonoBehaviour
         // GameSettingPanel을 비활성화
         gameSettingPanel.SetActive(false);
     }
+
 }
