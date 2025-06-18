@@ -24,7 +24,6 @@ export class AuthService {
 
     // 201 Created + 유저 정보 반환
     return {
-      statusCode: 201,
       message: 'User successfully registered',
       user: {
         id: user.id,
@@ -44,7 +43,6 @@ export class AuthService {
 
     // 200 OK + 유저 정보 반환
     return {
-      statusCode: 200,
       message: 'Login successful',
       user: {
         id: user.id,
