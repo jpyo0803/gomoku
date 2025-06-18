@@ -3,10 +3,14 @@ import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
 import { DBService } from '../db/db.service';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly dbService: DBService) {}
+  constructor(
+    private readonly dbService: DBService,
+    private readonly jwtService: JwtService,
+  ) {}
 
   async signup(dto: SignupDto) {
     const { username, password } = dto;
@@ -25,10 +29,6 @@ export class AuthService {
     // 201 Created + 유저 정보 반환
     return {
       message: 'User successfully registered',
-      user: {
-        id: user.id,
-        username: user.username,
-      },
     };
   }
 
@@ -41,13 +41,13 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    const payload = { username: user.username, sub: user.id };
+    const token = this.jwtService.sign(payload);
+
     // 200 OK + 유저 정보 반환
     return {
       message: 'Login successful',
-      user: {
-        id: user.id,
-        username: user.username,
-      },
+      token,
     };
   }
 }
