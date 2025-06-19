@@ -9,7 +9,7 @@ import { WsGateway } from './ws-gateway';
 import { forwardRef } from '@nestjs/common'; // forwardRef 사용을 위해 추가
 
 // import { RedisService } from './redis.service'; // RedisService 추가
-import { NoSqlInterface } from './nosql-interface';
+import { NosqlInterface } from './nosql/nosql-interface';
 import { SqlInterface } from './sql/sql-interface';
 
 @Injectable()
@@ -19,8 +19,8 @@ export class GameService {
     private readonly socketGateway: GatewayInterface,
     private readonly aiGateway: WsGateway,
     
-    @Inject('NoSqlInterface')
-    private readonly noSqlService: NoSqlInterface,
+    @Inject('NosqlInterface')
+    private readonly nosqlService: NosqlInterface,
     @Inject('SqlInterface')
     private readonly sqlService: SqlInterface, // SqlService 주입
   ) {
@@ -49,10 +49,10 @@ export class GameService {
       return gameId;
     } else {
       // 일반 플레이어 상대 매칭
-      const opponentId = await this.noSqlService.popDataFromQueue('matchmaking_queue');
+      const opponentId = await this.nosqlService.popDataFromQueue('matchmaking_queue');
       if (!opponentId) {
         // 상대가 없으면 현재 플레이어를 대기열에 추가
-        await this.noSqlService.pushDataToQueue('matchmaking_queue', playerId);
+        await this.nosqlService.pushDataToQueue('matchmaking_queue', playerId);
         console.log(`[Log] Player ${playerId} added to matchmaking queue`);
       }
       else {
@@ -78,7 +78,7 @@ export class GameService {
     const whitePlayerId = whitePlayer.getId();
 
     // redis에 game session 및 playerId -> gameId 매핑 저장
-    this.noSqlService.registerGameInstance(gameId, game);
+    this.nosqlService.registerGameInstance(gameId, game);
 
     console.log(`[Log] Game created, gameId: ${gameId}, blackPlayerId: ${blackPlayerId}, whitePlayerId: ${whitePlayer.getId()}`);
 
@@ -96,7 +96,7 @@ export class GameService {
   }
 
   async handlePlaceStone(playerId: string, x: number, y: number) {
-    const game =  await this.noSqlService.getGameInstance(playerId);
+    const game =  await this.nosqlService.getGameInstance(playerId);
     if (!game) {
       throw new Error(`No game instance found for player ${playerId}`);
     }
@@ -129,7 +129,7 @@ export class GameService {
       this.socketGateway.sendPlaceStoneResp(playerId, 'ok'); // 플레이어가 돌을 놓았을 때
     }
 
-    this.noSqlService.setGameInstance(playerId, game);
+    this.nosqlService.setGameInstance(playerId, game);
 
     // ok 상태일 때 상대 플레이어에게 돌을 놓은 후 보드 상태 전어
     if (opponentPlayer.isAIPlayer()) {
@@ -162,6 +162,6 @@ export class GameService {
       this.socketGateway.sendYourTurn(opponentPlayer.getId(), 30); // time limit is not used for now
     }
 
-    this.noSqlService.setGameInstance(playerId, game);
+    this.nosqlService.setGameInstance(playerId, game);
   }
 }

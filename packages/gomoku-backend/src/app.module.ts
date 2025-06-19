@@ -6,10 +6,10 @@ import { SocketIoGateway } from './socketio-gateway';
 import { WsGateway } from './ws-gateway';
 import { GameService } from './game-service';
 
-import { NoSqlRedisImpl } from './nosql-redis-impl';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SqlModule } from './sql/sql.module';
 import { AuthModule } from './auth/auth.module';
+import { NosqlModule } from './nosql/nosql.module';
 
 @Module({
   imports: [
@@ -25,6 +25,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     SqlModule,
     AuthModule,
+    NosqlModule,
   ],
   controllers: [AppController],
   providers: [
@@ -32,10 +33,6 @@ import { AuthModule } from './auth/auth.module';
     SocketIoGateway, 
     GameService, 
     WsGateway,
-    {
-      provide: 'NoSqlInterface',
-      useClass: NoSqlRedisImpl,
-    },
   ],
 })
 export class AppModule {}

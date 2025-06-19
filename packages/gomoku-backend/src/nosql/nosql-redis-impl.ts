@@ -1,11 +1,11 @@
-import { NoSqlInterface } from "./nosql-interface";
-import { GameInstance } from "./game-instance"; // Assuming you have a GameInstance class defined somewhere
+import { NosqlInterface } from "./nosql-interface";
+import { GameInstance } from "../game-instance"; // Assuming you have a GameInstance class defined somewhere
 import { Injectable } from '@nestjs/common';
 import Redis from 'ioredis';
 import Redlock from 'redlock';
 
 @Injectable()
-export class NoSqlRedisImpl implements NoSqlInterface {
+export class NosqlRedisImpl implements NosqlInterface {
   private redisClient: Redis;
   private redlock: Redlock;
 

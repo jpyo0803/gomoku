@@ -1,4 +1,4 @@
-export interface NoSqlInterface {
+export interface NosqlInterface {
     popDataFromQueue(queueKey: string): Promise<string | null>;
     pushDataToQueue(queueKey: string, data: string): Promise<void>;
 
