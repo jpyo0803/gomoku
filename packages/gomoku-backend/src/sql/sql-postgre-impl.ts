@@ -2,26 +2,28 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
+import { SqlInterface } from './sql-interface'; 
 
 @Injectable()
-export class SqlService {
+export class SqlPostgreImpl implements SqlInterface {
   constructor(
     @InjectRepository(User)
     private SqlRepository: Repository<User>,
   ) {}
 
   // 유저 생성
-  async create(username: string, password: string): Promise<User> {
+  async createUser(username: string, password: string): Promise<User> {
     const user = this.SqlRepository.create({ username, password }); // password는 실제로는 해싱해서 저장해야 함
     return this.SqlRepository.save(user);
   }
 
   // 유저 정보 조회 
-  async findByUsername(username: string): Promise<User | null> {
+  async findUserByUsername(username: string): Promise<User | null> {
     return this.SqlRepository.findOneBy({ username });
   }
 
-  async updateResult(userId: number, result: 'win' | 'draw' | 'loss') {
+  // 유저 결과 업데이트
+  async updateUserResult(userId: number, result: 'win' | 'draw' | 'loss') : Promise<void> {
     return this.SqlRepository
       .createQueryBuilder()
       .update(User)
@@ -32,6 +34,7 @@ export class SqlService {
         losses: result === 'loss' ? () => '"losses" + 1' : undefined,
       })
       .where("id = :id", { id: userId })
-      .execute();
+      .execute()
+      .then(() => undefined); // TypeORM은 void를 반환하므로, 명시적으로 void를 반환하도록 함
   }
 }

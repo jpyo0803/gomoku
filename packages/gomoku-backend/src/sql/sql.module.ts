@@ -1,13 +1,18 @@
 import { Module } from '@nestjs/common';
-import { SqlService } from './sql.service';
+import { SqlPostgreImpl } from './sql-postgre-impl';
 import { SqlController } from './sql.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User])],
-  providers: [SqlService],
-  controllers: [SqlController],
-  exports: [SqlService],
+  controllers: [SqlController], // Testing 용도 
+  providers: [
+    {
+      provide: 'SqlInterface',
+      useClass: SqlPostgreImpl,
+    },
+  ],
+  exports: ['SqlInterface'],
 })
 export class SqlModule {}

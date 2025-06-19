@@ -10,7 +10,7 @@ import { forwardRef } from '@nestjs/common'; // forwardRef 사용을 위해 추�
 
 // import { RedisService } from './redis.service'; // RedisService 추가
 import { NoSqlInterface } from './nosql-interface';
-import { SqlService } from './sql/sql.service';
+import { SqlInterface } from './sql/sql-interface';
 
 @Injectable()
 export class GameService {
@@ -21,18 +21,19 @@ export class GameService {
     
     @Inject('NoSqlInterface')
     private readonly noSqlService: NoSqlInterface,
-    private readonly dbService: SqlService,
+    @Inject('SqlInterface')
+    private readonly sqlService: SqlInterface, // SqlService 주입
   ) {
     console.log('GameService initialized');
   }
 
   async updateUserResult(playerId: string, result: 'win' | 'draw' | 'loss') {
     // SqlService를 통해 유저 결과 업데이트
-    const user = await this.dbService.findByUsername(playerId);
+    const user = await this.sqlService.findUserByUsername(playerId);
     if (!user) {
       throw new Error(`[Log] User with ID ${playerId} not found`);
     }
-    await this.dbService.updateResult(user.id, result);
+    await this.sqlService.updateUserResult(user.id, result);
   }
 
   async handleMatchRequest(playerId: string, wantAiOpponent: boolean) {
