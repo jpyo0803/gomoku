@@ -1,14 +1,14 @@
 import { Injectable, ConflictException, UnauthorizedException, NotFoundException } from '@nestjs/common';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
-import { DBService } from '../db/db.service';
+import { SqlService } from '../sql/sql.service';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly dbService: DBService,
+    private readonly dbService: SqlService,
     private readonly jwtService: JwtService,
   ) {}
 

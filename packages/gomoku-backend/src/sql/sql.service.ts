@@ -4,25 +4,25 @@ import { Repository } from 'typeorm';
 import { User } from './user.entity';
 
 @Injectable()
-export class DBService {
+export class SqlService {
   constructor(
     @InjectRepository(User)
-    private DBRepository: Repository<User>,
+    private SqlRepository: Repository<User>,
   ) {}
 
   // 유저 생성
   async create(username: string, password: string): Promise<User> {
-    const user = this.DBRepository.create({ username, password }); // password는 실제로는 해싱해서 저장해야 함
-    return this.DBRepository.save(user);
+    const user = this.SqlRepository.create({ username, password }); // password는 실제로는 해싱해서 저장해야 함
+    return this.SqlRepository.save(user);
   }
 
   // 유저 정보 조회 
   async findByUsername(username: string): Promise<User | null> {
-    return this.DBRepository.findOneBy({ username });
+    return this.SqlRepository.findOneBy({ username });
   }
 
   async updateResult(userId: number, result: 'win' | 'draw' | 'loss') {
-    return this.DBRepository
+    return this.SqlRepository
       .createQueryBuilder()
       .update(User)
       .set({
