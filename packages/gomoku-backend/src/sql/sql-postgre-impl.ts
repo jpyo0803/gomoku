@@ -9,7 +9,9 @@ export class SqlPostgreImpl implements SqlInterface {
   constructor(
     @InjectRepository(User)
     private SqlRepository: Repository<User>,
-  ) {}
+  ) {
+    console.log('SqlPostgreImpl initialized');
+  }
 
   // 유저 생성
   async createUser(username: string, password: string): Promise<User> {

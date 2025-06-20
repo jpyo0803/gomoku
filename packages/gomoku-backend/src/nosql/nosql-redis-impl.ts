@@ -1,5 +1,5 @@
 import { NosqlInterface } from "./nosql-interface";
-import { GameInstance } from "../game-instance"; // Assuming you have a GameInstance class defined somewhere
+import { GameInstance } from "../game/game-instance"; // Assuming you have a GameInstance class defined somewhere
 import { Injectable } from '@nestjs/common';
 import Redis from 'ioredis';
 import Redlock from 'redlock';
@@ -23,6 +23,8 @@ export class NosqlRedisImpl implements NosqlInterface {
             retryJitter: 100,    // 지연 랜덤화
         }
     );
+
+    console.log('NosqlRedisImpl initialized');
   }
 
     async popDataFromQueue(queueKey: string): Promise<string | null> {

@@ -1,15 +1,13 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
-
-import { SocketIoGateway } from './socketio-gateway';
-import { WsGateway } from './ws-gateway';
-import { GameService } from './game-service';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SqlModule } from './sql/sql.module';
 import { AuthModule } from './auth/auth.module';
 import { NosqlModule } from './nosql/nosql.module';
+import { ClientGatewayModule } from './client-gateway/client-gateway.module';
+import { AiGatewayModule } from './ai-gateway/ai-gateway.module';
+import { GameModule } from './game/game-module';
 
 @Module({
   imports: [
@@ -26,13 +24,12 @@ import { NosqlModule } from './nosql/nosql.module';
     SqlModule,
     AuthModule,
     NosqlModule,
+    ClientGatewayModule,
+    AiGatewayModule,
+    GameModule,
   ],
-  controllers: [AppController],
   providers: [
-    AppService, 
-    SocketIoGateway, 
-    GameService, 
-    WsGateway,
+    AppService,
   ],
 })
 export class AppModule {}

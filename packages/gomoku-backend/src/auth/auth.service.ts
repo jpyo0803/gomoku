@@ -11,7 +11,9 @@ export class AuthService {
   constructor(
     @Inject('SqlInterface') private readonly sqlService: SqlInterface,
     private readonly jwtService: JwtService,
-  ) {}
+  ) {
+    console.log('AuthService initialized');
+  }
 
   async signup(dto: SignupDto) {
     const { username, password } = dto;

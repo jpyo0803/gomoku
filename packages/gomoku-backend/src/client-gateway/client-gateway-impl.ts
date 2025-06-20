@@ -6,15 +6,13 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { Injectable } from '@nestjs/common';
-import { GameService } from './game-service';
-import { GatewayInterface } from './gateway-interface';
-import { Inject, forwardRef } from '@nestjs/common';
-
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
+import { GameService } from '../game/game-service';
+import { ClientGatewayInterface } from './client-gateway-interface';
 
 @WebSocketGateway({ cors: true })
 @Injectable()
-export class SocketIoGateway implements GatewayInterface {
+export class ClientGatewayImpl implements ClientGatewayInterface {
   @WebSocketServer()
   server: Server;
 
@@ -23,15 +21,7 @@ export class SocketIoGateway implements GatewayInterface {
   constructor(
     @Inject(forwardRef(() => GameService))
     private readonly gameService: GameService) {
-    console.log('SocketIoGateway initialized');
-  }
-
-  init(): void {
-    // Nothing required — auto-initialized by NestJS WebSocketGateway
-  }
-
-  deinit(): void {
-    this.playerIdToSocket.clear();
+    console.log('ClientGateway initialized');
   }
 
   @SubscribeMessage('match_request')

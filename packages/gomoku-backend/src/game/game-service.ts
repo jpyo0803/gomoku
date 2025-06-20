@@ -1,28 +1,26 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { GameInstance } from './game-instance';
-import { GatewayInterface } from './gateway-interface'; // 추가
+import { ClientGatewayInterface } from '../client-gateway/client-gateway-interface'; // 추가
 import { Player } from './player';
 import assert from 'assert';
-import { SocketIoGateway } from './socketio-gateway';
-import { WsGateway } from './ws-gateway';
-import { forwardRef } from '@nestjs/common'; // forwardRef 사용을 위해 추가
+import { AiGatewayInterface } from '../ai-gateway/ai-gateway-interface';
 
 // import { RedisService } from './redis.service'; // RedisService 추가
-import { NosqlInterface } from './nosql/nosql-interface';
-import { SqlInterface } from './sql/sql-interface';
+import { NosqlInterface } from '../nosql/nosql-interface';
+import { SqlInterface } from '../sql/sql-interface';
 
 @Injectable()
 export class GameService {
   constructor(
-    @Inject(forwardRef(() => SocketIoGateway))
-    private readonly socketGateway: GatewayInterface,
-    private readonly aiGateway: WsGateway,
-    
+    @Inject('ClientGatewayInterface')
+    private readonly clientGateway: ClientGatewayInterface,
+    @Inject('AiGatewayInterface')
+    private readonly aiGateway: AiGatewayInterface,
     @Inject('NosqlInterface')
     private readonly nosqlService: NosqlInterface,
     @Inject('SqlInterface')
-    private readonly sqlService: SqlInterface, // SqlService 주입
+    private readonly sqlService: SqlInterface,
   ) {
     console.log('GameService initialized');
   }
@@ -84,14 +82,14 @@ export class GameService {
 
     // AI 플레이어가 아닌 경우 매치 메이킹 결과 통보
     if (!blackPlayer.isAIPlayer()) {
-      this.socketGateway.sendMatchMakingSuccess(blackPlayerId, whitePlayerId, gameId, "black");
+      this.clientGateway.sendMatchMakingSuccess(blackPlayerId, whitePlayerId, gameId, "black");
     }
     if (!whitePlayer.isAIPlayer()) {
-      this.socketGateway.sendMatchMakingSuccess(whitePlayerId, blackPlayerId, gameId, "white");
+      this.clientGateway.sendMatchMakingSuccess(whitePlayerId, blackPlayerId, gameId, "white");
     }
 
     // Notify black to start turn
-    this.socketGateway.sendYourTurn(blackPlayerId, 30); // time limit is not used for now
+    this.clientGateway.sendYourTurn(blackPlayerId, 30); // time limit is not used for now
     return gameId;
   }
 
@@ -105,18 +103,18 @@ export class GameService {
     
     const result = game.play(x, y, playerId);
     if (result === 'invalid') {
-      this.socketGateway.sendPlaceStoneResp(playerId, 'invalid');
+      this.clientGateway.sendPlaceStoneResp(playerId, 'invalid');
       return;
     } else if (result === 'win') {
       const board = game.getBoardString();
 
       // 현재 플레이어에게 승리 알림
-      this.socketGateway.sendBoardState(playerId, board, { x, y });
-      this.socketGateway.sendPlaceStoneResp(playerId, 'win'); 
+      this.clientGateway.sendBoardState(playerId, board, { x, y });
+      this.clientGateway.sendPlaceStoneResp(playerId, 'win'); 
 
       // 상대 플레이어에게 패배 알림
-      this.socketGateway.sendPlaceStoneResp(opponentPlayer.getId(), 'lose'); // 상대 플레이어에게 패배 알림
-      this.socketGateway.sendBoardState(opponentPlayer.getId(), board, { x, y });
+      this.clientGateway.sendPlaceStoneResp(opponentPlayer.getId(), 'lose'); // 상대 플레이어에게 패배 알림
+      this.clientGateway.sendBoardState(opponentPlayer.getId(), board, { x, y });
 
       // 게임 결과를 Sql에 업데이트
       await this.updateUserResult(playerId, 'win');
@@ -125,8 +123,8 @@ export class GameService {
       const board = game.getBoardString();
 
       // 현재 플레이어에게 돌을 놓은 후 보드 상태 전어
-      this.socketGateway.sendBoardState(playerId, board, { x, y });
-      this.socketGateway.sendPlaceStoneResp(playerId, 'ok'); // 플레이어가 돌을 놓았을 때
+      this.clientGateway.sendBoardState(playerId, board, { x, y });
+      this.clientGateway.sendPlaceStoneResp(playerId, 'ok'); // 플레이어가 돌을 놓았을 때
     }
 
     this.nosqlService.setGameInstance(playerId, game);
@@ -141,8 +139,8 @@ export class GameService {
 
       if (result_after_ai_turn === 'win') {
         // AI가 이겼을 때
-        this.socketGateway.sendBoardState(playerId, board_after_ai_turn, { x: x_ai, y: y_ai });
-        this.socketGateway.sendPlaceStoneResp(playerId, 'lose'); // 플레이어가 졌을 때
+        this.clientGateway.sendBoardState(playerId, board_after_ai_turn, { x: x_ai, y: y_ai });
+        this.clientGateway.sendPlaceStoneResp(playerId, 'lose'); // 플레이어가 졌을 때
 
         // 패배 결과를 Sql에 업데이트
         await this.updateUserResult(playerId, 'loss');
@@ -151,15 +149,15 @@ export class GameService {
         assert.fail('AI made an invalid move, which should not happen');
       } else {
         // AI가 돌을 놓았을 때
-        this.socketGateway.sendBoardState(playerId, board_after_ai_turn, { x: x_ai, y: y_ai });
-        this.socketGateway.sendYourTurn(playerId, 30); // 플레이어에게 다음 턴 알림
+        this.clientGateway.sendBoardState(playerId, board_after_ai_turn, { x: x_ai, y: y_ai });
+        this.clientGateway.sendYourTurn(playerId, 30); // 플레이어에게 다음 턴 알림
       }
     } else {
       // 상대 플레이어에게 턴 알림
       const board = game.getBoardString();
 
-      this.socketGateway.sendBoardState(opponentPlayer.getId(), board, { x, y });
-      this.socketGateway.sendYourTurn(opponentPlayer.getId(), 30); // time limit is not used for now
+      this.clientGateway.sendBoardState(opponentPlayer.getId(), board, { x, y });
+      this.clientGateway.sendYourTurn(opponentPlayer.getId(), 30); // time limit is not used for now
     }
 
     this.nosqlService.setGameInstance(playerId, game);

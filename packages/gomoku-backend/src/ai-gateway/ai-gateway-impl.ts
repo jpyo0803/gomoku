@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { AiGatewayInterface } from './ai-gateway-interface';
 
 import * as http from 'http';
 import axios from 'axios';
@@ -6,7 +7,7 @@ import axios from 'axios';
 const maxRetries = 1000;
 const pollingInterval = 500; // 500ms
 
-async function requestAI(board: string, serverBaseUrl: string): Promise<{ x: number; y: number }> {
+async function requestAi(board: string, serverBaseUrl: string): Promise<{ x: number; y: number }> {
   try {
     const agent = new http.Agent({ keepAlive: false }); // 매 요청마다 새로운 연결
 
@@ -39,13 +40,15 @@ async function requestAI(board: string, serverBaseUrl: string): Promise<{ x: num
 }
 
 @Injectable()
-export class WsGateway {
+export class AiGatewayImpl implements AiGatewayInterface {
   private readonly AI_ENDPOINT = 'http://localhost:8080';
   
-  constructor() {}
+  constructor() {
+    console.log('AiGatewayImpl initialized');
+  }
 
   async sendYourTurn(board: string): Promise<{ x: number; y: number }> {
-    const { x, y } = await requestAI(board, this.AI_ENDPOINT);
+    const { x, y } = await requestAi(board, this.AI_ENDPOINT);
     return { x, y };
   }
 }
