@@ -9,6 +9,8 @@ import { Server, Socket } from 'socket.io';
 import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { GameService } from '../game/game-service';
 import { ClientGatewayInterface } from './client-gateway-interface';
+import { UseGuards } from '@nestjs/common';
+import { WsJwtAuthGuard } from '../auth/ws-jwt-auth-guard';
 
 @WebSocketGateway({ cors: true })
 @Injectable()
@@ -25,6 +27,7 @@ export class ClientGatewayImpl implements ClientGatewayInterface {
   }
 
   @SubscribeMessage('match_request')
+  @UseGuards(WsJwtAuthGuard)
   handleMatchRequest(
     @ConnectedSocket() socket: Socket,
     @MessageBody() data: { playerId: string; wantAiOpponent: boolean },
@@ -35,6 +38,7 @@ export class ClientGatewayImpl implements ClientGatewayInterface {
   }
 
   @SubscribeMessage('place_stone')
+  @UseGuards(WsJwtAuthGuard)
   async handlePlaceStone(
     @ConnectedSocket() socket: Socket,
     @MessageBody() data: { playerId: string; x: number; y: number },

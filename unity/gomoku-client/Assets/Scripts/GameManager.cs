@@ -35,6 +35,10 @@ public class GameManager : MonoBehaviour
 
     private AuthInterface authClient;
 
+    private string username = "test12343"; // 사용자 이름
+    private string password = "1q2w3e4r"; // 사용자 비밀번호
+    private string jwtToken; // JWT 토큰
+
     private void Awake()
     {
         if (instance == null)
@@ -53,12 +57,51 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        InitBoard();
-        // Initialize the result image to be inactive at the start
-        resultImage.gameObject.SetActive(false);
-        playAgainButton.SetActive(false);
 
-        okButton.onClick.AddListener(OnOkClicked);
+        // TODO(jpyo0803): Dialog 창을 띄워 사용자 이름과 비밀번호 입력 받기
+        // 회원가입
+        authClient.SignUp(username, password, (resultCode) =>
+        {
+            if (resultCode == 201)
+            {
+                Debug.Log("[Log] SignUp successful.");
+            }
+            else
+            {
+                Debug.Log($"[Log] SignUp failed with code: {resultCode}");
+            }
+            // 로그인
+            authClient.Login(username, password, (resultCode, token) =>
+            {
+                if (resultCode == 200)
+                {
+                    Debug.Log("[Log] Login successful.");
+                    Debug.Log($"[Log] Token: {token}");
+                    jwtToken = token; // JWT 토큰 저장
+
+                    InitBoard();
+                    // Initialize the result image to be inactive at the start
+                    resultImage.gameObject.SetActive(false);
+                    playAgainButton.SetActive(false);
+
+                    okButton.onClick.AddListener(OnOkClicked);
+
+                    // Gomoku server와 연결
+                    var gomokuClient = FindObjectOfType<GomokuClient>();
+                    if (gomokuClient == null)
+                    {
+                        Debug.LogError("GomokuClient not found in the scene.");
+                        return;
+                    }
+
+                    gomokuClient.ConnectSocket(jwtToken); // JWT 토큰을 사용하여 서버에 연결
+                }
+                else
+                {
+                    Debug.LogError($"[Log] Login failed with code: {resultCode}");
+                }
+            });
+        });
     }
 
     private void InitBoard()

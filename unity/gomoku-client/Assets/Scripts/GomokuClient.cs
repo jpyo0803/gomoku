@@ -23,14 +23,14 @@ public class GomokuClient : MonoBehaviour
     private void Start()
     {
         Debug.Log("[Log] GomokuClient Start() called");
-        ConnectSocket();
+        // ConnectSocket();
 
         // 랜덤 스트링을 생성하여 playerId로 사용
         // playerId = System.Guid.NewGuid().ToString(); // 예시로 GUID 사용
         playerId = "test1"; // 예시로 GUID 사용
     }
 
-    private void ConnectSocket()
+    public void ConnectSocket(string jwtToken)
     {
         // 연결 대상 주소
         var uri = new System.Uri(uri_base);
@@ -40,6 +40,10 @@ public class GomokuClient : MonoBehaviour
             EIO = EngineIO.V4, // 엔진IO 버전
             Transport = SocketIOClient.Transport.TransportProtocol.WebSocket,
             Reconnection = false, // 소켓 라이브러리가 자의로 재연결하지 않도록 설정
+            Query = new Dictionary<string, string>
+            {
+                { "token", jwtToken } // JWT 토큰을 쿼리 파라미터로 전달
+            }
         });
 
         // 연결 이벤트 핸들러
