@@ -44,64 +44,69 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(gameObject); // 씬 전환 시에도 GameManager 유지
+        }
+        else
+        {
+            Destroy(gameObject); // 이미 존재하는 GameManager가 있으면 현재 오브젝트 삭제
         }
     }
 
     private void Start()
     {
         // authClient를 찾아 의존성 주입
-        authClient = FindObjectOfType<AuthClient>();
-        if (authClient == null)
-        {
-            Debug.LogError("AuthClient not found in the scene. Please add it to the scene.");
-            return;
-        }
+        // authClient = FindObjectOfType<AuthClient>();
+        // if (authClient == null)
+        // {
+        //     Debug.LogError("AuthClient not found in the scene. Please add it to the scene.");
+        //     return;
+        // }
 
 
-        // TODO(jpyo0803): Dialog 창을 띄워 사용자 이름과 비밀번호 입력 받기
-        // 회원가입
-        authClient.SignUp(username, password, (resultCode) =>
-        {
-            if (resultCode == 201)
-            {
-                Debug.Log("[Log] SignUp successful.");
-            }
-            else
-            {
-                Debug.Log($"[Log] SignUp failed with code: {resultCode}");
-            }
-            // 로그인
-            authClient.Login(username, password, (resultCode, token) =>
-            {
-                if (resultCode == 200)
-                {
-                    Debug.Log("[Log] Login successful.");
-                    Debug.Log($"[Log] Token: {token}");
-                    jwtToken = token; // JWT 토큰 저장
+        // // TODO(jpyo0803): Dialog 창을 띄워 사용자 이름과 비밀번호 입력 받기
+        // // 회원가입
+        // authClient.SignUp(username, password, (resultCode) =>
+        // {
+        //     if (resultCode == 201)
+        //     {
+        //         Debug.Log("[Log] SignUp successful.");
+        //     }
+        //     else
+        //     {
+        //         Debug.Log($"[Log] SignUp failed with code: {resultCode}");
+        //     }
+        //     // 로그인
+        //     authClient.Login(username, password, (resultCode, token) =>
+        //     {
+        //         if (resultCode == 200)
+        //         {
+        //             Debug.Log("[Log] Login successful.");
+        //             Debug.Log($"[Log] Token: {token}");
+        //             jwtToken = token; // JWT 토큰 저장
 
-                    InitBoard();
-                    // Initialize the result image to be inactive at the start
-                    resultImage.gameObject.SetActive(false);
-                    playAgainButton.SetActive(false);
+        //             InitBoard();
+        //             // Initialize the result image to be inactive at the start
+        //             resultImage.gameObject.SetActive(false);
+        //             playAgainButton.SetActive(false);
 
-                    okButton.onClick.AddListener(OnOkClicked);
+        //             okButton.onClick.AddListener(OnOkClicked);
 
-                    // Gomoku server와 연결
-                    var gomokuClient = FindObjectOfType<GomokuClient>();
-                    if (gomokuClient == null)
-                    {
-                        Debug.LogError("GomokuClient not found in the scene.");
-                        return;
-                    }
+        //             // Gomoku server와 연결
+        //             var gomokuClient = FindObjectOfType<GomokuClient>();
+        //             if (gomokuClient == null)
+        //             {
+        //                 Debug.LogError("GomokuClient not found in the scene.");
+        //                 return;
+        //             }
 
-                    gomokuClient.ConnectSocket(jwtToken); // JWT 토큰을 사용하여 서버에 연결
-                }
-                else
-                {
-                    Debug.LogError($"[Log] Login failed with code: {resultCode}");
-                }
-            });
-        });
+        //             gomokuClient.ConnectSocket(jwtToken); // JWT 토큰을 사용하여 서버에 연결
+        //         }
+        //         else
+        //         {
+        //             Debug.LogError($"[Log] Login failed with code: {resultCode}");
+        //         }
+        //     });
+        // });
     }
 
     private void InitBoard()
