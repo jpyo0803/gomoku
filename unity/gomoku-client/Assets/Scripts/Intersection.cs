@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using UnityEngine;
 
 public class Intersection : MonoBehaviour
@@ -12,15 +13,8 @@ public class Intersection : MonoBehaviour
     {
         // Check if the mouse button is pressed
         Debug.Log($"[Log] Intersection clicked at ({row_index}, {col_index})");
-        // Find gomoku client and send the click event
-        GomokuClient gomokuClient = FindFirstObjectByType<GomokuClient>();
-        if (gomokuClient == null)
-        {
-            Debug.LogError("GomokuClient not found in the scene.");
-            return;
-        }
 
-        gomokuClient.SendPlaceStone(row_index, col_index);
+        GameManager.instance?.SendPlaceStone(row_index, col_index);
     }
     
     public int GetRowIndex()
@@ -35,6 +29,8 @@ public class Intersection : MonoBehaviour
 
     public void SetStone(GameObject stonePrefab)
     {
+        Debug.Log($"Print transform position: {transform.position}");
+        Debug.Log($"[Log] Setting stone at ({row_index}, {col_index})");
         if (stone != null)
         {
             Destroy(stone);

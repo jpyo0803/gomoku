@@ -3,75 +3,64 @@
     Rest API를 사용하여 회원가입과 로그인 기능을 제공합니다.
 */
 
-using UnityEngine;
-using UnityEngine.Networking;
-using System.Collections;
+using System;
+using System.Net.Http;
 using System.Text;
+using System.Text.Json;
+using System.Threading.Tasks;
 
-public class AuthClient : MonoBehaviour, AuthInterface
+public class AuthClient : AuthInterface
 {
-    // 서버 URL, 실제 서버 주소로 변경 필요
     private const string serverUrl = "http://localhost:3000";
+    private static readonly HttpClient httpClient = new HttpClient();
 
-    public void SignUp(string username, string password, System.Action<int> onResult)
-    {
-        // TODO(jpyo0803): 보안을 위해 종단간 암호화를 고려할 것
-        StartCoroutine(SignUpCoroutine(username, password, onResult));
-    }
-
-    public void Login(string username, string password, System.Action<int, string> onResult)
-    {
-        // TODO(jpyo0803): 보안을 위해 종단간 암호화를 고려할 것
-        StartCoroutine(LoginCoroutine(username, password, onResult));
-    }
-
-    private IEnumerator SignUpCoroutine(string username, string password, System.Action<int> onResult)
+    public async Task<int> SignUp(string username, string password)
     {
         string url = $"{serverUrl}/auth/signup";
-        string json = $"{{\"username\": \"{username}\", \"password\": \"{password}\"}}";
-        byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+        string json = JsonSerializer.Serialize(new { username, password });
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        UnityWebRequest req = new UnityWebRequest(url, "POST");
-        req.uploadHandler = new UploadHandlerRaw(jsonBytes);
-        req.downloadHandler = new DownloadHandlerBuffer();
-        req.SetRequestHeader("Content-Type", "application/json");
-
-        yield return req.SendWebRequest();
-
-        onResult?.Invoke((int)req.responseCode);
+        try
+        {
+            HttpResponseMessage response = await httpClient.PostAsync(url, content);
+            return (int)response.StatusCode;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"SignUp error: {ex.Message}");
+            return -1;
+        }
     }
 
-    private IEnumerator LoginCoroutine(string username, string password, System.Action<int, string> onResult)
+    public async Task<(int, string)> Login(string username, string password)
     {
         string url = $"{serverUrl}/auth/login";
-        string json = $"{{\"username\": \"{username}\", \"password\": \"{password}\"}}";
-        byte[] jsonBytes = Encoding.UTF8.GetBytes(json);
+        string json = JsonSerializer.Serialize(new { username, password });
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-        UnityWebRequest req = new UnityWebRequest(url, "POST");
-        req.uploadHandler = new UploadHandlerRaw(jsonBytes);
-        req.downloadHandler = new DownloadHandlerBuffer();
-        req.SetRequestHeader("Content-Type", "application/json");
-
-        yield return req.SendWebRequest();
-
-        int code = (int)req.responseCode;
-
-        if (code == 200)
+        try
         {
-            // 응답에서 token 추출
-            string jsonResponse = req.downloadHandler.text;
-            string token = ExtractTokenFromJson(jsonResponse);
-            onResult?.Invoke(code, token);
+            HttpResponseMessage response = await httpClient.PostAsync(url, content);
+            int code = (int)response.StatusCode;
+
+            if (code == 200)
+            {
+                string responseBody = await response.Content.ReadAsStringAsync();
+                string token = ExtractTokenFromJson(responseBody);
+                return (code, token);
+            }
+
+            return (code, null);
         }
-        else
+        catch (Exception ex)
         {
-            onResult?.Invoke(code, null);
+            Console.WriteLine($"Login error: {ex.Message}");
+            return (-1, null);
         }
     }
-    
+
     private string ExtractTokenFromJson(string json)
     {
-        // 간단한 문자열 파싱 (MiniJSON 없을 때)
         const string tokenKey = "\"token\":\"";
         int start = json.IndexOf(tokenKey);
         if (start == -1) return null;

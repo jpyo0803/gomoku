@@ -1,5 +1,7 @@
+using System.Threading.Tasks;
+
 public interface AuthInterface
 {
-    void SignUp(string username, string password, System.Action<int> onResult);
-    void Login(string username, string password, System.Action<int, string> onResult);
+    Task<int> SignUp(string username, string password);
+    Task<(int code, string token)> Login(string username, string password);
 }

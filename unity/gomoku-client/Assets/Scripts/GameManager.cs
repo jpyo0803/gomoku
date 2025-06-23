@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +13,8 @@ public class GameManager : MonoBehaviour
 
     private Intersection[,] board = new Intersection[BOARD_SIZE, BOARD_SIZE];
 
+    public bool isGameDone = false; // 게임 종료 여부
+
 
     [SerializeField]
     private GameObject blackStonePrefab, blackStoneNewPrefab; // 교차점에 놓을 돌 프리팹
@@ -18,26 +22,17 @@ public class GameManager : MonoBehaviour
     private GameObject whiteStonePrefab, whiteStoneNewPrefab; // 교차점에 놓을 돌 프리팹
 
     [SerializeField]
-    private Image resultImage;
-
-    [SerializeField]
-    private GameObject playAgainButton;
-
-    [SerializeField]
     private Sprite winSprite;
     [SerializeField]
     private Sprite loseSprite;
 
     // 게임 설정 패널
-    public GameObject gameSettingPanel; // 게임 설정 패널 오브젝트
-    public Toggle wantAiOpponentToggle; // AI 상대 희망 여부 토글
-    public Button okButton; // 게임 설정 패널의 확인 버튼
 
-    private AuthInterface authClient;
-
-    private string username = "test12343"; // 사용자 이름
-    private string password = "1q2w3e4r"; // 사용자 비밀번호
     private string jwtToken; // JWT 토큰
+
+    private GomokuClient gomokuClient; // GomokuClient 인스턴스
+
+    private readonly Queue<Action> mainThreadActions = new Queue<Action>();
 
     private void Awake()
     {
@@ -54,62 +49,16 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        // authClient를 찾아 의존성 주입
-        // authClient = FindObjectOfType<AuthClient>();
-        // if (authClient == null)
-        // {
-        //     Debug.LogError("AuthClient not found in the scene. Please add it to the scene.");
-        //     return;
-        // }
-
-
-        // // TODO(jpyo0803): Dialog 창을 띄워 사용자 이름과 비밀번호 입력 받기
-        // // 회원가입
-        // authClient.SignUp(username, password, (resultCode) =>
-        // {
-        //     if (resultCode == 201)
-        //     {
-        //         Debug.Log("[Log] SignUp successful.");
-        //     }
-        //     else
-        //     {
-        //         Debug.Log($"[Log] SignUp failed with code: {resultCode}");
-        //     }
-        //     // 로그인
-        //     authClient.Login(username, password, (resultCode, token) =>
-        //     {
-        //         if (resultCode == 200)
-        //         {
-        //             Debug.Log("[Log] Login successful.");
-        //             Debug.Log($"[Log] Token: {token}");
-        //             jwtToken = token; // JWT 토큰 저장
-
-        //             InitBoard();
-        //             // Initialize the result image to be inactive at the start
-        //             resultImage.gameObject.SetActive(false);
-        //             playAgainButton.SetActive(false);
-
-        //             okButton.onClick.AddListener(OnOkClicked);
-
-        //             // Gomoku server와 연결
-        //             var gomokuClient = FindObjectOfType<GomokuClient>();
-        //             if (gomokuClient == null)
-        //             {
-        //                 Debug.LogError("GomokuClient not found in the scene.");
-        //                 return;
-        //             }
-
-        //             gomokuClient.ConnectSocket(jwtToken); // JWT 토큰을 사용하여 서버에 연결
-        //         }
-        //         else
-        //         {
-        //             Debug.LogError($"[Log] Login failed with code: {resultCode}");
-        //         }
-        //     });
-        // });
+        gomokuClient = new GomokuClient(); // Player1은 임시 플레이어 ID, 실제로는 로그인한 사용자 ID로 설정해야 함
     }
 
-    private void InitBoard()
+    public void SetJwtToken(string token)
+    {
+        jwtToken = token;
+        Debug.Log($"[Log] JWT Token set: {jwtToken}");
+    }
+
+    public void InitBoard()
     {
         Debug.Log("[Log] Mapping intersections to board...");
         // Intersection 오브젝트를 찾아서 board 배열에 매핑
@@ -122,6 +71,14 @@ public class GameManager : MonoBehaviour
             int col = intersection.GetColIndex();
 
             board[row, col] = intersection;
+            if (board[row, col] == null)
+            {
+                Debug.LogError($"[Log] Intersection at ({row}, {col}) is null!");
+            }
+            else
+            {
+                Debug.Log($"[Log] Intersection at ({row}, {col}) mapped successfully.");
+            }
         }
     }
 
@@ -129,6 +86,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("[Log] Updating board state...");
         // 보드 상태 업데이트 
+        Debug.Log($"[Log] Board string: {boardStr}, Last move: ({lastMoveX}, {lastMoveY})");
 
         for (int i = 0; i < BOARD_SIZE; i++)
         {
@@ -139,11 +97,27 @@ public class GameManager : MonoBehaviour
 
                 if (stoneType == 'B') // 검은 돌
                 {
-                    board[i, j].SetStone(isLastMove ? blackStoneNewPrefab : blackStonePrefab);
+                    Debug.Log($"[Log] Placing black stone at ({i}, {j}), Last move: {isLastMove}");
+                    try
+                    {
+                        board[i, j].SetStone(isLastMove ? blackStoneNewPrefab : blackStonePrefab);
+                    }
+                    catch (System.Exception ex)
+                    {
+                        Debug.LogError($"[Log] Error placing black stone at ({i}, {j}): {ex.Message}");
+                    }
                 }
                 else if (stoneType == 'W') // 흰 돌
                 {
-                    board[i, j].SetStone(isLastMove ? whiteStoneNewPrefab : whiteStonePrefab);
+                    Debug.Log($"[Log] Placing white stone at ({i}, {j}), Last move: {isLastMove}");
+                    try
+                    {
+                        board[i, j].SetStone(isLastMove ? whiteStoneNewPrefab : whiteStonePrefab);
+                    }
+                    catch (System.Exception ex)
+                    {
+                        Debug.LogError($"[Log] Error placing white stone at ({i}, {j}): {ex.Message}");
+                    }
                 }
                 else // 빈 칸
                 {
@@ -152,11 +126,13 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+        Debug.Log("[Log] Board state updated successfully.");
     }
 
     public void SetGameResult(bool isWin)
     {
         // Display the result image based on the game outcome
+        isGameDone = true; // 게임 종료 상태 설정
         DisplayResultImage(isWin);
     }
 
@@ -164,41 +140,63 @@ public class GameManager : MonoBehaviour
     private void DisplayResultImage(bool isWin)
     {
 
-        if (isWin)
-        {
-            resultImage.sprite = winSprite;
-        }
-        else
-        {
-            resultImage.sprite = loseSprite;
-        }
-
-        resultImage.gameObject.SetActive(true);
-        playAgainButton.SetActive(true);
     }
 
     public void PlayAgain()
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("GameSettingScene");
     }
 
-    void OnOkClicked()
+    public void ConnectGomokuClient()
     {
-        bool wantAiOpponent = wantAiOpponentToggle.isOn; // 토글 상태에 따라 AI 상대 희망 여부 설정
-        Debug.Log($"[Log] Want AI opponent: {wantAiOpponent}");
-
-        // 매치 요청을 보내는 메소드 호출
-        var gomokuClient = FindObjectOfType<GomokuClient>();
-        if (gomokuClient == null)
+        if (gomokuClient != null)
         {
-            Debug.LogError("GomokuClient not found in the scene.");
-            return;
+            gomokuClient.Connect(jwtToken);
         }
-
-        gomokuClient.SendMatchRequest(wantAiOpponent);
-
-        // GameSettingPanel을 비활성화
-        gameSettingPanel.SetActive(false);
+        else
+        {
+            Debug.LogError("GomokuClient is not initialized.");
+        }
     }
 
+    public async void SendMatchRequest(bool wantAiOpponent)
+    {
+        if (gomokuClient != null)
+        {
+            await gomokuClient.SendMatchRequest(wantAiOpponent);
+        }
+        else
+        {
+            Debug.LogError("GomokuClient is not initialized.");
+        }
+    }
+
+    public async void SendPlaceStone(int row, int col)
+    {
+        if (gomokuClient != null)
+        {
+            await gomokuClient.SendPlaceStone(row, col);
+        }
+        else
+        {
+            Debug.LogError("GomokuClient is not initialized.");
+        }
+    }
+
+    public void RunOnMainThread(Action action)
+    {
+        lock (mainThreadActions)
+        {
+            mainThreadActions.Enqueue(action);
+        }
+    }
+
+    private void Update()
+    {
+        while (mainThreadActions.Count > 0)
+        {
+            var action = mainThreadActions.Dequeue();
+            action.Invoke();
+        }
+    }
 }

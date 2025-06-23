@@ -30,21 +30,25 @@ export class ClientGatewayImpl implements ClientGatewayInterface {
   @UseGuards(WsJwtAuthGuard)
   handleMatchRequest(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() data: { playerId: string; wantAiOpponent: boolean },
+    @MessageBody() data: { wantAiOpponent: boolean },
   ) {
-    console.log(`[Log] Receive 'match_request' from \'${data.playerId}\' (playerId), want AI: ${data.wantAiOpponent}`);
-    this.playerIdToSocket.set(data.playerId, socket);
-    this.gameService.handleMatchRequest(data.playerId, data.wantAiOpponent);
+    // playerId는 JWT 토큰에서 가져옴 (username)
+    const playerId = socket.data.user.username;
+    console.log(`[Log] Receive 'match_request' from \'${playerId}\' (playerId), want AI: ${data.wantAiOpponent}`);
+    this.playerIdToSocket.set(playerId, socket);
+    this.gameService.handleMatchRequest(playerId, data.wantAiOpponent);
   }
 
   @SubscribeMessage('place_stone')
   @UseGuards(WsJwtAuthGuard)
   async handlePlaceStone(
     @ConnectedSocket() socket: Socket,
-    @MessageBody() data: { playerId: string; x: number; y: number },
+    @MessageBody() data: { x: number; y: number },
   ) {
-    console.log(`[Log] Receive 'place_stone' from \'${data.playerId}\' (playerId), x: ${data.x}, y: ${data.y}`);
-    await this.gameService.handlePlaceStone(data.playerId, data.x, data.y);
+    // playerId는 JWT 토큰에서 가져옴 (username)
+    const playerId = socket.data.user.username;
+    console.log(`[Log] Receive 'place_stone' from \'${playerId}\' (playerId), x: ${data.x}, y: ${data.y}`);
+    await this.gameService.handlePlaceStone(playerId, data.x, data.y);
   }
 
   sendMatchMakingSuccess(playerId: string, opponentId: string, gameId: string, stoneColor: string): void {
