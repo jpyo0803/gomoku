@@ -133,13 +133,29 @@ public class GameManager : MonoBehaviour
     {
         // Display the result image based on the game outcome
         isGameDone = true; // 게임 종료 상태 설정
-        DisplayResultImage(isWin);
+        DisplayGameResult(isWin);
     }
 
     // Update is called once per frame
-    private void DisplayResultImage(bool isWin)
+    private void DisplayGameResult(bool isWin)
     {
-
+        // PlayManager 찾기 
+        try
+        {
+            PlayManager playManager = FindObjectOfType<PlayManager>();
+            if (playManager != null)
+            {
+                playManager.DisplayGameResult(isWin);
+            }
+            else
+            {
+                Debug.LogError("[Log] PlayManager not found in the scene.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[Log] Error displaying game result: {ex.Message}");
+        }
     }
 
     public void PlayAgain()

@@ -3,11 +3,15 @@ import { Player } from './player'
 
 export class GameInstance {
     private game : Gomoku;
+
+    private gameId: string; // Unique identifier for the game instance
+
     private blackPlayer: Player;
     private whitePlayer: Player;
     private currentPlayer: Player;
 
-    constructor(blackPlayer: Player, whitePlayer: Player) {
+    constructor(gameId: string, blackPlayer: Player, whitePlayer: Player) {
+        this.gameId = gameId;
         this.blackPlayer = blackPlayer;
         this.whitePlayer = whitePlayer;
         this.currentPlayer = blackPlayer; // Black starts first
@@ -44,6 +48,10 @@ export class GameInstance {
         return this.blackPlayer; // If current player is white, opponent is black
     }
 
+    getGameId(): string {
+        return this.gameId;
+    }
+
     getBlackPlayer(): Player {
         return this.blackPlayer; // Assuming black is always the human player
     }
@@ -53,10 +61,11 @@ export class GameInstance {
     }
 
     static fromJSON(json_data: any): GameInstance {
+        const gameId = json_data.gameId;
         const blackPlayer = Player.fromJSON(json_data.blackPlayer);
         const whitePlayer = Player.fromJSON(json_data.whitePlayer);
 
-        const gameInstance = new GameInstance(blackPlayer, whitePlayer);
+        const gameInstance = new GameInstance(gameId, blackPlayer, whitePlayer);
         gameInstance.game = Gomoku.fromJSON(json_data.game); // Assuming Gomoku has a fromJSON method
         gameInstance.currentPlayer = json_data.currentPlayer.id === blackPlayer.getId() ? blackPlayer : whitePlayer;
         return gameInstance;

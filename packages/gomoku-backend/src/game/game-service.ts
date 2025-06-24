@@ -70,7 +70,7 @@ export class GameService {
 
   async createGame(blackPlayer: Player, whitePlayer: Player): Promise<string> {
     const gameId = uuidv4();
-    const game = new GameInstance(blackPlayer, whitePlayer);
+    const game = new GameInstance(gameId, blackPlayer, whitePlayer);
 
     const blackPlayerId = blackPlayer.getId();
     const whitePlayerId = whitePlayer.getId();
@@ -118,6 +118,8 @@ export class GameService {
 
       // 게임 결과를 Sql에 업데이트
       await this.updateUserResult(playerId, 'win');
+
+      this.nosqlService.deleteGameInstance(game.getGameId()); // 게임 삭제
       return;
     } else { // result === 'ok'
       const board = game.getBoardString();
@@ -144,6 +146,9 @@ export class GameService {
 
         // 패배 결과를 Sql에 업데이트
         await this.updateUserResult(playerId, 'loss');
+
+        // Game 삭제
+        this.nosqlService.deleteGameInstance(game.getGameId());
       } else if (result_after_ai_turn === 'invalid') {
         // AI는 항상 유효한 돌을 놓는다고 가정
         assert.fail('AI made an invalid move, which should not happen');

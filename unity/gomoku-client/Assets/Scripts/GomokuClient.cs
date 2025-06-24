@@ -13,7 +13,6 @@ public class GomokuClient
 {
     private const string uriBase = "http://localhost:3000";
     private SocketIO socket;
-    private bool matchRequested = false;
     private string playerId;
     private string opponentId;
     private bool isBlackStone;
@@ -76,7 +75,10 @@ public class GomokuClient
             if (result == "win" || result == "lose")
             {
                 bool isClientWin = result == "win";
-                GameManager.instance?.SetGameResult(isClientWin);
+                GameManager.instance?.RunOnMainThread(() =>
+                {
+                    GameManager.instance?.SetGameResult(isClientWin);
+                });
                 Console.WriteLine("[Log] Game result set.");
             }
         });
@@ -86,9 +88,6 @@ public class GomokuClient
 
     public async Task SendMatchRequest(bool wantAiOpponent)
     {
-        if (matchRequested) return;
-        matchRequested = true;
-
         Console.WriteLine("[Log] Sending match request...");
 
         await socket.EmitAsync("match_request", new

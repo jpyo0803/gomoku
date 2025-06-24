@@ -99,6 +99,28 @@ export class NosqlRedisImpl implements NosqlInterface {
         }
     }
 
+    async deleteGameInstance(gameId: string): Promise<void> {
+        // 게임 인스턴스를 Redis에서 삭제
+        try {
+            const gameData = await this.redisClient.get(`game:${gameId}`);
+            if (!gameData) {
+                console.warn(`No game instance found for game '${gameId}'.`);
+                return; // 게임 인스턴스가 없음
+            }
+
+            const gameInstance = GameInstance.fromJSON(JSON.parse(gameData));
+            const blackPlayerId = gameInstance.getBlackPlayer().getId();
+            const whitePlayerId = gameInstance.getWhitePlayer().getId();
+
+            await this.redisClient.del(`game:${gameId}`);
+            await this.redisClient.del(`player:${blackPlayerId}`);
+            await this.redisClient.del(`player:${whitePlayerId}`);
+            console.log(`Game instance for '${gameId}' deleted successfully.`);
+        } catch (err) {
+            console.error(`Failed to delete game instance for '${gameId}': ${err.message}`);
+        }
+    }
+
     async getGameInstance(playerId: string): Promise<GameInstance | null> {
         const gameId = await this.redisClient.get(`player:${playerId}`);
         if (!gameId) {
