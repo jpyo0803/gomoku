@@ -3,9 +3,13 @@ import { SqlPostgreImpl } from './sql-postgre-impl';
 import { SqlController } from './sql.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    JwtModule,
+  ],
   controllers: [SqlController], // Testing 용도 
   providers: [
     {

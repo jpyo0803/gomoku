@@ -1,9 +1,6 @@
-/*
-  db.controller.ts는 직접 테스트용으로 존재
-  game-service.ts에서 SqlService를 주입받아 사용 
-*/
-
-import { Controller, Post, Body, Patch, Param, ParseIntPipe, Get, Inject } from '@nestjs/common';
+import { Controller, Get, UseGuards, Req, Inject } from '@nestjs/common';
+import { Request } from 'express';
+import { JwtAuthGuard } from 'src/jwt/jwt-auth-guard';
 import { SqlInterface } from './sql-interface';
 
 @Controller('Sql')
@@ -12,30 +9,26 @@ export class SqlController {
     @Inject('SqlInterface') private readonly SqlService: SqlInterface,
   ) {}
 
-  @Post()
-  async createUser(
-    @Body('username') username: string,
-    @Body('password') password: string,
-  ) {
-    const user = await this.SqlService.createUser(username, password);
-    return { message: 'User created', user };
-  }
+  @Get('my-match-history')
+  @UseGuards(JwtAuthGuard)
+  async getMyMatchHistory(@Req() req: Request) {
+    const user = (req as any).user as { userId: number; username: string };
+    const username = user.username;
 
-  @Get('by-username/:username')
-  async getUserByUsername(@Param('username') username: string) {
-    const user = await this.SqlService.findUserByUsername(username);
-    if (!user) {
-      return { message: `User '${username}' not found` };
+    console.log(`[Log] Get match history for user: ${username}`);
+
+    const history = await this.SqlService.findUserByUsername(username);
+
+    if (!history) {
+      return { message: `No match history found for user '${username}'` };
     }
-    return user;
-  }
 
-  @Patch(':id/result')
-  async updateUserResult(
-    @Param('id', ParseIntPipe) id: number,
-    @Body('result') result: 'win' | 'draw' | 'loss',
-  ) {
-    await this.SqlService.updateUserResult(id, result);
-    return { message: 'Result updated' };
+    return {
+      username,
+      totalGames: history.totalGames,
+      wins: history.wins,
+      draws: history.draws,
+      losses: history.losses,
+    };
   }
 }

@@ -1,13 +1,26 @@
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+
+public class MatchHistory
+{
+    public string username;
+    public int totalGames;
+    public int wins;
+    public int draws;
+    public int losses;
+}
 
 public class GameManager : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public static GameManager instance = null;
+
+    private const string serverUrl = "http://localhost:3000";
 
     private const int BOARD_SIZE = 15; // 오목판 크기, 15로 고정
 
@@ -32,6 +45,8 @@ public class GameManager : MonoBehaviour
 
     private GomokuClient gomokuClient; // GomokuClient 인스턴스
 
+    private RestAPIClient restApiClient; // REST API 클라이언트
+
     private readonly Queue<Action> mainThreadActions = new Queue<Action>();
 
     private void Awake()
@@ -50,6 +65,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         gomokuClient = new GomokuClient(); // Player1은 임시 플레이어 ID, 실제로는 로그인한 사용자 ID로 설정해야 함
+        restApiClient = new RestAPIClient(); // REST API 클라이언트 초기화
     }
 
     public void SetJwtToken(string token)
@@ -213,6 +229,29 @@ public class GameManager : MonoBehaviour
         {
             var action = mainThreadActions.Dequeue();
             action.Invoke();
+        }
+    }
+
+    public async Task<MatchHistory> GetMatchHistory()
+    {
+        try
+        {
+            string json = await restApiClient.RequestMatchHistory(serverUrl, jwtToken);
+
+            Debug.Log($"[Log] Match history JSON: {json}");
+
+            MatchHistory history = JsonConvert.DeserializeObject<MatchHistory>(json);
+            return history;
+        }
+        catch (HttpRequestException e)
+        {
+            Debug.LogError($"HTTP 오류: {e.Message}");
+            return null;
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogError($"기타 오류: {e.Message}");
+            return null;
         }
     }
 }
