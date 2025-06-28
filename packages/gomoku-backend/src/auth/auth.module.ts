@@ -1,29 +1,16 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { SqlModule } from '../sql/sql.module'; // Adjust the import path as necessary
-import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './jwt.strategy';
-import { WsJwtAuthGuard } from './ws-jwt-auth-guard';
+import { SqlModule } from '../sql/sql.module';
+import { JwtModule } from '../jwt/jwt.module'; // 바뀐 경로
 
 @Module({
   imports: [
     SqlModule,
-    JwtModule.register({
-      secret: 'your_jwt_secret_key',
-      signOptions: { expiresIn: '1h' },
-    }),
+    JwtModule, // 이제 JwtModule만 import (strategy와 guard가 포함됨)
   ],
   controllers: [AuthController],
-  providers: [
-    AuthService, 
-    JwtStrategy,
-    WsJwtAuthGuard,
-  ],
-  exports: [
-    JwtModule,
-    AuthService,
-    WsJwtAuthGuard,
-  ],
+  providers: [AuthService],
+  exports: [AuthService], // AuthService만 내보내면 됨
 })
 export class AuthModule {}

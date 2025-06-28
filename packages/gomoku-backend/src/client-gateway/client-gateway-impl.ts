@@ -10,7 +10,7 @@ import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { GameService } from '../game/game-service';
 import { ClientGatewayInterface } from './client-gateway-interface';
 import { UseGuards } from '@nestjs/common';
-import { WsJwtAuthGuard } from '../auth/ws-jwt-auth-guard';
+import { WsJwtAuthGuard } from 'src/jwt/ws-jwt-auth-guard';
 
 @WebSocketGateway({ cors: true })
 @Injectable()
