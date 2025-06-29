@@ -8,17 +8,22 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.Diagnostics;
+
+public class MatchMakingPayload
+{
+    public PlayerInfo my_info;
+    public PlayerInfo opponent_info;
+    public string game_id;
+}
 
 public class GomokuClient
 {
     private const string uriBase = "http://localhost:3000";
     private SocketIO socket;
-    private string playerId;
-    private string opponentId;
-    private bool isBlackStone;
-    private string gameId;
 
-    public GomokuClient() {}
+    public GomokuClient() { }
 
     public void Connect(string jwtToken)
     {
@@ -35,6 +40,7 @@ public class GomokuClient
             }
         });
 
+
         socket.OnConnected += (_, _) =>
         {
             Console.WriteLine("[Log] Connected to server!");
@@ -42,12 +48,26 @@ public class GomokuClient
 
         socket.On("match_making_success", res =>
         {
-            var data = res.GetValue<Dictionary<string, string>>();
-            this.opponentId = data["opponent_id"];
-            this.gameId = data["game_id"];
-            this.isBlackStone = data["stone_color"] == "black";
+            try
+            {
+                var json = res.ToString();
+                Console.WriteLine($"[DEBUG] Received JSON: {json}");
 
-            Console.WriteLine($"[Log] Match success: Opponent={opponentId}, GameID={gameId}, Color={(isBlackStone ? "Black" : "White")}");
+                var payloads = JsonConvert.DeserializeObject<List<MatchMakingPayload>>(json);
+
+                var payload = payloads[0];
+
+                Console.WriteLine($"[DEBUG] Deserialized payload. Player: {payload.my_info.username}, Opponent: {payload.opponent_info.username}");
+
+                GameManager.instance?.RunOnMainThread(() =>
+                {
+                    GameManager.instance.SetPlayScene(payload.my_info, payload.opponent_info, payload.game_id);
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Exception in match_making_success handler: {ex.Message}");
+            }
         });
 
         socket.On("board_state", res =>

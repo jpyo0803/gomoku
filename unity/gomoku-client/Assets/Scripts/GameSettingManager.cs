@@ -29,9 +29,6 @@ public class GameSettingManager : MonoBehaviour
 
         // GameManager에 설정 전달
         GameManager.instance.SendMatchRequest(wantAiOpponent);
-
-        // 게임 Scene로 전환
-        SceneManager.LoadScene("PlayScene");
     }
 
     private async void UpdateMatchHistoryText()
