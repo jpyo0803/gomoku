@@ -1,7 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 import { GameInstance } from './game-instance';
-import { ClientGatewayInterface } from '../client-gateway/client-gateway-interface'; // 추가
+import { ClientGatewayInterface } from '../client-gateway/client-gateway-interface';
+import type { PlayerInfo } from '../client-gateway/client-gateway-interface';
 import { Player } from './player';
 import assert from 'assert';
 import { AiGatewayInterface } from '../ai-gateway/ai-gateway-interface';
@@ -80,12 +81,55 @@ export class GameService {
 
     console.log(`[Log] Game created, gameId: ${gameId}, blackPlayerId: ${blackPlayerId}, whitePlayerId: ${whitePlayer.getId()}`);
 
+    
+    const blackPlayerInfo: PlayerInfo = {
+      username: blackPlayerId,
+      isAI: blackPlayer.isAIPlayer(),
+      stoneColor: 'black',
+      totalGames: 0,
+      wins: 0,
+      draws: 0,
+      losses: 0,
+    };
+
+    const whitePlayerInfo: PlayerInfo = {
+      username: whitePlayerId,
+      isAI: whitePlayer.isAIPlayer(),
+      stoneColor: 'white',
+      totalGames: 0,
+      wins: 0,
+      draws: 0,
+      losses: 0,
+    };
+
+    if (!blackPlayer.isAIPlayer()) {
+      // Match History 조회 후 Info 업데이트
+      const blackPlayerRecord = await this.sqlService.findUserByUsername(blackPlayerId);
+      if (blackPlayerRecord) {
+        blackPlayerInfo.totalGames = blackPlayerRecord.totalGames;
+        blackPlayerInfo.wins = blackPlayerRecord.wins;
+        blackPlayerInfo.losses = blackPlayerRecord.losses;
+        blackPlayerInfo.draws = blackPlayerRecord.draws;
+      }
+    }
+
+    if (!whitePlayer.isAIPlayer()) {
+      // Match History 조회 후 Info 업데이트
+      const whitePlayerRecord = await this.sqlService.findUserByUsername(whitePlayerId);
+      if (whitePlayerRecord) {
+        whitePlayerInfo.totalGames = whitePlayerRecord.totalGames;
+        whitePlayerInfo.wins = whitePlayerRecord.wins;
+        whitePlayerInfo.losses = whitePlayerRecord.losses;
+        whitePlayerInfo.draws = whitePlayerRecord.draws;
+      }
+    }
+
     // AI 플레이어가 아닌 경우 매치 메이킹 결과 통보
     if (!blackPlayer.isAIPlayer()) {
-      this.clientGateway.sendMatchMakingSuccess(blackPlayerId, whitePlayerId, gameId, "black");
+      this.clientGateway.sendMatchMakingSuccess(blackPlayerInfo, whitePlayerInfo, gameId);
     }
     if (!whitePlayer.isAIPlayer()) {
-      this.clientGateway.sendMatchMakingSuccess(whitePlayerId, blackPlayerId, gameId, "white");
+      this.clientGateway.sendMatchMakingSuccess(whitePlayerInfo, blackPlayerInfo, gameId);
     }
 
     // Notify black to start turn

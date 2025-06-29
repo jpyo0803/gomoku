@@ -6,6 +6,17 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
+public class PlayerInfo
+{
+    public string username;
+    public bool isAI;
+    public string stoneColor;    // "black" or "white"
+    public int totalGames;
+    public int wins;
+    public int draws;
+    public int losses;
+}
+
 public class MatchHistory
 {
     public string username;
@@ -27,6 +38,9 @@ public class GameManager : MonoBehaviour
     private Intersection[,] board = new Intersection[BOARD_SIZE, BOARD_SIZE];
 
     public bool isGameDone = false; // 게임 종료 여부
+
+    public PlayerInfo myInfo; // 내 정보
+    public PlayerInfo opponentInfo; // 상대 정보
 
 
     [SerializeField]
@@ -72,6 +86,17 @@ public class GameManager : MonoBehaviour
     {
         jwtToken = token;
         Debug.Log($"[Log] JWT Token set: {jwtToken}");
+    }
+
+    public void SetPlayScene(PlayerInfo myInfo, PlayerInfo opponentInfo, string gameId)
+    {
+        Debug.Log($"[Log] Starting game with MyInfo: {myInfo.username}, OpponentInfo: {opponentInfo.username}, GameID: {gameId}");
+
+        this.myInfo = myInfo;
+        this.opponentInfo = opponentInfo;
+
+        // PlayScene로 전환
+        SceneManager.LoadScene("PlayScene");
     }
 
     public void InitBoard()
@@ -183,6 +208,8 @@ public class GameManager : MonoBehaviour
     {
         if (gomokuClient != null)
         {
+            Debug.Log($"[Log] Connecting GomokuClient with JWT Token: {jwtToken}");
+            Console.WriteLine($"[Log] Connecting GomokuClient with JWT Tokenssssssss: {jwtToken}");
             gomokuClient.Connect(jwtToken);
         }
         else
@@ -253,5 +280,10 @@ public class GameManager : MonoBehaviour
             Debug.LogError($"기타 오류: {e.Message}");
             return null;
         }
+    }
+
+    public void DebugPrint(string str)
+    {
+        Debug.Log($"[Log] PrintString: {str}");
     }
 }

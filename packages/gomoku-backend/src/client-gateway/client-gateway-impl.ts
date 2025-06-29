@@ -9,6 +9,7 @@ import { Server, Socket } from 'socket.io';
 import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { GameService } from '../game/game-service';
 import { ClientGatewayInterface } from './client-gateway-interface';
+import type { PlayerInfo } from './client-gateway-interface';
 import { UseGuards } from '@nestjs/common';
 import { WsJwtAuthGuard } from 'src/jwt/ws-jwt-auth-guard';
 
@@ -51,10 +52,16 @@ export class ClientGatewayImpl implements ClientGatewayInterface {
     await this.gameService.handlePlaceStone(playerId, data.x, data.y);
   }
 
-  sendMatchMakingSuccess(playerId: string, opponentId: string, gameId: string, stoneColor: string): void {
-    console.log(`[Log] Send 'match_making_success' to \'${playerId}\' (playerId), \'${opponentId}\' (opponentId), gameId: ${gameId}, stone_color: ${stoneColor}`);
-    const socket = this.playerIdToSocket.get(playerId);
-    socket?.emit('match_making_success', { opponent_id: opponentId , game_id: gameId, stone_color: stoneColor });
+  sendMatchMakingSuccess(myInfo: PlayerInfo, opponentInfo: PlayerInfo, gameId: string): void {
+    console.log(`[Log] Send 'match_making_success' to \'${myInfo.username}\' (playerId), \'${opponentInfo.username}\' (opponentId), gameId: ${gameId}, stone_color: ${myInfo.stoneColor}`);
+    const socket = this.playerIdToSocket.get(myInfo.username);
+    
+    socket?.emit('match_making_success', 
+    { 
+      my_info: myInfo,
+      opponent_info: opponentInfo,
+      game_id: gameId,
+    });
   }
 
   sendYourTurn(playerId: string, timeLimit: number): void {
