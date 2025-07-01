@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 
-public class AuthManager : MonoBehaviour
+public class AuthSceneManager : MonoBehaviour
 {
     private AuthInterface authClient;
 

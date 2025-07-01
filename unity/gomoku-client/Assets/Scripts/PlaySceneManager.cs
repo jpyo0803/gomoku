@@ -3,7 +3,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
 
-public class PlayManager : MonoBehaviour
+public class PlaySceneManager : MonoBehaviour
 {
     // Restart 버튼 
     [SerializeField]

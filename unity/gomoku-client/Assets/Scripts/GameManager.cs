@@ -183,10 +183,10 @@ public class GameManager : MonoBehaviour
         // PlayManager 찾기 
         try
         {
-            PlayManager playManager = FindObjectOfType<PlayManager>();
-            if (playManager != null)
+            PlaySceneManager playSceneManager = FindObjectOfType<PlaySceneManager>();
+            if (playSceneManager != null)
             {
-                playManager.DisplayGameResult(isWin);
+                playSceneManager.DisplayGameResult(isWin);
             }
             else
             {

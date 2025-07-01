@@ -5,7 +5,7 @@ using TMPro;
 using System;
 using System.Threading.Tasks;
 
-public class GameSettingManager : MonoBehaviour
+public class GameSettingSceneManager : MonoBehaviour
 {
     [SerializeField]
     private Toggle wantAiOpponentToggle; // AI 상대 희망 여부 토글

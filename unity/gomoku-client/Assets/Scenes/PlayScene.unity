@@ -2299,7 +2299,7 @@ GameObject:
   - component: {fileID: 468439734}
   - component: {fileID: 468439735}
   m_Layer: 0
-  m_Name: PlayManager
+  m_Name: PlaySceneManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2337,7 +2337,7 @@ MonoBehaviour:
   loseSprite: {fileID: 8063888842709871850, guid: 027717bf5e8e3ca4e98cca6dd515fd5e, type: 3}
   resultImage: {fileID: 1397831499}
   gameOverPanel: {fileID: 539158921}
-  playInfoPanel: {fileID: 369423669}
+  leftPlayInfoPanel: {fileID: 0}
   myMatchHistoryText: {fileID: 52421201}
   opponentMatchHistoryText: {fileID: 1148179620}
 --- !u!1 &497247406
