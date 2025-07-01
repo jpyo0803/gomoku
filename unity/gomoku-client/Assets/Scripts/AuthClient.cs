@@ -9,12 +9,27 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
+internal static class AuthJsonUtils 
+{
+    public static string ExtractTokenFromJson(string json)
+    {
+        const string tokenKey = "\"token\":\"";
+        int start = json.IndexOf(tokenKey);
+        if (start == -1) return null;
+
+        start += tokenKey.Length;
+        int end = json.IndexOf("\"", start);
+        if (end == -1) return null;
+
+        return json.Substring(start, end - start);
+    }
+}
+
 public class AuthClient : AuthInterface
 {
-    private const string serverUrl = "http://localhost:3000";
     private static readonly HttpClient httpClient = new HttpClient();
 
-    public async Task<int> SignUp(string username, string password)
+    public async Task<int> SignUp(string serverUrl, string username, string password)
     {
         string url = $"{serverUrl}/auth/signup";
         string json = JsonSerializer.Serialize(new { username, password });
@@ -27,12 +42,12 @@ public class AuthClient : AuthInterface
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"SignUp error: {ex.Message}");
+            Console.WriteLine($"[Log] SignUp error: {ex.Message}");
             return -1;
         }
     }
 
-    public async Task<(int, string)> Login(string username, string password)
+    public async Task<(int, string)> Login(string serverUrl, string username, string password)
     {
         string url = $"{serverUrl}/auth/login";
         string json = JsonSerializer.Serialize(new { username, password });
@@ -46,7 +61,7 @@ public class AuthClient : AuthInterface
             if (code == 200)
             {
                 string responseBody = await response.Content.ReadAsStringAsync();
-                string token = ExtractTokenFromJson(responseBody);
+                string token = AuthJsonUtils.ExtractTokenFromJson(responseBody);
                 return (code, token);
             }
 
@@ -54,21 +69,8 @@ public class AuthClient : AuthInterface
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Login error: {ex.Message}");
+            Console.WriteLine($"[Log] Login error: {ex.Message}");
             return (-1, null);
         }
-    }
-
-    private string ExtractTokenFromJson(string json)
-    {
-        const string tokenKey = "\"token\":\"";
-        int start = json.IndexOf(tokenKey);
-        if (start == -1) return null;
-
-        start += tokenKey.Length;
-        int end = json.IndexOf("\"", start);
-        if (end == -1) return null;
-
-        return json.Substring(start, end - start);
     }
 }

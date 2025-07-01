@@ -1,3 +1,8 @@
+/*
+    BootScene에서는 게임 실행에 필요한 초기화 작업을 수행합니다.
+    현재는 단순히 AuthScene을 로드하는 역할만 합니다.
+*/
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

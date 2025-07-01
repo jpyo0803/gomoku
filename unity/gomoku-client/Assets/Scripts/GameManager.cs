@@ -28,10 +28,26 @@ public class MatchHistory
 
 public class GameManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // GameManager는 싱글턴 패턴을 통해 전역에서 접근 가능
     public static GameManager instance = null;
 
-    private const string serverUrl = "http://localhost:3000";
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject); // 씬 전환 시에도 GameManager 유지
+        }
+        else
+        {
+            Destroy(gameObject); // 이미 존재하는 GameManager가 있으면 현재 오브젝트 삭제
+        }
+    }
+
+    public string AuthServerUrl { get; } = "http://localhost:3000";
+    public string JwtToken { get; set; } // JWT 토큰
+
+    private const string backendServerUrl = "http://localhost:3000";
 
     private const int BOARD_SIZE = 15; // 오목판 크기, 15로 고정
 
@@ -55,7 +71,6 @@ public class GameManager : MonoBehaviour
 
     // 게임 설정 패널
 
-    private string jwtToken; // JWT 토큰
 
     private GomokuClient gomokuClient; // GomokuClient 인스턴스
 
@@ -63,29 +78,11 @@ public class GameManager : MonoBehaviour
 
     private readonly Queue<Action> mainThreadActions = new Queue<Action>();
 
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject); // 씬 전환 시에도 GameManager 유지
-        }
-        else
-        {
-            Destroy(gameObject); // 이미 존재하는 GameManager가 있으면 현재 오브젝트 삭제
-        }
-    }
 
     private void Start()
     {
         gomokuClient = new GomokuClient(); // Player1은 임시 플레이어 ID, 실제로는 로그인한 사용자 ID로 설정해야 함
         restApiClient = new RestAPIClient(); // REST API 클라이언트 초기화
-    }
-
-    public void SetJwtToken(string token)
-    {
-        jwtToken = token;
-        Debug.Log($"[Log] JWT Token set: {jwtToken}");
     }
 
     public void SetPlayScene(PlayerInfo myInfo, PlayerInfo opponentInfo, string gameId)
@@ -208,9 +205,8 @@ public class GameManager : MonoBehaviour
     {
         if (gomokuClient != null)
         {
-            Debug.Log($"[Log] Connecting GomokuClient with JWT Token: {jwtToken}");
-            Console.WriteLine($"[Log] Connecting GomokuClient with JWT Tokenssssssss: {jwtToken}");
-            gomokuClient.Connect(jwtToken);
+            Debug.Log($"[Log] Connecting GomokuClient with JWT Token: {JwtToken}");
+            gomokuClient.Connect(JwtToken);
         }
         else
         {
@@ -263,7 +259,7 @@ public class GameManager : MonoBehaviour
     {
         try
         {
-            string json = await restApiClient.RequestMatchHistory(serverUrl, jwtToken);
+            string json = await restApiClient.RequestMatchHistory(backendServerUrl, JwtToken);
 
             Debug.Log($"[Log] Match history JSON: {json}");
 
