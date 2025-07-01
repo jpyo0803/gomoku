@@ -27,49 +27,49 @@ internal static class AuthJsonUtils
 
 public class AuthClient : AuthInterface
 {
-    private static readonly HttpClient httpClient = new HttpClient();
-
     public async Task<int> SignUp(string serverUrl, string username, string password)
     {
+        var restApiClient = GameManager.instance.RestApiClient;
         string url = $"{serverUrl}/auth/signup";
         string json = JsonSerializer.Serialize(new { username, password });
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
 
         try
         {
-            HttpResponseMessage response = await httpClient.PostAsync(url, content);
-            return (int)response.StatusCode;
+            string responseBody = await restApiClient.SendRequest(HttpMethod.Post, url, null, json);
+            return 201; // 성공적으로 왔다면 회원가입은 보통 201 Created
         }
-        catch (Exception ex)
+        catch (HttpRequestException e)
         {
-            Console.WriteLine($"[Log] SignUp error: {ex.Message}");
+            Console.WriteLine($"[Log] SignUp HTTP error: {e.Message}");
+            return -1;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"[Log] SignUp general error: {e.Message}");
             return -1;
         }
     }
 
     public async Task<(int, string)> Login(string serverUrl, string username, string password)
     {
+        var restApiClient = GameManager.instance.RestApiClient;
         string url = $"{serverUrl}/auth/login";
         string json = JsonSerializer.Serialize(new { username, password });
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
 
         try
         {
-            HttpResponseMessage response = await httpClient.PostAsync(url, content);
-            int code = (int)response.StatusCode;
-
-            if (code == 200)
-            {
-                string responseBody = await response.Content.ReadAsStringAsync();
-                string token = AuthJsonUtils.ExtractTokenFromJson(responseBody);
-                return (code, token);
-            }
-
-            return (code, null);
+            string responseBody = await restApiClient.SendRequest(HttpMethod.Post, url, null, json);
+            string token = AuthJsonUtils.ExtractTokenFromJson(responseBody);
+            return (200, token);
         }
-        catch (Exception ex)
+        catch (HttpRequestException e)
         {
-            Console.WriteLine($"[Log] Login error: {ex.Message}");
+            Console.WriteLine($"[Log] Login HTTP error: {e.Message}");
+            return (-1, null);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"[Log] Login general error: {e.Message}");
             return (-1, null);
         }
     }

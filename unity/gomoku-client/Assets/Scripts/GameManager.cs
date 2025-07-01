@@ -31,12 +31,16 @@ public class GameManager : MonoBehaviour
     // GameManager는 싱글턴 패턴을 통해 전역에서 접근 가능
     public static GameManager instance = null;
 
+    public RestApiClient RestApiClient { get;  private set; } // REST API 클라이언트 인스턴스
+
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
             DontDestroyOnLoad(gameObject); // 씬 전환 시에도 GameManager 유지
+
+            RestApiClient = new RestApiClient(); // REST API 클라이언트 초기화
         }
         else
         {
@@ -47,7 +51,7 @@ public class GameManager : MonoBehaviour
     public string AuthServerUrl { get; } = "http://localhost:3000";
     public string JwtToken { get; set; } // JWT 토큰
 
-    private const string backendServerUrl = "http://localhost:3000";
+    public string BackendServerUrl { get; } = "http://localhost:3000";
 
     private const int BOARD_SIZE = 15; // 오목판 크기, 15로 고정
 
@@ -74,15 +78,12 @@ public class GameManager : MonoBehaviour
 
     private GomokuClient gomokuClient; // GomokuClient 인스턴스
 
-    private RestAPIClient restApiClient; // REST API 클라이언트
-
     private readonly Queue<Action> mainThreadActions = new Queue<Action>();
 
 
     private void Start()
     {
         gomokuClient = new GomokuClient(); // Player1은 임시 플레이어 ID, 실제로는 로그인한 사용자 ID로 설정해야 함
-        restApiClient = new RestAPIClient(); // REST API 클라이언트 초기화
     }
 
     public void SetPlayScene(PlayerInfo myInfo, PlayerInfo opponentInfo, string gameId)
@@ -252,29 +253,6 @@ public class GameManager : MonoBehaviour
         {
             var action = mainThreadActions.Dequeue();
             action.Invoke();
-        }
-    }
-
-    public async Task<MatchHistory> GetMatchHistory()
-    {
-        try
-        {
-            string json = await restApiClient.RequestMatchHistory(backendServerUrl, JwtToken);
-
-            Debug.Log($"[Log] Match history JSON: {json}");
-
-            MatchHistory history = JsonConvert.DeserializeObject<MatchHistory>(json);
-            return history;
-        }
-        catch (HttpRequestException e)
-        {
-            Debug.LogError($"HTTP 오류: {e.Message}");
-            return null;
-        }
-        catch (System.Exception e)
-        {
-            Debug.LogError($"기타 오류: {e.Message}");
-            return null;
         }
     }
 
