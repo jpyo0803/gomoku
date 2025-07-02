@@ -93,9 +93,6 @@ public class AuthSceneManager : MonoBehaviour
             responseDisplay.text = "Login successful!";
             Debug.Log("[Log] Login successful!");
 
-            // GomokuClient 연결
-            GameManager.instance.ConnectGomokuClient();
-
             SceneManager.LoadScene("GameSettingScene");
         }
         else if (code == 401) // 인증 실패

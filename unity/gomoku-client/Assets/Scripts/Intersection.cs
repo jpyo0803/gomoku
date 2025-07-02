@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Intersection : MonoBehaviour
@@ -8,12 +9,30 @@ public class Intersection : MonoBehaviour
     private GameObject stone = null; // 교차점에 놓인 돌 오브젝트
 
     // Update is called once per frame
-    private void OnMouseDown()
+    private async void OnMouseDown()
     {
         // Check if the mouse button is pressed
         Debug.Log($"[Log] Intersection clicked at ({row_index}, {col_index})");
 
-        GameManager.instance?.SendPlaceStone(row_index, col_index);
+        if (GameManager.instance != null)
+        {
+            var websocketClient = GameManager.instance.WebSocketClient;
+
+            if (websocketClient == null)
+            {
+                Debug.LogError("[Log Error] WebSocketClient is not initialized properly.");
+                return;
+            }
+           
+            // Send the place stone request to the server
+            await websocketClient.SendPlaceStone(row_index, col_index);
+        }
+        else
+        {
+            Debug.LogError("[Log Error] GameManager instance is null. Cannot place stone.");
+            return;
+        }
+
     }
     
     public int GetRowIndex()

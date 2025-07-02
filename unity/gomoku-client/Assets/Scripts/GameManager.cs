@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
 using System.Collections.Generic;
-
 public class PlayerInfo
 {
     public string username;
@@ -30,6 +29,8 @@ public class GameManager : MonoBehaviour
 
     public RestApiClient RestApiClient { get;  private set; } // REST API 클라이언트 인스턴스
 
+    public WebSocketClient WebSocketClient { get; private set; } // WebSocket 클라이언트 인스턴스
+
     private void Awake()
     {
         if (instance == null)
@@ -38,6 +39,7 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject); // 씬 전환 시에도 GameManager 유지
 
             RestApiClient = new RestApiClient(); // REST API 클라이언트 초기화
+            WebSocketClient = new WebSocketClient(); // WebSocket 클라이언트 초기화
         }
         else
         {
@@ -45,10 +47,13 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public string AuthServerUrl { get; } = "http://localhost:3000";
     public string JwtToken { get; set; } // JWT 토큰
 
+    public string AuthServerUrl { get; } = "http://localhost:3000";
+
     public string BackendServerUrl { get; } = "http://localhost:3000";
+
+    public string WebSocketServerUrl { get; } = "http://localhost:3000"; // WebSocket 서버 URL
 
     private const int BOARD_SIZE = 15; // 오목판 크기, 15로 고정
 
@@ -70,18 +75,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private Sprite loseSprite;
 
-    // 게임 설정 패널
-
-
-    private GomokuClient gomokuClient; // GomokuClient 인스턴스
-
     private readonly Queue<Action> mainThreadActions = new Queue<Action>();
-
-
-    private void Start()
-    {
-        gomokuClient = new GomokuClient(); // Player1은 임시 플레이어 ID, 실제로는 로그인한 사용자 ID로 설정해야 함
-    }
 
     public void SetPlayScene(PlayerInfo myInfo, PlayerInfo opponentInfo, string gameId)
     {
@@ -199,43 +193,6 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("GameSettingScene");
     }
 
-    public void ConnectGomokuClient()
-    {
-        if (gomokuClient != null)
-        {
-            Debug.Log($"[Log] Connecting GomokuClient with JWT Token: {JwtToken}");
-            gomokuClient.Connect(JwtToken);
-        }
-        else
-        {
-            Debug.LogError("GomokuClient is not initialized.");
-        }
-    }
-
-    public async void SendMatchRequest(bool wantAiOpponent)
-    {
-        if (gomokuClient != null)
-        {
-            await gomokuClient.SendMatchRequest(wantAiOpponent);
-        }
-        else
-        {
-            Debug.LogError("GomokuClient is not initialized.");
-        }
-    }
-
-    public async void SendPlaceStone(int row, int col)
-    {
-        if (gomokuClient != null)
-        {
-            await gomokuClient.SendPlaceStone(row, col);
-        }
-        else
-        {
-            Debug.LogError("GomokuClient is not initialized.");
-        }
-    }
-
     public void RunOnMainThread(Action action)
     {
         lock (mainThreadActions)
@@ -251,10 +208,5 @@ public class GameManager : MonoBehaviour
             var action = mainThreadActions.Dequeue();
             action.Invoke();
         }
-    }
-
-    public void DebugPrint(string str)
-    {
-        Debug.Log($"[Log] PrintString: {str}");
     }
 }

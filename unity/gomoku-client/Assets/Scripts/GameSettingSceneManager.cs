@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 public class GameSettingSceneManager : MonoBehaviour
 {
@@ -20,19 +21,30 @@ public class GameSettingSceneManager : MonoBehaviour
 
     void Start()
     {
+        var websocketClient = GameManager.instance.WebSocketClient;
+        if (websocketClient == null)
+        {
+            Debug.LogError("[Log Error] WebSocketClient is not initialized properly.");
+            return;
+        }
+
+        // WebSocket 연결
+        // TODO(jpyo0803): WebSocket 연결시 GameManager에서 WebSocketServerUrl과 JwtToken을 가져오는 구조가 좋은지 생각해보기
+        websocketClient.Connect(GameManager.instance.WebSocketServerUrl, GameManager.instance.JwtToken);
+
         // 매치 히스토리 업데이트
         DisplayMatchHistory();
         // 버튼 클릭 이벤트 등록
         okButton.onClick.AddListener(OnOkClicked);
     }
 
-    void OnOkClicked()
+    private async void OnOkClicked()
     {
         // AI 상대 희망 여부에 따라 게임 설정을 저장
         bool wantAiOpponent = wantAiOpponentToggle.isOn;
 
-        // GameManager에 설정 전달
-        GameManager.instance.SendMatchRequest(wantAiOpponent);
+        var websocketClient = GameManager.instance.WebSocketClient;
+        await websocketClient.SendMatchRequest(wantAiOpponent);
     }
 
     private async void DisplayMatchHistory()

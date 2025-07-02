@@ -3,12 +3,12 @@
     1. https://github.com/itisnajim/SocketIOUnity
 */
 
-using SocketIOClient;
 using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using SocketIOClient;           
+using Newtonsoft.Json;            
 
 public class MatchMakingPayload
 {
@@ -17,16 +17,13 @@ public class MatchMakingPayload
     public string game_id;
 }
 
-public class GomokuClient
+public class WebSocketClient
 {
-    private const string uriBase = "http://localhost:3000";
     private SocketIO socket;
 
-    public GomokuClient() { }
-
-    public void Connect(string jwtToken)
+    public void Connect(string url, string jwtToken)
     {
-        var uri = new Uri(uriBase);
+        var uri = new Uri(url);
 
         this.socket = new SocketIO(uri, new SocketIOOptions
         {
@@ -34,11 +31,10 @@ public class GomokuClient
             Transport = SocketIOClient.Transport.TransportProtocol.WebSocket,
             Reconnection = false,
             Query = new Dictionary<string, string>
-            {
-                { "token", jwtToken }
-            }
+        {
+            { "token", jwtToken }
+        }
         });
-
 
         socket.OnConnected += (_, _) =>
         {
@@ -50,13 +46,13 @@ public class GomokuClient
             try
             {
                 var json = res.ToString();
-                Console.WriteLine($"[DEBUG] Received JSON: {json}");
+                Console.WriteLine($"[Log] Received JSON: {json}");
 
                 var payloads = JsonConvert.DeserializeObject<List<MatchMakingPayload>>(json);
 
                 var payload = payloads[0];
 
-                Console.WriteLine($"[DEBUG] Deserialized payload. Player: {payload.my_info.username}, Opponent: {payload.opponent_info.username}");
+                Console.WriteLine($"[Log] Deserialized payload. Player: {payload.my_info.username}, Opponent: {payload.opponent_info.username}");
 
                 GameManager.instance?.RunOnMainThread(() =>
                 {
@@ -65,7 +61,7 @@ public class GomokuClient
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[ERROR] Exception in match_making_success handler: {ex.Message}");
+                Console.WriteLine($"[Log] Exception in match_making_success handler: {ex.Message}");
             }
         });
 
@@ -136,10 +132,25 @@ public class GomokuClient
     {
         if (socket == null) return;
 
-        await socket.DisconnectAsync();
-        socket.Dispose();
-        socket = null;
+        try
+        {
+            await socket.DisconnectAsync();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Log] Exception during DisconnectAsync: {ex.Message}");
+        }
 
+        try
+        {
+            socket.Dispose();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[Log] Exception during Dispose: {ex.Message}");
+        }
+
+        socket = null;
         Console.WriteLine("[Log] Socket disconnected.");
     }
 }
