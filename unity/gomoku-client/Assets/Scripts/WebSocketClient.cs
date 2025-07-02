@@ -54,10 +54,18 @@ public class WebSocketClient
 
                 Console.WriteLine($"[Log] Deserialized payload. Player: {payload.my_info.username}, Opponent: {payload.opponent_info.username}");
 
-                GameManager.instance?.RunOnMainThread(() =>
+                if (GameManager.instance != null)
                 {
-                    GameManager.instance.SetPlayScene(payload.my_info, payload.opponent_info, payload.game_id);
-                });
+                    GameManager.instance.RunOnMainThread(() =>
+                    {
+                        GameManager.instance.SetPlayScene(payload.my_info, payload.opponent_info, payload.game_id);
+                        Console.WriteLine("[Log] Play scene set successfully.");
+                    });
+                }
+                else
+                {
+                    Console.WriteLine("[Log Error] GameManager instance is null. Cannot set play scene.");
+                }
             }
             catch (Exception ex)
             {
@@ -74,11 +82,19 @@ public class WebSocketClient
             int lastMoveY = map["last_move_y"].GetInt32();
 
             // NOTE(jpyo0803): Unity 관련 객체들은 Pure C# 환경에서는 사용 불가능
-            GameManager.instance?.RunOnMainThread(() =>
+
+            if (GameManager.instance != null)
             {
-                GameManager.instance.UpdateBoard(boardStr, lastMoveX, lastMoveY);
-            });
-            Console.WriteLine("[Log] Board state updated.");
+                GameManager.instance.RunOnMainThread(() =>
+                {
+                    GameManager.instance.UpdateBoard(boardStr, lastMoveX, lastMoveY);
+                });
+                Console.WriteLine("[Log] Board state updated.");
+            }
+            else
+            {
+                Console.WriteLine("[Log Error] GameManager instance is null. Cannot update board state.");
+            }
         });
 
         socket.On("place_stone_resp", res =>
@@ -90,11 +106,19 @@ public class WebSocketClient
             if (result == "win" || result == "lose")
             {
                 bool isClientWin = result == "win";
-                GameManager.instance?.RunOnMainThread(() =>
+
+                if (GameManager.instance != null)
                 {
-                    GameManager.instance?.SetGameResult(isClientWin);
-                });
-                Console.WriteLine("[Log] Game result set.");
+                    GameManager.instance.RunOnMainThread(() =>
+                    {
+                        GameManager.instance.SetGameResult(isClientWin);
+                    });
+                    Console.WriteLine("[Log] Game result set.");
+                }
+                else
+                {
+                    Console.WriteLine("[Log Error] GameManager instance is null. Cannot set game result.");
+                }
             }
         });
 
