@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using System.Diagnostics;
 
 public class MatchMakingPayload
 {
