@@ -61,7 +61,6 @@ public class GameManager : MonoBehaviour
     public PlayerInfo myInfo; // 내 정보
     public PlayerInfo opponentInfo; // 상대 정보
 
-
     private readonly Queue<Action> mainThreadActions = new Queue<Action>();
 
     public void SetPlayScene(PlayerInfo myInfo, PlayerInfo opponentInfo, string gameId)
@@ -100,13 +99,7 @@ public class GameManager : MonoBehaviour
     {
         // Display the result image based on the game outcome
         isGameDone = true; // 게임 종료 상태 설정
-        DisplayGameResult(isWin);
-    }
 
-    // Update is called once per frame
-    private void DisplayGameResult(bool isWin)
-    {
-        // PlayManager 찾기 
         try
         {
             PlaySceneManager playSceneManager = FindFirstObjectByType<PlaySceneManager>();
@@ -123,11 +116,6 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError($"[Log] Error displaying game result: {ex.Message}");
         }
-    }
-
-    public void PlayAgain()
-    {
-        SceneManager.LoadScene("GameSettingScene");
     }
 
     public void RunOnMainThread(Action action)
