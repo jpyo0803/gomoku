@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
             PlaySceneManager playSceneManager = FindFirstObjectByType<PlaySceneManager>();
             if (playSceneManager != null)
             {
-                playSceneManager.UpdateBoard(boardStr, lastMoveX, lastMoveY);
+                playSceneManager.SetLatestBoardState(boardStr, lastMoveX, lastMoveY);
             }
             else
             {

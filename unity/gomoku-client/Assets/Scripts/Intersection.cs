@@ -47,8 +47,6 @@ public class Intersection : MonoBehaviour
 
     public void SetStone(GameObject stonePrefab)
     {
-        Debug.Log($"Print transform position: {transform.position}");
-        Debug.Log($"[Log] Setting stone at ({row_index}, {col_index})");
         if (stone != null)
         {
             Destroy(stone);

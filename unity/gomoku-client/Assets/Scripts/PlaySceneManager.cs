@@ -8,6 +8,10 @@ public class PlaySceneManager : MonoBehaviour
     private const int BOARD_SIZE = 15; // 오목판 크기, 15로 고정
     private Intersection[,] board = new Intersection[BOARD_SIZE, BOARD_SIZE];
 
+    private string latestBoardState;
+    private int lastMoveX = -1; // 마지막 이동 X 좌표
+    private int lastMoveY = -1; // 마지막 이동 Y 좌표
+
     [Header("Buttons")]
     [SerializeField]
     private GameObject restartButton;
@@ -91,19 +95,33 @@ public class PlaySceneManager : MonoBehaviour
             {
                 Debug.LogError($"[Log] Intersection at ({row}, {col}) is null!");
             }
-            else
-            {
-                Debug.Log($"[Log] Intersection at ({row}, {col}) mapped successfully.");
-            }
         }
     }
  
-    public void UpdateBoard(string boardStr, int lastMoveX, int lastMoveY)
+    public void SetLatestBoardState(string boardStr, int lastMoveX, int lastMoveY)
     {
-        Debug.Log("[Log] Updating board state...");
-        // 보드 상태 업데이트 
-        Debug.Log($"[Log] Board string: {boardStr}, Last move: ({lastMoveX}, {lastMoveY})");
+        Debug.Log("[Log] Setting latest board state with last move...");
+        // 최신 보드 상태와 마지막 이동 좌표를 저장
+        latestBoardState = boardStr;
+        this.lastMoveX = lastMoveX;
+        this.lastMoveY = lastMoveY;
 
+        Debug.Log($"[Log] Latest board state set: {latestBoardState}, Last move: ({lastMoveX}, {lastMoveY})");
+    }
+
+    private void Update()
+    {
+        if (GameManager.instance.isGameDone == false && !string.IsNullOrEmpty(latestBoardState))
+        {
+            Debug.Log("[Log] Updating board with latest state...");
+            // 최신 보드 상태로 업데이트
+            UpdateBoard(latestBoardState, lastMoveX, lastMoveY); // 마지막 이동 좌표는 -1, -1로 설정 (아직 알 수 없음)
+            latestBoardState = null; // 업데이트 후 최신 상태 초기화
+        }
+    }
+
+    private void UpdateBoard(string boardStr, int lastMoveX, int lastMoveY)
+    {
         for (int i = 0; i < BOARD_SIZE; i++)
         {
             for (int j = 0; j < BOARD_SIZE; j++)
@@ -113,7 +131,6 @@ public class PlaySceneManager : MonoBehaviour
 
                 if (stoneType == 'B') // 검은 돌
                 {
-                    Debug.Log($"[Log] Placing black stone at ({i}, {j}), Last move: {isLastMove}");
                     try
                     {
                         board[i, j].SetStone(isLastMove ? blackStoneNewPrefab : blackStonePrefab);
@@ -125,7 +142,6 @@ public class PlaySceneManager : MonoBehaviour
                 }
                 else if (stoneType == 'W') // 흰 돌
                 {
-                    Debug.Log($"[Log] Placing white stone at ({i}, {j}), Last move: {isLastMove}");
                     try
                     {
                         board[i, j].SetStone(isLastMove ? whiteStoneNewPrefab : whiteStonePrefab);
@@ -134,11 +150,6 @@ public class PlaySceneManager : MonoBehaviour
                     {
                         Debug.LogError($"[Log] Error placing white stone at ({i}, {j}): {ex.Message}");
                     }
-                }
-                else // 빈 칸
-                {
-                    // 빈 칸일 경우 돌을 놓지 않음
-                    // board[i, j].SetStone(null); // 이 줄은 필요 없음, 그냥 두면 빈 칸으로 유지됨
                 }
             }
         }
