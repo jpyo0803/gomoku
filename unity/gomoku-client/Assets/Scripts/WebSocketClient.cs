@@ -78,8 +78,8 @@ public class WebSocketClient
             var map = res.GetValue<Dictionary<string, JsonElement>>();
 
             string boardStr = map["board_state"].GetString();
-            int lastMoveX = map["last_move_x"].GetInt32();
-            int lastMoveY = map["last_move_y"].GetInt32();
+            int newMoveX = map["last_move_x"].GetInt32();
+            int newMoveY = map["last_move_y"].GetInt32();
 
             // NOTE(jpyo0803): Unity 관련 객체들은 Pure C# 환경에서는 사용 불가능
 
@@ -87,7 +87,7 @@ public class WebSocketClient
             {
                 GameManager.instance.RunOnMainThread(() =>
                 {
-                    GameManager.instance.UpdateBoard(boardStr, lastMoveX, lastMoveY);
+                    GameManager.instance.UpdateBoard(boardStr, newMoveX, newMoveY);
                 });
                 Console.WriteLine("[Log] Board state updated.");
             }

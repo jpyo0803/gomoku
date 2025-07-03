@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("PlayScene");
     }
 
-    public void UpdateBoard(string boardStr, int lastMoveX, int lastMoveY)
+    public void UpdateBoard(string boardStr, int newMoveX, int newMoveY)
     {
         // PlaySceneManager 찾기
         try
@@ -82,7 +82,7 @@ public class GameManager : MonoBehaviour
             PlaySceneManager playSceneManager = FindFirstObjectByType<PlaySceneManager>();
             if (playSceneManager != null)
             {
-                playSceneManager.SetLatestBoardState(boardStr, lastMoveX, lastMoveY);
+                playSceneManager.SetLatestBoardState(boardStr, newMoveX, newMoveY);
             }
             else
             {

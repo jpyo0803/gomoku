@@ -8,9 +8,12 @@ public class PlaySceneManager : MonoBehaviour
     private const int BOARD_SIZE = 15; // 오목판 크기, 15로 고정
     private Intersection[,] board = new Intersection[BOARD_SIZE, BOARD_SIZE];
 
-    private string latestBoardState;
+    private string latestBoardStateStr;
+
     private int lastMoveX = -1; // 마지막 이동 X 좌표
     private int lastMoveY = -1; // 마지막 이동 Y 좌표
+    private int newMoveX = -1; // 마지막 이동 X 좌표
+    private int newMoveY = -1; // 마지막 이동 Y 좌표
 
     [Header("Buttons")]
     [SerializeField]
@@ -98,61 +101,61 @@ public class PlaySceneManager : MonoBehaviour
         }
     }
  
-    public void SetLatestBoardState(string boardStr, int lastMoveX, int lastMoveY)
+    public void SetLatestBoardState(string boardStr, int newMoveX, int newMoveY)
     {
         Debug.Log("[Log] Setting latest board state with last move...");
         // 최신 보드 상태와 마지막 이동 좌표를 저장
-        latestBoardState = boardStr;
-        this.lastMoveX = lastMoveX;
-        this.lastMoveY = lastMoveY;
+        this.latestBoardStateStr = boardStr;
 
-        Debug.Log($"[Log] Latest board state set: {latestBoardState}, Last move: ({lastMoveX}, {lastMoveY})");
+        this.lastMoveX = this.newMoveX; // 이전 마지막 이동 좌표 저장
+        this.lastMoveY = this.newMoveY;
+        this.newMoveX = newMoveX;
+        this.newMoveY = newMoveY;
+
+        Debug.Log($"[Log] Latest board state set: {this.latestBoardStateStr}, Last move: ({lastMoveX}, {lastMoveY})");
     }
 
     private void Update()
     {
-        if (GameManager.instance.isGameDone == false && !string.IsNullOrEmpty(latestBoardState))
+        if (GameManager.instance.isGameDone == false && !string.IsNullOrEmpty(this.latestBoardStateStr))
         {
             Debug.Log("[Log] Updating board with latest state...");
             // 최신 보드 상태로 업데이트
-            UpdateBoard(latestBoardState, lastMoveX, lastMoveY); // 마지막 이동 좌표는 -1, -1로 설정 (아직 알 수 없음)
-            latestBoardState = null; // 업데이트 후 최신 상태 초기화
+            UpdateBoard();
         }
     }
 
-    private void UpdateBoard(string boardStr, int lastMoveX, int lastMoveY)
+    private void UpdateBoard()
     {
-        for (int i = 0; i < BOARD_SIZE; i++)
+        if (this.lastMoveX != -1 && this.lastMoveY != -1)
         {
-            for (int j = 0; j < BOARD_SIZE; j++)
+            char stoneColor = this.latestBoardStateStr[this.lastMoveX * BOARD_SIZE + this.lastMoveY];
+            if (stoneColor == 'B')
             {
-                char stoneType = boardStr[i * BOARD_SIZE + j];
-                bool isLastMove = (i == lastMoveX && j == lastMoveY);
-
-                if (stoneType == 'B') // 검은 돌
-                {
-                    try
-                    {
-                        board[i, j].SetStone(isLastMove ? blackStoneNewPrefab : blackStonePrefab);
-                    }
-                    catch (System.Exception ex)
-                    {
-                        Debug.LogError($"[Log] Error placing black stone at ({i}, {j}): {ex.Message}");
-                    }
-                }
-                else if (stoneType == 'W') // 흰 돌
-                {
-                    try
-                    {
-                        board[i, j].SetStone(isLastMove ? whiteStoneNewPrefab : whiteStonePrefab);
-                    }
-                    catch (System.Exception ex)
-                    {
-                        Debug.LogError($"[Log] Error placing white stone at ({i}, {j}): {ex.Message}");
-                    }
-                }
+                board[this.lastMoveX, this.lastMoveY].SetStone(blackStonePrefab); // 이전 돌을 검은 돌로 설정
+            }
+            else if (stoneColor == 'W')
+            {
+                board[this.lastMoveX, this.lastMoveY].SetStone(whiteStonePrefab); // 이전 돌을 흰 돌로 설정
             }
         }
+
+        // 최신 보드 상태를 파싱하여 교차점에 돌을 놓기
+        if (this.newMoveX != -1 && this.newMoveY != -1)
+        {
+            char stoneColor = this.latestBoardStateStr[newMoveX * BOARD_SIZE + newMoveY];
+            if (stoneColor == 'B')
+            {
+                board[newMoveX, newMoveY].SetStone(blackStoneNewPrefab); // 새로운 돌을 검은 돌로 설정
+            }
+            else if (stoneColor == 'W')
+            {
+                board[newMoveX, newMoveY].SetStone(whiteStoneNewPrefab); // 새로운 돌을 흰 돌로 설정
+            }
+
+            this.latestBoardStateStr = null; // 업데이트 후 최신 상태 초기화
+        }
+
         Debug.Log("[Log] Board state updated successfully.");
     }
 
