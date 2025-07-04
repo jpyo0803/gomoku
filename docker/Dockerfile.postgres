@@ -1,0 +1,23 @@
+FROM ubuntu:24.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# PostgreSQL 설치
+RUN apt update && \
+    apt install -y wget gnupg2 lsb-release postgresql-16
+
+# PostgreSQL 설정: listen_addresses = '*'
+RUN sed -i "s/#listen_addresses = 'localhost'/listen_addresses = '*'/g" /etc/postgresql/16/main/postgresql.conf
+
+# pg_hba.conf 수정: 모든 IP에서 md5 인증 허용
+RUN echo "host all all 0.0.0.0/0 md5" >> /etc/postgresql/16/main/pg_hba.conf
+
+# PostgreSQL 패스워드 초기화
+RUN service postgresql start && \
+    su - postgres -c "psql -c \"ALTER USER postgres WITH PASSWORD 'postgres';\""
+
+# 포트 노출
+EXPOSE 5432
+
+# pg_ctlcluster로 foreground 실행 (systemd 필요 없이 Docker PID 1 유지)
+CMD ["pg_ctlcluster", "16", "main", "start", "--foreground"]
