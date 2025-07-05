@@ -41,7 +41,7 @@ async function requestAi(board: string, serverBaseUrl: string): Promise<{ x: num
 
 @Injectable()
 export class AiGatewayImpl implements AiGatewayInterface {
-  private readonly AI_ENDPOINT = 'http://localhost:8080';
+  private readonly AI_ENDPOINT = 'http://bot:8080';
   
   constructor() {
     console.log('AiGatewayImpl initialized');
