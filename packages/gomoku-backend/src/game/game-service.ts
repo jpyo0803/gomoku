@@ -26,15 +26,6 @@ export class GameService {
     console.log('GameService initialized');
   }
 
-  async updateUserResult(playerId: string, result: 'win' | 'draw' | 'loss') {
-    // SqlService를 통해 유저 결과 업데이트
-    const user = await this.sqlService.findUserByUsername(playerId);
-    if (!user) {
-      throw new Error(`[Log] User with ID ${playerId} not found`);
-    }
-    await this.sqlService.updateUserResult(user.id, result);
-  }
-
   async handleMatchRequest(playerId: string, wantAiOpponent: boolean) {
     // TODO: Matchmaking queue logic, here we just create a game directly for demo
     // In real setup, wait until two players are available
@@ -56,7 +47,9 @@ export class GameService {
       }
       else {
         // 상대가 있으면 게임 생성
-        assert(opponentId !== playerId, 'Cannot match with yourself');
+        console.log(`[Log] Player ${playerId} matched with opponent ${opponentId}`);
+
+        // assert(opponentId != playerId, 'Cannot match with yourself');
 
         // NOTE(jpyo0803): 간단함을 위해 흑돌과 백돌을 고정
         const blackPlayer = new Player(playerId, false);
@@ -161,7 +154,7 @@ export class GameService {
       this.clientGateway.sendBoardState(opponentPlayer.getId(), board, { x, y });
 
       // 게임 결과를 Sql에 업데이트
-      await this.updateUserResult(playerId, 'win');
+      await this.sqlService.updateUserStatsByUsername(playerId, 'win');
 
       this.nosqlService.deleteGameInstance(game.getGameId()); // 게임 삭제
       return;
@@ -189,7 +182,7 @@ export class GameService {
         this.clientGateway.sendPlaceStoneResp(playerId, 'lose'); // 플레이어가 졌을 때
 
         // 패배 결과를 Sql에 업데이트
-        await this.updateUserResult(playerId, 'loss');
+        await this.sqlService.updateUserStatsByUsername(playerId, 'loss');
 
         // Game 삭제
         this.nosqlService.deleteGameInstance(game.getGameId());

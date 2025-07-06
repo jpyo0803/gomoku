@@ -25,8 +25,8 @@ export class SqlPostgreImpl implements SqlInterface {
   }
 
   // 유저 결과 업데이트
-  async updateUserResult(userId: number, result: 'win' | 'draw' | 'loss') : Promise<void> {
-    return this.SqlRepository
+  async updateUserStatsByUsername(username: string, result: 'win' | 'draw' | 'loss'): Promise<void> {
+    const qb = this.SqlRepository
       .createQueryBuilder()
       .update(User)
       .set({
@@ -35,8 +35,12 @@ export class SqlPostgreImpl implements SqlInterface {
         draws: result === 'draw' ? () => '"draws" + 1' : undefined,
         losses: result === 'loss' ? () => '"losses" + 1' : undefined,
       })
-      .where("id = :id", { id: userId })
-      .execute()
-      .then(() => undefined); // TypeORM은 void를 반환하므로, 명시적으로 void를 반환하도록 함
+      .where('username = :username', { username });
+
+    const resultInfo = await qb.execute();
+
+    if (resultInfo.affected === 0) {
+      throw new Error(`User with username ${username} not found`);
+    }
   }
 }
