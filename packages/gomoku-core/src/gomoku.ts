@@ -9,6 +9,7 @@ export function createGomokuGame(): Gomoku {
 export class Gomoku {
     private board: Board;
     private currentPiece: Piece;
+    private lastMove: { x: number; y: number } = { x: -1, y: -1 }; // 초기값 설정
 
     constructor() {
         this.board = new Board(GOMOKU_BOARD_SIZE); // 15x15 강제
@@ -18,12 +19,19 @@ export class Gomoku {
     play(x: number, y: number): 'ok' | 'invalid' | 'win' {
         const result = this.board.play(x, y, this.currentPiece);
         if (result === -1) {
-            return 'invalid'; // Invalid move
-        } else if (result === 1) {
-            return 'win'; // Player wins
+            return 'invalid'; // 유효하지 않은 착수
         }
-        this.currentPiece = this.currentPiece === Piece.Black ? Piece.White : Piece.Black; // Switch player
-        return 'ok'; // Move accepted
+        this.lastMove = { x, y }; // 가장 최근 착수 저최
+
+        if (result === 1) {
+            return 'win'; // 방금 착수한 플레이어 승리
+        }
+        this.currentPiece = this.currentPiece === Piece.Black ? Piece.White : Piece.Black; // 다음 플레이어로 전환
+        return 'ok'; // 유효한 착수
+    }
+
+    getLastMove(): { x: number; y: number } {
+        return this.lastMove;
     }
 
     getCurrentPlayer(): string {

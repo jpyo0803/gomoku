@@ -33,6 +33,10 @@ export class GameInstance {
         return result; // Move accepted
     }
 
+    getLastMove(): { x: number; y: number } {
+        return this.game.getLastMove(); // Assuming Gomoku has a method to get the last move
+    }
+
     getBoardString(): string {
         return this.game.getBoardString();
     }
