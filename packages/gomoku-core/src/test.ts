@@ -1,4 +1,4 @@
-import { createGomokuGame } from './gomoku';
+import { Gomoku } from './gomoku';
 import { printBoardFromString } from './utils';
 import readlineSync from 'readline-sync';
 
@@ -6,9 +6,8 @@ import http from 'http';
 import axios from 'axios';
 
 async function main() {
-  const game = createGomokuGame();
-  const playerId = 'ts-test-client';
-  const serverBaseUrl = 'http://localhost:8080';
+  const game = new Gomoku;
+  const serverBaseUrl = 'http://bot:8080';
   const maxRetries = 1000;
   const pollingInterval = 500; // 500ms
 

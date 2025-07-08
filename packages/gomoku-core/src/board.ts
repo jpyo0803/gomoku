@@ -20,21 +20,29 @@ export class Board {
     }
   }
 
+  /*
+    착수 시도하는 메서드
+    유효하지 않은 착수는 -1을 반착
+    유효한 착수는 0을 반환
+    착수 후 승리 조건을 만족하면 1을 반환
+  */
   play(x: number, y: number, Piece: Piece): number {
     if (!this.isValidMove(x, y)) {
-      return -1; // Invalid move
+      return -1; // 유효하지 않은 착효
     }
-    this.board[x][y] = Piece; // Place the stone
+    this.board[x][y] = Piece; // 착수
     if (this.isWin(x, y, Piece)) {
-      return 1; // Piece wins
+      return 1; // 현재 착수가 승리 조건을 만족
     }
-    return 0; // Continue the game
+    return 0; // 유효한 착수
   }
   
+  // 유효한 착수인지 검사
   private isValidMove(x: number, y: number): boolean {
-    return this.board[x]?.[y] === Piece.Empty;
+    return this.board[x][y] === Piece.Empty;
   }
   
+  // 최근 착수가 승리 조건을 만족하는지 검사
   private isWin(x: number, y: number, Piece: Piece): boolean {
     const directions = [
       [1, 0], [0, 1], [1, 1], [1, -1],
@@ -55,10 +63,10 @@ export class Board {
           count++;
           nx += dx * dir;
           ny += dy * dir;
+          // 특정 방향으로 연속된 돌의 개수가 5개면 승리
+          if (count == 5) return true;
         }
       }
-      // 특정 방향으로 연속된 돌의 개수가 5개 이상이면 승리
-      if (count >= 5) return true;
     }
     return false;
   }
@@ -67,16 +75,13 @@ export class Board {
     return this.size;
   }
 
+  // 현재 보드 상태를 깊은 복사하여 반환
   getBoard(): Piece[][] {
-    return this.board;
+    return structuredClone(this.board);
   }
 
-  getBoardRaw(): number[][] {
-    return this.board.map(row => [...row]);
-  }
-
+  // 오목 보드를 1차원 문자열로 변환 (통신용 객체)
   getBoardString(): string {
-    // Convert the board to a single string representation
     return this.board.flat().map(cell => {
       switch (cell) {
         case Piece.Empty: return '.';
@@ -87,6 +92,7 @@ export class Board {
     }).join('');
   }
 
+  // JSON 형태로부터 Board 객체를 생성
   static fromJSON(json_data: any): Board {
     const board = new Board(json_data.size);
     board.board = json_data.board.map((row: number[]) => row.map((cell: number) => cell as Piece));
