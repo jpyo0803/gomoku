@@ -149,7 +149,9 @@ export class GameService {
   }
 
   async handlePlaceStone(playerId: string, x: number, y: number) {
-    const game =  await this.nosqlService.getGameInstance(playerId);
+    const gameLease =  await this.nosqlService.checkOutGameInstance(playerId);
+
+    const game = gameLease?.gameInstance;
     if (!game) {
       throw new Error(`No game instance found for player ${playerId}`);
     }
@@ -163,8 +165,6 @@ export class GameService {
       return;
     }
 
-    // Nosql에 게임 인스턴스 저장
-    this.nosqlService.setGameInstance(playerId, game);
 
     // 업데이트된 보드 상태를 현재 플레이어와 상대 플레이어에게 전송
     await this.boardcastUpdateBoardStateByGameInstance(game);
@@ -180,6 +180,9 @@ export class GameService {
         await this.sqlService.updateUserStatsByUsername(opponentPlayerId, 'loss');
       }
       
+      // Nosql에 게임 인스턴스 저장
+      this.nosqlService.checkInGameInstance(playerId, gameLease);
+
       // 게임 인스턴스 삭제
       this.nosqlService.deleteGameInstance(game.getGameId()); // 게임 삭제
       return;
@@ -189,6 +192,10 @@ export class GameService {
 
       if (opponentPlayer.isAIPlayer() === false) {
         // 상대 플레이어에게 턴 알림
+
+        // Nosql에 게임 인스턴스 저장
+        this.nosqlService.checkInGameInstance(playerId, gameLease);
+
         this.clientGateway.sendYourTurn(opponentPlayerId, 30); // time limit is not used for now
       } else {
         console.log(`[Log] AI opponent's turn, playerId: ${opponentPlayerId}`);
@@ -198,8 +205,6 @@ export class GameService {
 
         const result_after_ai_turn = game.play(x_ai, y_ai, opponentPlayerId);
 
-        this.nosqlService.setGameInstance(playerId, game); // AI가 돌을 놓은 후 게임 인스턴스 저장
-
         // AI가 돌을 놓은 후 보드 상태 브로드캐스드
         this.boardcastUpdateBoardStateByGameInstance(game);
 
@@ -208,6 +213,9 @@ export class GameService {
           this.clientGateway.sendPlaceStoneResp(playerId, 'lose'); // 플레이어가 졌을 때
           await this.sqlService.updateUserStatsByUsername(playerId, 'loss');
 
+          // Nosql에 게임 인스턴스 저장
+          this.nosqlService.checkInGameInstance(playerId, gameLease);
+
           // 게임 인스턴스 삭제
           this.nosqlService.deleteGameInstance(game.getGameId());
           return;
@@ -215,6 +223,9 @@ export class GameService {
           // AI는 항상 유효한 돌을 놓는다고 가정
           assert.fail('AI made an invalid move, which should not happen');
         } else {
+          // Nosql에 게임 인스턴스 저장
+          this.nosqlService.checkInGameInstance(playerId, gameLease);
+
           // 인간 플레이어에게 턴 알림
           this.clientGateway.sendYourTurn(playerId, 30); // 플레이어에게 다음
         }

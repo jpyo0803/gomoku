@@ -1,7 +1,8 @@
-import { NosqlInterface } from "./nosql-interface";
+import { NosqlInterface, GameLease } from "./nosql-interface";
 import { GameInstance } from "../game/game-instance"; // Assuming you have a GameInstance class defined somewhere
 import { Injectable } from '@nestjs/common';
 import Redis from 'ioredis';
+import { Lock } from 'redlock';
 import Redlock from 'redlock';
 
 @Injectable()
@@ -121,67 +122,61 @@ export class NosqlRedisImpl implements NosqlInterface {
         }
     }
 
-    async getGameInstance(playerId: string): Promise<GameInstance | null> {
+    async checkOutGameInstance(playerId: string): Promise<GameLease | null> {
         const gameId = await this.redisClient.get(`player:${playerId}`);
         if (!gameId) {
-            console.warn(`No game instance found for player '${playerId}'.`);
+            console.warn(`[Warn] No game instance found for player '${playerId}'.`);
             return null; // 플레이어가 게임에 참여하고 있지 않음
         }
 
-        let lock;
+        const lockKey = `lock:game:${gameId}`;
+        const gameKey = `game:${gameId}`;
+        let lock: Lock;
+
         try {
-            lock = await this.redlock.acquire([`lock:game:${gameId}`], 600000); // 10분 동안 Lock 획득
-            console.log(`Lock for game '${gameId}' acquired successfully.`);
+            // Lock을 획득할 때까지 대기
+            lock = await this.redlock.acquire([lockKey], 600000); // 10분 동안 Lock 획득
+            console.log(`[Log] CheckOut Lock for game '${gameId}' acquired successfully.`);
+        } catch (err) {
+            // Lock 획득 실패 시 null 반환
+            console.warn(`[Warn] CheckOut Lock for game '${gameId}' could not be acquired: ${err.message}`);
+            return null;
+        }
 
-            const gameData = await this.redisClient.get(`game:${gameId}`);
-            if (!gameData) {
-                console.warn(`No game instance found for game '${gameId}'.`);
-                return null; // 게임 인스턴스가 없음
-            }
+        // 락 획득 후 게임 인스턴스 가져오기
+        const gameData = await this.redisClient.get(gameKey);
+        if (!gameData) {
+            console.warn(`[Warn] No game instance found for game '${gameId}'.`);
+            await lock.release(); // Lock 해제
+            return null; // 게임 인스턴스가 없음
+        }
 
-            const gameInstance = GameInstance.fromJSON(JSON.parse(gameData));
-            return gameInstance;
-        }
-        catch (err) {
-            console.error(`Failed to get game instance for player '${playerId}': ${err.message}`);
-            return null; // 에러 발생 시 null 반환
-        }
-        finally {
-            if (lock) {
-                try {
-                    await lock.release();
-                    console.log(`Lock for game '${gameId}' released successfully.`);
-                } catch (releaseErr) {
-                    console.error(`Failed to release lock for game '${gameId}': ${releaseErr.message}`);
-                }
-            }
-        }
+        const gameInstance = GameInstance.fromJSON(JSON.parse(gameData));
+        return { gameInstance, lock }; // GameLease 객체 반환
     }
 
-    async setGameInstance(playerId: string, gameInstance: GameInstance): Promise<void> {
+    async checkInGameInstance(playerId: string, lease: GameLease): Promise<void> {
         const gameId = await this.redisClient.get(`player:${playerId}`);
         if (!gameId) {
-            console.warn(`No game instance found for player '${playerId}'.`);
+            console.warn(`[Warn] No game instance found for player '${playerId}'.`);
             return; // 플레이어가 게임에 참여하고 있지 않음
         }
 
-        let lock;
-        try {
-            lock = await this.redlock.acquire([`lock:game:${gameId}`], 600000); // 10분 동안 Lock 획득
-            console.log(`Lock for game '${gameId}' acquired successfully.`);
+        const { gameInstance, lock } = lease;
+        const gameKey = `game:${gameId}`;
 
-            await this.redisClient.set(`game:${gameId}`, JSON.stringify(gameInstance));
-            console.log(`Game instance for '${gameId}' updated successfully.`);
+        try {
+            const updatedGameData = JSON.stringify(gameInstance);
+            await this.redisClient.set(gameKey, updatedGameData);
+            console.log(`[Log] Game instance for '${gameId}' updated successfully.`);
         } catch (err) {
-            console.error(`Failed to set game instance for '${gameId}': ${err.message}`);
+            console.error(`[Error] Failed to update game instance for '${gameId}': ${err.message}`);
         } finally {
-            if (lock) {
-                try {
-                    await lock.release();
-                    console.log(`Lock for game '${gameId}' released successfully.`);
-                } catch (releaseErr) {
-                    console.error(`Failed to release lock for game '${gameId}': ${releaseErr.message}`);
-                }
+            try {
+                await lock.release();
+                console.log(`[Log] CheckOut Lock for game '${gameId}' released successfully.`);
+            } catch (releaseErr) {
+                console.error(`[Error] Failed to release lock for game '${gameId}': ${releaseErr.message}`);
             }
         }
     }
