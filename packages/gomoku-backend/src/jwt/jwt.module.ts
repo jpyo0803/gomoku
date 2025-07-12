@@ -10,7 +10,6 @@ import { WsJwtAuthGuard } from './ws-jwt-auth-guard';
     PassportModule,
     NestJwtModule.register({
       secret: 'your_jwt_secret_key',
-      signOptions: { expiresIn: '1d' },
     }),
   ],
   providers: [JwtStrategy, JwtAuthGuard, WsJwtAuthGuard],

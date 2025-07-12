@@ -48,7 +48,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public string JwtToken { get; set; } // JWT 토큰
+    public string AccessToken { get; set; } // JWT access 토큰
+
+    public string RefreshToken { get; set; } // JWT refresh 토큰
 
     public string AuthServerUrl { get; } = "http://localhost:3000";
 

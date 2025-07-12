@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 internal static class AuthJsonUtils 
 {
-    public static string ExtractTokenFromJson(string json)
+    public static string ExtractValueFromJson(string key, string json)
     {
-        const string tokenKey = "\"token\":\"";
-        int start = json.IndexOf(tokenKey);
+        string keyWithQuotes = $"\"{key}\":\"";
+        int start = json.IndexOf(keyWithQuotes);
         if (start == -1) return null;
 
-        start += tokenKey.Length;
+        start += keyWithQuotes.Length;
         int end = json.IndexOf("\"", start);
         if (end == -1) return null;
 
@@ -49,7 +49,7 @@ public class AuthClient : AuthInterface
         }
     }
 
-    public async Task<(int, string)> Login(string serverUrl, string username, string password)
+    public async Task<(int, string, string)> Login(string serverUrl, string username, string password)
     {
         var restApiClient = GameManager.instance.RestApiClient;
         string url = $"{serverUrl}/auth/login";
@@ -58,18 +58,19 @@ public class AuthClient : AuthInterface
         try
         {
             string responseBody = await restApiClient.SendRequest(HttpMethod.Post, url, null, json);
-            string token = AuthJsonUtils.ExtractTokenFromJson(responseBody);
-            return (200, token);
+            string accessToken = AuthJsonUtils.ExtractValueFromJson("accessToken", responseBody);
+            string refreshToken = AuthJsonUtils.ExtractValueFromJson("refreshToken", responseBody);
+            return (200, accessToken, refreshToken);
         }
         catch (HttpRequestException e)
         {
             Console.WriteLine($"[Log] Login HTTP error: {e.Message}");
-            return (-1, null);
+            return (-1, null, null);
         }
         catch (Exception e)
         {
             Console.WriteLine($"[Log] Login general error: {e.Message}");
-            return (-1, null);
+            return (-1, null, null);
         }
     }
 }

@@ -11,14 +11,14 @@ public class RestApiClient
 {
     private static readonly HttpClient httpClient = new HttpClient();
 
-    public async Task<string> SendRequest(HttpMethod method, string url, string jwtToken = null, string content = null)
+    public async Task<string> SendRequest(HttpMethod method, string url, string accessToken = null, string content = null)
     {
         var request = new HttpRequestMessage(method, url);
 
         // JWT 토큰이 제공된 경우 Authorization 헤더에 추가
-        if (!string.IsNullOrEmpty(jwtToken))
+        if (!string.IsNullOrEmpty(accessToken))
         {
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", jwtToken);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
 
         // 요청 본문이 있는 경우 설정

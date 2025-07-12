@@ -85,11 +85,13 @@ public class AuthSceneManager : MonoBehaviour
 
         Debug.Log($"[Log; Login Attempt] Username: {username}, Password: {password}");
 
-        var (code, token) = await authClient.Login(GameManager.instance.AuthServerUrl, username, password);
+        var (code, accessToken, refreshToken) = await authClient.Login(GameManager.instance.AuthServerUrl, username, password);
 
         if (code == 200) // 로그인 성공
         {
-            GameManager.instance.JwtToken = token; // JWT 토큰 저장
+            GameManager.instance.AccessToken = accessToken; // JWT Access 토큰 저장
+            GameManager.instance.RefreshToken = refreshToken; // Refresh 토큰 저장
+
             responseDisplay.text = "Login successful!";
             Debug.Log("[Log] Login successful!");
 

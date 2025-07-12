@@ -45,12 +45,14 @@ export class AuthService {
     }
 
     const payload = { username: user.username, sub: user.id };
-    const token = this.jwtService.sign(payload);
+    const accessToken = this.jwtService.sign(payload, { expiresIn: '1h' });
+    const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
 
     // 200 OK + 유저 정보 반환
     return {
       message: 'Login successful',
-      token,
+      accessToken,
+      refreshToken,
     };
   }
 }

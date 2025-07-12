@@ -29,8 +29,8 @@ public class GameSettingSceneManager : MonoBehaviour
         }
 
         // WebSocket 연결
-        // TODO(jpyo0803): WebSocket 연결시 GameManager에서 WebSocketServerUrl과 JwtToken을 가져오는 구조가 좋은지 생각해보기
-        websocketClient.Connect(GameManager.instance.WebSocketServerUrl, GameManager.instance.JwtToken);
+        // TODO(jpyo0803): WebSocket 연결시 GameManager에서 WebSocketServerUrl과 AccessToken을 가져오는 구조가 좋은지 생각해보기
+        websocketClient.Connect(GameManager.instance.WebSocketServerUrl, GameManager.instance.AccessToken);
 
         // 매치 히스토리 업데이트
         DisplayMatchHistory();
@@ -52,7 +52,7 @@ public class GameSettingSceneManager : MonoBehaviour
         var restApiClient = GameManager.instance.RestApiClient;
 
         string serverUrl = GameManager.instance.BackendServerUrl;
-        string jwtToken = GameManager.instance.JwtToken;
+        string accessToken = GameManager.instance.AccessToken;
 
         HttpMethod method = HttpMethod.Get;
         string url = $"{serverUrl}/Sql/my-match-history";
@@ -60,7 +60,7 @@ public class GameSettingSceneManager : MonoBehaviour
         try
         {
             // JWT 토큰을 Authorization 헤더에 추가하여 요청
-            string responseBody = await restApiClient.SendRequest(method, url, jwtToken);
+            string responseBody = await restApiClient.SendRequest(method, url, accessToken);
 
             // 응답을 MatchHistory 객체로 변환
             MatchHistory history = JsonUtility.FromJson<MatchHistory>(responseBody);

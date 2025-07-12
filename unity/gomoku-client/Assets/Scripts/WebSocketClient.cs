@@ -21,7 +21,7 @@ public class WebSocketClient
 {
     private SocketIO socket;
 
-    public void Connect(string url, string jwtToken)
+    public void Connect(string url, string accessToken)
     {
         var uri = new Uri(url);
 
@@ -32,7 +32,7 @@ public class WebSocketClient
             Reconnection = false,
             Query = new Dictionary<string, string>
         {
-            { "token", jwtToken }
+            { "token", accessToken }
         }
         });
 
