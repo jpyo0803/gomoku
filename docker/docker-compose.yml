@@ -3,6 +3,7 @@ version: "3.8"
 services:
   postgres:
     image: postgres:16
+    container_name: gomoku-postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -11,8 +12,39 @@ services:
       - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
+      # 백업 파일을 저장할 볼륨을 postgres 컨테이너에도 연결
+      - db-backups:/backups
     networks:
       - gomoku-net
+    restart: always # 만약 컨테이너가 중단되면 자동으로 재시작, docker-compose down시에는 재시작하지 않음 
+
+  backup:
+    image: postgres:16 # pg_dump를 사용하기 위해 동일한 이미지 사용
+    container_name: gomoku-backup
+    restart: always
+    volumes:
+      # 백업 스크립트를 컨테이너 내부로 마운트
+      - ./db_backup.sh:/usr/local/bin/db_backup.sh
+      # 백업 파일을 저장할 볼륨을 공유
+      - db-backups:/backups
+    environment:
+      # 백업 스크립트가 사용할 환경변수 설정
+      - POSTGRES_HOST=postgres # 접속할 DB 호스트 (서비스 이름)
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=gomoku
+    networks:
+      - gomoku-net
+    # 컨테이너가 시작되면 이 명령어를 실행
+    # cron 대신 간단한 셸 루프를 사용하여 1시간(3600초)마다 스크립트 실행
+    command: >
+      sh -c "chmod +x /usr/local/bin/db_backup.sh && \
+              while true; do \
+                /usr/local/bin/db_backup.sh; \
+                sleep 3600; \
+              done"
+    depends_on:
+      - postgres # postgres 컨테이너가 먼저 시작되도록 보장
 
   redis:
     image: redis:7
@@ -33,6 +65,7 @@ services:
 
 volumes:
   db-data:
+  db-backups:
 
 networks:
   gomoku-net:
