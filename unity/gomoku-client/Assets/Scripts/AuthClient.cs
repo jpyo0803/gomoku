@@ -34,7 +34,7 @@ public class AuthClient : AuthInterface
 
         try
         {
-            string responseBody = await restApiClient.SendRequest(HttpMethod.Post, url, null, json);
+            string responseBody = await restApiClient.SendRequest(HttpMethod.Post, url, useAuth: false, content: json);
             return 201; // 성공적으로 왔다면 회원가입은 보통 201 Created
         }
         catch (HttpRequestException e)
@@ -57,7 +57,7 @@ public class AuthClient : AuthInterface
 
         try
         {
-            string responseBody = await restApiClient.SendRequest(HttpMethod.Post, url, null, json);
+            string responseBody = await restApiClient.SendRequest(HttpMethod.Post, url, useAuth: false, content: json);
             string accessToken = AuthJsonUtils.ExtractValueFromJson("accessToken", responseBody);
             string refreshToken = AuthJsonUtils.ExtractValueFromJson("refreshToken", responseBody);
             return (200, accessToken, refreshToken);

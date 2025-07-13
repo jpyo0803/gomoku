@@ -136,4 +136,9 @@ public class GameManager : MonoBehaviour
             action.Invoke();
         }
     }
+
+    public void DebugLog(string message)
+    {
+        Debug.Log($"[Log] {message}");
+    }
 }

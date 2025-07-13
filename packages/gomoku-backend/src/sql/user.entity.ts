@@ -22,4 +22,7 @@ export class User {
 
   @Column({ default: 0 })
   losses: number;
+
+  @Column({ nullable: true })
+  refreshToken: string;
 }

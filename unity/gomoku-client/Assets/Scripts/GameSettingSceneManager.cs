@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using System.Net.Http;
-using System.Threading.Tasks;
 
 public class GameSettingSceneManager : MonoBehaviour
 {
@@ -52,7 +51,6 @@ public class GameSettingSceneManager : MonoBehaviour
         var restApiClient = GameManager.instance.RestApiClient;
 
         string serverUrl = GameManager.instance.BackendServerUrl;
-        string accessToken = GameManager.instance.AccessToken;
 
         HttpMethod method = HttpMethod.Get;
         string url = $"{serverUrl}/Sql/my-match-history";
@@ -60,7 +58,7 @@ public class GameSettingSceneManager : MonoBehaviour
         try
         {
             // JWT 토큰을 Authorization 헤더에 추가하여 요청
-            string responseBody = await restApiClient.SendRequest(method, url, accessToken);
+            string responseBody = await restApiClient.SendRequest(method, url, useAuth: true);
 
             // 응답을 MatchHistory 객체로 변환
             MatchHistory history = JsonUtility.FromJson<MatchHistory>(responseBody);

@@ -43,4 +43,14 @@ export class SqlPostgreImpl implements SqlInterface {
       throw new Error(`User with username ${username} not found`);
     }
   }
+
+  async updateUserRefreshToken(username: string, refreshToken: string): Promise<void> {
+    const user = await this.findUserByUsername(username);
+    if (!user) {
+      throw new Error(`User with username ${username} not found`);
+    }
+
+    user.refreshToken = refreshToken;
+    await this.SqlRepository.save(user);
+  }
 }
