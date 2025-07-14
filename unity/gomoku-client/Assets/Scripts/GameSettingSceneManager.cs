@@ -37,13 +37,13 @@ public class GameSettingSceneManager : MonoBehaviour
         okButton.onClick.AddListener(OnOkClicked);
     }
 
-    private async void OnOkClicked()
+    private void OnOkClicked()
     {
         // AI 상대 희망 여부에 따라 게임 설정을 저장
         bool wantAiOpponent = wantAiOpponentToggle.isOn;
 
         var websocketClient = GameManager.instance.WebSocketClient;
-        await websocketClient.SendMatchRequest(wantAiOpponent);
+        websocketClient.SendMatchRequest(wantAiOpponent);
     }
 
     private async void DisplayMatchHistory()

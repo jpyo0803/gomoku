@@ -17,9 +17,57 @@ public class MatchMakingPayload
     public string game_id;
 }
 
+public abstract class Command
+{
+    protected string EventName;
+    public string GetEventName()
+    {
+        return EventName;
+    }
+
+    public abstract object[] GetPayload();
+}
+
+public class MatchRequestCommand : Command
+{
+    private bool wantAiOpponent;
+
+    public MatchRequestCommand(bool wantAiOpponent)
+    {
+        this.EventName = "match_request";
+        this.wantAiOpponent = wantAiOpponent;
+    }
+
+    public override object[] GetPayload()
+    {
+        return new object[] { new { wantAiOpponent = this.wantAiOpponent } };
+    }
+}
+
+public class PlaceStoneCommand : Command
+{
+    private int x;
+    private int y;
+
+    public PlaceStoneCommand(int x, int y)
+    {
+        this.EventName = "place_stone";
+        this.x = x;
+        this.y = y;
+    }
+
+    public override object[] GetPayload()
+    {
+        return new object[] { new { x = this.x, y = this.y } };
+    }
+}
+
 public class WebSocketClient
 {
     private SocketIO socket;
+
+    // Command queue
+    private Queue<Command> commandQueue = new Queue<Command>();
 
     public void Connect(string url, string accessToken)
     {
@@ -125,17 +173,15 @@ public class WebSocketClient
         socket.ConnectAsync(); // 비동기로 연결
     }
 
-    public async Task SendMatchRequest(bool wantAiOpponent)
+    // 매치 요청 커맨드를 큐에 추가
+    public void SendMatchRequest(bool wantAiOpponent)
     {
-        Console.WriteLine("[Log] Sending match request...");
-
-        await socket.EmitAsync("match_request", new
-        {
-            wantAiOpponent = wantAiOpponent
-        });
+        Console.WriteLine("[Log] Enqueue MatchRequest command");
+        commandQueue.Enqueue(new MatchRequestCommand(wantAiOpponent));
     }
 
-    public async Task SendPlaceStone(int rowIndex, int colIndex)
+    // 착수 커맨드를 큐에 추가
+    public void SendPlaceStone(int rowIndex, int colIndex)
     {
         if (GameManager.instance.isGameDone)
         {
@@ -143,13 +189,32 @@ public class WebSocketClient
             return;
         }
 
-        Console.WriteLine($"[Log] Sending place_stone at ({rowIndex}, {colIndex})");
+        Console.WriteLine($"[Log] Enqueue PlaceStone command, placement: ({rowIndex}, {colIndex})");
+        commandQueue.Enqueue(new PlaceStoneCommand(rowIndex, colIndex));
+    }
 
-        await socket.EmitAsync("place_stone", new
+    /*
+        커맨드 큐에서 커맨드를 처리.
+
+        GameManager의 Update 메서드에서 주기적으로 비동기 호출됨.
+    */
+    public async Task ProcessCommands()
+    {
+        while (commandQueue.Count > 0)
         {
-            x = rowIndex,
-            y = colIndex,
-        });
+            var command = commandQueue.Dequeue();
+            Console.WriteLine($"[Log] Processing command: {command.GetEventName()}");
+
+            try
+            {
+                await socket.EmitAsync(command.GetEventName(), command.GetPayload());
+                Console.WriteLine($"[Log] Command {command.GetEventName()} sent successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[Log] Exception while sending command {command.GetEventName()}: {ex.Message}");
+            }
+        }
     }
 
     public async Task Disconnect()

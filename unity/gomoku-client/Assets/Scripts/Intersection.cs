@@ -9,7 +9,7 @@ public class Intersection : MonoBehaviour
     private GameObject stone = null; // 교차점에 놓인 돌 오브젝트
 
     // Update is called once per frame
-    private async void OnMouseDown()
+    private void OnMouseDown()
     {
         // Check if the mouse button is pressed
         Debug.Log($"[Log] Intersection clicked at ({row_index}, {col_index})");
@@ -25,7 +25,7 @@ public class Intersection : MonoBehaviour
             }
            
             // Send the place stone request to the server
-            await websocketClient.SendPlaceStone(row_index, col_index);
+            websocketClient.SendPlaceStone(row_index, col_index);
         }
         else
         {

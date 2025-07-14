@@ -135,6 +135,13 @@ public class GameManager : MonoBehaviour
             var action = mainThreadActions.Dequeue();
             action.Invoke();
         }
+
+        // WebSocket 클라이언트의 Command 처리
+        if (WebSocketClient != null)
+        {
+            // 비동기로 백그라운드 처리
+            WebSocketClient.ProcessCommands();
+        }
     }
 
     public void DebugLog(string message)
