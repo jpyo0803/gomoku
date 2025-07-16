@@ -10,6 +10,8 @@ public class BootSceneManager : MonoBehaviour
 {
     private void Awake()
     {
+        ServiceLocator.Register<ILogger>(new UnityDebugLogger()); // ILogger 서비스 등록
+
         SceneManager.LoadScene("AuthScene"); // AuthScene 로드
     }
 }

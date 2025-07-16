@@ -18,6 +18,17 @@ public class RestApiClient
     private static readonly HttpClient httpClient = new HttpClient();
     private bool isRefreshing = false;
 
+    private readonly ILogger logger;
+
+    public RestApiClient()
+    {
+        this.logger = ServiceLocator.Get<ILogger>();
+        if (this.logger == null)
+        {
+            throw new Exception("ILogger service is not registered.");
+        }
+    }
+
     public async Task<string> SendRequest(HttpMethod method, string url, bool useAuth = false, string content = null)
     {
         var request = new HttpRequestMessage(method, url);
@@ -36,7 +47,7 @@ public class RestApiClient
 
         if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized && !isRefreshing)
         {
-            GameManager.instance.DebugLog("[Log] Access token expired, attempting to refresh.");
+            logger.Log("Access token expired, attempting to refresh.");
             isRefreshing = true; // 토큰 갱신 중에 새로운 요청이 들어오지 않도록 플래그 설정 
             bool tokenRefreshed = await RefreshTokenAsync();
             isRefreshing = false;
@@ -72,12 +83,12 @@ public class RestApiClient
             // 새 토큰 저장
             GameManager.instance.AccessToken = newTokens.accessToken;
 
-            GameManager.instance.DebugLog("[Log] Token refreshed successfully.");
+            logger.Log("Access token refreshed successfully.");
             return true;
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Failed to refresh token: " + ex.Message);
+            logger.LogError($"Failed to refresh access token: {ex.Message}");
             // NOTE(jpyo0803): 리프레시 토큰도 만료된 경우 로그아웃 처리 필요. 현재는 예외 처리만 함
             return false;
         }

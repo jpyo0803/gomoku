@@ -69,6 +69,17 @@ public class WebSocketClient
     // Command queue
     private Queue<Command> commandQueue = new Queue<Command>();
 
+    private readonly ILogger logger;
+
+    public WebSocketClient()
+    {
+        this.logger = ServiceLocator.Get<ILogger>();
+        if (this.logger == null)
+        {
+            throw new Exception("ILogger service is not registered.");
+        }
+    }
+
     public void Connect(string url, string accessToken)
     {
         var uri = new Uri(url);
@@ -86,7 +97,7 @@ public class WebSocketClient
 
         socket.OnConnected += (_, _) =>
         {
-            Console.WriteLine("[Log] Connected to server!");
+            logger.Log("WebSocket connected successfully.");
         };
 
         socket.On("match_making_success", res =>
@@ -94,30 +105,28 @@ public class WebSocketClient
             try
             {
                 var json = res.ToString();
-                Console.WriteLine($"[Log] Received JSON: {json}");
 
                 var payloads = JsonConvert.DeserializeObject<List<MatchMakingPayload>>(json);
 
                 var payload = payloads[0];
 
-                Console.WriteLine($"[Log] Deserialized payload. Player: {payload.my_info.username}, Opponent: {payload.opponent_info.username}");
+                logger.Log($"Match making success: Game ID: {payload.game_id}, Opponent: {payload.opponent_info.username}");
 
                 if (GameManager.instance != null)
                 {
                     GameManager.instance.RunOnMainThread(() =>
                     {
                         GameManager.instance.SetPlayScene(payload.my_info, payload.opponent_info, payload.game_id);
-                        Console.WriteLine("[Log] Play scene set successfully.");
                     });
                 }
                 else
                 {
-                    Console.WriteLine("[Log Error] GameManager instance is null. Cannot set play scene.");
+                    logger.LogError("GameManager instance is null. Cannot set play scene.");
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[Log] Exception in match_making_success handler: {ex.Message}");
+                logger.LogError($"Exception in match_making_success handler: {ex.Message}");
             }
         });
 
@@ -137,11 +146,11 @@ public class WebSocketClient
                 {
                     GameManager.instance.UpdateBoard(boardStr, newMoveX, newMoveY);
                 });
-                Console.WriteLine("[Log] Board state updated.");
+                logger.Log("Board state updated successfully.");
             }
             else
             {
-                Console.WriteLine("[Log Error] GameManager instance is null. Cannot update board state.");
+                logger.LogError("GameManager instance is null. Cannot update board state.");
             }
         });
 
@@ -149,7 +158,8 @@ public class WebSocketClient
         {
             var map = res.GetValue<Dictionary<string, string>>();
             string result = map["result"];
-            Console.WriteLine($"[Log] Place stone result: {result}");
+            
+            logger.Log($"Place stone response received: {result}");
 
             if (result == "win" || result == "lose")
             {
@@ -161,11 +171,12 @@ public class WebSocketClient
                     {
                         GameManager.instance.SetGameResult(isClientWin);
                     });
-                    Console.WriteLine("[Log] Game result set.");
+                    
+                    logger.Log($"Game result set: {isClientWin}");
                 }
                 else
                 {
-                    Console.WriteLine("[Log Error] GameManager instance is null. Cannot set game result.");
+                    logger.LogError("GameManager instance is null. Cannot set game result.");
                 }
             }
         });
@@ -176,7 +187,7 @@ public class WebSocketClient
     // 매치 요청 커맨드를 큐에 추가
     public void SendMatchRequest(bool wantAiOpponent)
     {
-        Console.WriteLine("[Log] Enqueue MatchRequest command");
+        logger.Log($"Enqueue MatchRequest command (wantAiOpponent: {wantAiOpponent})");
         commandQueue.Enqueue(new MatchRequestCommand(wantAiOpponent));
     }
 
@@ -185,11 +196,11 @@ public class WebSocketClient
     {
         if (GameManager.instance.isGameDone)
         {
-            Console.WriteLine("[Log] Game is already done.");
+            logger.LogError("Cannot place stone, game is already done.");
             return;
         }
 
-        Console.WriteLine($"[Log] Enqueue PlaceStone command, placement: ({rowIndex}, {colIndex})");
+        logger.Log($"Enqueue PlaceStone command at ({rowIndex}, {colIndex})");
         commandQueue.Enqueue(new PlaceStoneCommand(rowIndex, colIndex));
     }
 
@@ -203,16 +214,16 @@ public class WebSocketClient
         while (commandQueue.Count > 0)
         {
             var command = commandQueue.Dequeue();
-            Console.WriteLine($"[Log] Processing command: {command.GetEventName()}");
+            logger.Log($"Processing command: {command.GetEventName()}");
 
             try
             {
                 await socket.EmitAsync(command.GetEventName(), command.GetPayload());
-                Console.WriteLine($"[Log] Command {command.GetEventName()} sent successfully.");
+                logger.Log($"Command {command.GetEventName()} sent successfully.");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"[Log] Exception while sending command {command.GetEventName()}: {ex.Message}");
+                logger.LogError($"Error sending command {command.GetEventName()}: {ex.Message}");
             }
         }
     }
@@ -227,7 +238,7 @@ public class WebSocketClient
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[Log] Exception during DisconnectAsync: {ex.Message}");
+            logger.LogError($"[Log] Exception during disconnect: {ex.Message}");
         }
 
         try
@@ -236,10 +247,10 @@ public class WebSocketClient
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[Log] Exception during Dispose: {ex.Message}");
+            logger.LogError($"[Log] Exception during socket disposal: {ex.Message}");
         }
 
         socket = null;
-        Console.WriteLine("[Log] Socket disconnected.");
+        logger.Log("WebSocket disconnected and disposed successfully.");
     }
 }

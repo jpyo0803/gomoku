@@ -26,8 +26,20 @@ internal static class AuthJsonUtils
 
 public class AuthClient : AuthInterface
 {
+    private readonly ILogger logger;
+
+    public AuthClient()
+    {
+        this.logger = ServiceLocator.Get<ILogger>();
+        if (this.logger == null)
+        {
+            throw new Exception("ILogger service is not registered.");
+        }
+    }
+
     public async Task<int> SignUp(string serverUrl, string username, string password)
     {
+        logger.Log($"Signup with Username: {username}, Password: {password}");
         var restApiClient = GameManager.instance.RestApiClient;
         string url = $"{serverUrl}/auth/signup";
         string json = JsonSerializer.Serialize(new { username, password });
@@ -39,18 +51,19 @@ public class AuthClient : AuthInterface
         }
         catch (HttpRequestException e)
         {
-            Console.WriteLine($"[Log] SignUp HTTP error: {e.Message}");
+            logger.LogError($"SignUp HTTP error: {e.Message}");
             return -1;
         }
         catch (Exception e)
         {
-            Console.WriteLine($"[Log] SignUp general error: {e.Message}");
+            logger.LogError($"SignUp error: {e.Message}");
             return -1;
         }
     }
 
     public async Task<(int, string, string)> Login(string serverUrl, string username, string password)
     {
+        logger.Log($"Login with Username: {username}, Password: {password}");
         var restApiClient = GameManager.instance.RestApiClient;
         string url = $"{serverUrl}/auth/login";
         string json = JsonSerializer.Serialize(new { username, password });
@@ -64,12 +77,12 @@ public class AuthClient : AuthInterface
         }
         catch (HttpRequestException e)
         {
-            Console.WriteLine($"[Log] Login HTTP error: {e.Message}");
+            logger.LogError($"Login HTTP error: {e.Message}");
             return (-1, null, null);
         }
         catch (Exception e)
         {
-            Console.WriteLine($"[Log] Login general error: {e.Message}");
+            logger.LogError($"Login error: {e.Message}");
             return (-1, null, null);
         }
     }
