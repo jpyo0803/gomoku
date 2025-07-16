@@ -58,7 +58,8 @@ public class GameSettingSceneManager : MonoBehaviour
         try
         {
             // JWT 토큰을 Authorization 헤더에 추가하여 요청
-            string responseBody = await restApiClient.SendRequest(method, url, useAuth: true);
+            HttpResponseMessage response = await restApiClient.SendRequestAsync(method, url, useAuth: true);
+            var responseBody = await response.Content.ReadAsStringAsync();
 
             // 응답을 MatchHistory 객체로 변환
             MatchHistory history = JsonUtility.FromJson<MatchHistory>(responseBody);
@@ -69,11 +70,6 @@ public class GameSettingSceneManager : MonoBehaviour
                                        $"Total Games: {history.totalGames}\n" +
                                        $"Wins / Losses: {history.wins} / {history.losses}\n" +
                                        $"Win Rate: {(float)history.wins / history.totalGames * 100:F2}%\n";
-        }
-        catch (HttpRequestException e)
-        {
-            Debug.LogError($"[Log Error] Failed to load match history: {e.Message}");
-            matchHistoryDisplay.text = "Failed to load match history.";
         }
         catch (Exception ex)
         {

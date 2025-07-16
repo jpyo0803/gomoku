@@ -64,6 +64,39 @@ public class RestApiClient
         return await response.Content.ReadAsStringAsync();
     }
 
+    public async Task<HttpResponseMessage> SendRequestAsync(HttpMethod method, string url, bool useAuth = false, string content = null)
+    {
+        var request = new HttpRequestMessage(method, url);
+
+        if (useAuth && !string.IsNullOrEmpty(GameManager.instance.AccessToken))
+        {
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", GameManager.instance.AccessToken);
+        }
+
+        if (!string.IsNullOrEmpty(content))
+        {
+            request.Content = new StringContent(content, System.Text.Encoding.UTF8, "application/json");
+        }
+
+        var response = await httpClient.SendAsync(request);
+
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized && !isRefreshing)
+        {
+            logger.Log("Access token expired, attempting to refresh.");
+            isRefreshing = true; // 토큰 갱신 중에 새로운 요청이 들어오지 않도록 플래그 설정
+            bool tokenRefreshed = await RefreshTokenAsync();
+            isRefreshing = false;
+
+            if (tokenRefreshed)
+            {
+                // 토큰이 갱신되었으므로 다시 요청을 시도
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", GameManager.instance.AccessToken);
+                return await SendRequestAsync(method, url, useAuth, content);
+            }
+        }
+
+        return response;
+    }
     private async Task<bool> RefreshTokenAsync()
     {
         try

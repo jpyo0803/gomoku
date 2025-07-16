@@ -46,18 +46,13 @@ public class AuthClient : AuthInterface
 
         try
         {
-            string responseBody = await restApiClient.SendRequest(HttpMethod.Post, url, useAuth: false, content: json);
-            return 201; // 성공적으로 왔다면 회원가입은 보통 201 Created
-        }
-        catch (HttpRequestException e)
-        {
-            logger.LogError($"SignUp HTTP error: {e.Message}");
-            return -1;
+            HttpResponseMessage response = await restApiClient.SendRequestAsync(HttpMethod.Post, url, useAuth: false, content: json);
+            return (int)response.StatusCode;
         }
         catch (Exception e)
         {
             logger.LogError($"SignUp error: {e.Message}");
-            return -1;
+            return -1; // 예외 발생 시 -1 반환
         }
     }
 
@@ -70,15 +65,21 @@ public class AuthClient : AuthInterface
 
         try
         {
-            string responseBody = await restApiClient.SendRequest(HttpMethod.Post, url, useAuth: false, content: json);
-            string accessToken = AuthJsonUtils.ExtractValueFromJson("accessToken", responseBody);
-            string refreshToken = AuthJsonUtils.ExtractValueFromJson("refreshToken", responseBody);
-            return (200, accessToken, refreshToken);
-        }
-        catch (HttpRequestException e)
-        {
-            logger.LogError($"Login HTTP error: {e.Message}");
-            return (-1, null, null);
+            HttpResponseMessage response = await restApiClient.SendRequestAsync(HttpMethod.Post, url, useAuth: false, content: json);
+
+            // Status 코드가 200인 경우에만 토큰을 추출합니다.
+            if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                string responseBody = await response.Content.ReadAsStringAsync();
+                string accessToken = AuthJsonUtils.ExtractValueFromJson("accessToken", responseBody);
+                string refreshToken = AuthJsonUtils.ExtractValueFromJson("refreshToken", responseBody);
+                return ((int)System.Net.HttpStatusCode.OK, accessToken, refreshToken);
+            }
+            else
+            {
+                logger.LogError($"Login failed with status code: {response.StatusCode}");
+                return ((int)response.StatusCode, null, null);
+            }
         }
         catch (Exception e)
         {
