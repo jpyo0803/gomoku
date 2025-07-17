@@ -1,8 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System;
-using System.Net.Http;
 
 public class GameSettingSceneManager : MonoBehaviour
 {
@@ -20,6 +18,9 @@ public class GameSettingSceneManager : MonoBehaviour
 
     void Start()
     {
+        // 매치 히스토리 업데이트
+        DisplayMatchHistoryAsync();
+
         var websocketClient = GameManager.instance.WebSocketClient;
         if (websocketClient == null)
         {
@@ -31,8 +32,6 @@ public class GameSettingSceneManager : MonoBehaviour
         // TODO(jpyo0803): WebSocket 연결시 GameManager에서 WebSocketServerUrl과 AccessToken을 가져오는 구조가 좋은지 생각해보기
         websocketClient.Connect(GameManager.instance.WebSocketServerUrl, GameManager.instance.AccessToken);
 
-        // 매치 히스토리 업데이트
-        DisplayMatchHistory();
         // 버튼 클릭 이벤트 등록
         okButton.onClick.AddListener(OnOkClicked);
     }
@@ -46,35 +45,14 @@ public class GameSettingSceneManager : MonoBehaviour
         websocketClient.SendMatchRequest(wantAiOpponent);
     }
 
-    private async void DisplayMatchHistory()
+    private async void DisplayMatchHistoryAsync()
     {
-        var restApiClient = GameManager.instance.RestApiClient;
+        var matchHistory = await GameManager.instance.GetMatchHistoryAsync();
 
-        string serverUrl = GameManager.instance.BackendServerUrl;
-
-        HttpMethod method = HttpMethod.Get;
-        string url = $"{serverUrl}/Sql/my-match-history";
-
-        try
-        {
-            // JWT 토큰을 Authorization 헤더에 추가하여 요청
-            HttpResponseMessage response = await restApiClient.SendRequestAsync(method, url, useAuth: true);
-            var responseBody = await response.Content.ReadAsStringAsync();
-
-            // 응답을 MatchHistory 객체로 변환
-            MatchHistory history = JsonUtility.FromJson<MatchHistory>(responseBody);
-
-            // 매치 히스토리 표시
-            matchHistoryDisplay.text = "[Match History]\n" +
-                                       $"Username: {history.username}\n" +
-                                       $"Total Games: {history.totalGames}\n" +
-                                       $"Wins / Losses: {history.wins} / {history.losses}\n" +
-                                       $"Win Rate: {(float)history.wins / history.totalGames * 100:F2}%\n";
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError($"[Log Error] An error occurred: {ex.Message}");
-            matchHistoryDisplay.text = "An error occurred while loading match history.";
-        }
+        matchHistoryDisplay.text = "[Match History]\n" +
+                                    $"Username: {matchHistory.username}\n" +
+                                    $"Total Games: {matchHistory.totalGames}\n" +
+                                    $"Wins / Losses: {matchHistory.wins} / {matchHistory.losses}\n" +
+                                    $"Win Rate: {(float)matchHistory.wins / matchHistory.totalGames * 100:F2}%\n";
     }
 }

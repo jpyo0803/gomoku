@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 public class PlayerInfo
 {
@@ -29,19 +30,19 @@ public class GameManager : MonoBehaviour
     // GameManager는 싱글턴 패턴을 통해 전역에서 접근 가능
     public static GameManager instance = null;
 
-    public RestApiClient RestApiClient { get; private set; } // REST API 클라이언트 인스턴스
+    private RestApiClient restApiClient;// REST API 클라이언트 인스턴스
 
     public WebSocketClient WebSocketClient { get; private set; } // WebSocket 클라이언트 인스턴스
 
-    public AuthClient AuthClient { get; private set; } // 인증 클라이언트 인스턴스
+    private AuthClient authClient; // 인증 클라이언트 인스턴스
 
     public string AccessToken { get; set; } // JWT access 토큰
 
     public string RefreshToken { get; set; } // JWT refresh 토큰
 
-    public string AuthServerUrl { get; } = "http://localhost:3000";
+    public string AuthServerUrl { get; set; } = "http://localhost:3000";
 
-    public string BackendServerUrl { get; } = "http://localhost:3000";
+    private string backendServerUrl = "http://localhost:3000";
 
     public string WebSocketServerUrl { get; } = "http://localhost:3000"; // WebSocket 서버 URL
 
@@ -60,9 +61,9 @@ public class GameManager : MonoBehaviour
             DontDestroyOnLoad(gameObject); // 씬 전환 시에도 GameManager 유지
 
             // Logger 서비스 등록을 위해 여기서 객체 생성
-            RestApiClient = new RestApiClient(); // REST API 클라이언트 초기화
+            restApiClient = new RestApiClient(); // REST API 클라이언트 초기화
             WebSocketClient = new WebSocketClient(); // WebSocket 클라이언트 초기화
-            AuthClient = new AuthClient(); // 인증 클라이언트 초기화
+            authClient = new AuthClient(); // 인증 클라이언트 초기화
         }
         else
         {
@@ -152,31 +153,59 @@ public class GameManager : MonoBehaviour
 
     public async Task<int> SignUp(string username, string password)
     {
-        if (AuthClient == null)
+        if (authClient == null)
         {
             Debug.LogError("[Log Error] AuthClient is not initialized properly.");
             return -1;
         }
 
         // AuthClient를 통해 회원가입 요청
-        int statusCode = await AuthClient.SignUp(AuthServerUrl, username, password);
+        int statusCode = await authClient.SignUp(AuthServerUrl, username, password);
         return statusCode;
     }
 
     public async Task<int> Login(string username, string password)
     {
-        if (AuthClient == null)
+        if (authClient == null)
         {
             Debug.LogError("[Log Error] AuthClient is not initialized properly.");
             return -1;
         }
 
         // AuthClient를 통해 로그인 요청
-        var (statusCode, accessToken, refreshToken) = await AuthClient.Login(AuthServerUrl, username, password);
+        var (statusCode, accessToken, refreshToken) = await authClient.Login(AuthServerUrl, username, password);
 
         this.AccessToken = accessToken;
         this.RefreshToken = refreshToken;
 
         return statusCode;
+    }
+
+    public async Task<MatchHistory> GetMatchHistoryAsync()
+    {
+        if (restApiClient == null)
+        {
+            Debug.LogError("[Log Error] RestApiClient is not initialized properly.");
+            return null;
+        }
+
+        HttpMethod method = HttpMethod.Get;
+        string url = $"{backendServerUrl}/Sql/my-match-history";
+
+        try
+        {
+            // JWT 토큰을 Authorization 헤더에 추가하여 요청
+            HttpResponseMessage response = await restApiClient.SendRequestAsync(method, url, useAuth: true);
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            // 응답을 MatchHistory 객체로 변환
+            MatchHistory history = JsonUtility.FromJson<MatchHistory>(responseBody);
+            return history;
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[Log Error] GetMatchHistoryAsync error: {e.Message}");
+            return null; // 예외 발생 시 null 반환
+        }
     }
 }
