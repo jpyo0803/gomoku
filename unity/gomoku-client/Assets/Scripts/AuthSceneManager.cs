@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class AuthSceneManager : MonoBehaviour
 {
-    private AuthInterface authClient;
-
     [Header("Input Fields")]
     [SerializeField]
     private TMP_InputField usernameInput;
@@ -25,87 +23,90 @@ public class AuthSceneManager : MonoBehaviour
 
     void Start()
     {
-        authClient = new AuthClient(); // Task 기반 구현체
-        if (authClient == null)
-        {
-            Debug.LogError("[Log Error] AuthClient is not initialized properly.");
-            return;
-        }
-
-        loginButton.onClick.AddListener(() => OnLoginClicked());
-        signupButton.onClick.AddListener(() => OnSignupClicked());
+        loginButton.onClick.AddListener(() => OnLoginClickedAsync());
+        signupButton.onClick.AddListener(() => OnSignupClickedAsync());
     }
 
-    private async void OnSignupClicked()
+    private async void OnSignupClickedAsync()
     {
         string username = usernameInput.text;
         string password = passwordInput.text;
 
-        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+        if (CheckUsernameAndPassword(username, password) == false)
         {
-            responseDisplay.text = "Username and password cannot be empty.";
-            Debug.Log("[Log] Username or password is empty.");
-            return;
+            return; // 유효성 검사 실패 시 조기 반환
         }
 
         Debug.Log($"[Log; Signup Attempt] Username: {username}, Password: {password}");
 
-        int code = await authClient.SignUp(GameManager.instance.AuthServerUrl, username, password);
+        int code = await GameManager.instance.SignUp(username, password);
 
-        if (code == 201) // 회원가입 성공
-        {
-            responseDisplay.text = "SignUp successful! You can now log in.";
-        }
-        else if (code == 400) // 잘못된 요청
-        {
-            responseDisplay.text = "Bad request. Please check your input.";
-        }
-        else if (code == 409) // 중복된 사용자 이름
-        {
-            responseDisplay.text = "Username already exists. Please choose a different username.";
-        }
-        else // 기타 오류
-        {
-            responseDisplay.text = "SignUp failed with code: " + code;
-            Debug.LogError($"[Log Error] SignUp failed with code: {code}. Please check the server logs for more details.");
-        }
+        UpdateResponseDisplay(code);
     }
 
-    private async void OnLoginClicked()
+    private async void OnLoginClickedAsync()
     {
         string username = usernameInput.text;
         string password = passwordInput.text;
 
-        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+        if (CheckUsernameAndPassword(username, password) == false)
         {
-            responseDisplay.text = "Username and password cannot be empty.";
-            Debug.Log("[Log] Username or password is empty.");
-            return;
+            return; // 유효성 검사 실패 시 조기 반환
         }
 
         Debug.Log($"[Log; Login Attempt] Username: {username}, Password: {password}");
 
-        var (code, accessToken, refreshToken) = await authClient.Login(GameManager.instance.AuthServerUrl, username, password);
+        int code = await GameManager.instance.Login(username, password);
 
-        if (code == 200) // 로그인 성공
+        UpdateResponseDisplay(code);
+
+        if (code == 200) // 로그인 성공 시
         {
-            GameManager.instance.AccessToken = accessToken; // JWT Access 토큰 저장
-            GameManager.instance.RefreshToken = refreshToken; // Refresh 토큰 저장
-
-            responseDisplay.text = "Login successful!";
-            Debug.Log("[Log] Login successful!");
-
-            SceneManager.LoadScene("GameSettingScene");
+            SceneManager.LoadScene("GameSettingScene"); // 게임 설정 씬으로 이동
         }
-        else if (code == 401) // 인증 실패
+    }
+
+    private bool CheckUsernameAndPassword(string username, string password)
+    {
+        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
         {
-            responseDisplay.text = "Invalid username or password.";
-            Debug.Log("[Log] Invalid username or password.");
+            responseDisplay.text = "Username and password cannot be empty.";
+            return false;
         }
-        else // 기타 오류
+        return true;
+    }
+
+    private void UpdateResponseDisplay(int code)
+    {
+        /*
+            200: 로그인 성공
+            201: 회원가입 성공
+            400: 잘못된 요청
+            401: 인증 실패
+            409: 중복된 사용자 이름
+            기타: 기타 오류
+        */
+
+        switch (code)
         {
-            responseDisplay.text = "Login failed with code: " + code;
-            Debug.LogError($"[Log Error] Login failed with code: {code}. Please check the server logs for more details.");
+            case 200:
+                responseDisplay.text = "Login successful!";
+                break;
+            case 201:
+                responseDisplay.text = "SignUp successful! You can now log in.";
+                break;
+            case 400:
+                responseDisplay.text = "Bad request. Please check your input.";
+                break;
+            case 401:
+                responseDisplay.text = "Invalid username or password.";
+                break;
+            case 409:
+                responseDisplay.text = "Username already exists. Please choose a different username.";
+                break;
+            default:
+                responseDisplay.text = "Operation failed with code: " + code;
+                break;
         }
     }
 }

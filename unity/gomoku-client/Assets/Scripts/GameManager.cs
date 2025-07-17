@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class PlayerInfo
 {
@@ -28,25 +29,11 @@ public class GameManager : MonoBehaviour
     // GameManager는 싱글턴 패턴을 통해 전역에서 접근 가능
     public static GameManager instance = null;
 
-    public RestApiClient RestApiClient { get;  private set; } // REST API 클라이언트 인스턴스
+    public RestApiClient RestApiClient { get; private set; } // REST API 클라이언트 인스턴스
 
     public WebSocketClient WebSocketClient { get; private set; } // WebSocket 클라이언트 인스턴스
 
-    private void Awake()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject); // 씬 전환 시에도 GameManager 유지
-
-            RestApiClient = new RestApiClient(); // REST API 클라이언트 초기화
-            WebSocketClient = new WebSocketClient(); // WebSocket 클라이언트 초기화
-        }
-        else
-        {
-            Destroy(gameObject); // 이미 존재하는 GameManager가 있으면 현재 오브젝트 삭제
-        }
-    }
+    public AuthClient AuthClient { get; private set; } // 인증 클라이언트 인스턴스
 
     public string AccessToken { get; set; } // JWT access 토큰
 
@@ -64,6 +51,25 @@ public class GameManager : MonoBehaviour
     public PlayerInfo opponentInfo; // 상대 정보
 
     private readonly Queue<Action> mainThreadActions = new Queue<Action>();
+
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject); // 씬 전환 시에도 GameManager 유지
+
+            // Logger 서비스 등록을 위해 여기서 객체 생성
+            RestApiClient = new RestApiClient(); // REST API 클라이언트 초기화
+            WebSocketClient = new WebSocketClient(); // WebSocket 클라이언트 초기화
+            AuthClient = new AuthClient(); // 인증 클라이언트 초기화
+        }
+        else
+        {
+            Destroy(gameObject); // 이미 존재하는 GameManager가 있으면 현재 오브젝트 삭제
+        }
+    }
+
 
     public void SetPlayScene(PlayerInfo myInfo, PlayerInfo opponentInfo, string gameId)
     {
@@ -144,8 +150,33 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void DebugLog(string message)
+    public async Task<int> SignUp(string username, string password)
     {
-        Debug.Log($"[Log] {message}");
+        if (AuthClient == null)
+        {
+            Debug.LogError("[Log Error] AuthClient is not initialized properly.");
+            return -1;
+        }
+
+        // AuthClient를 통해 회원가입 요청
+        int statusCode = await AuthClient.SignUp(AuthServerUrl, username, password);
+        return statusCode;
+    }
+
+    public async Task<int> Login(string username, string password)
+    {
+        if (AuthClient == null)
+        {
+            Debug.LogError("[Log Error] AuthClient is not initialized properly.");
+            return -1;
+        }
+
+        // AuthClient를 통해 로그인 요청
+        var (statusCode, accessToken, refreshToken) = await AuthClient.Login(AuthServerUrl, username, password);
+
+        this.AccessToken = accessToken;
+        this.RefreshToken = refreshToken;
+
+        return statusCode;
     }
 }

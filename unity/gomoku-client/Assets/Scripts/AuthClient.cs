@@ -27,6 +27,8 @@ internal static class AuthJsonUtils
 public class AuthClient : AuthInterface
 {
     private readonly ILogger logger;
+    
+    private RestApiClient restApiClient = new RestApiClient();
 
     public AuthClient()
     {
@@ -40,13 +42,13 @@ public class AuthClient : AuthInterface
     public async Task<int> SignUp(string serverUrl, string username, string password)
     {
         logger.Log($"Signup with Username: {username}, Password: {password}");
-        var restApiClient = GameManager.instance.RestApiClient;
+
         string url = $"{serverUrl}/auth/signup";
         string json = JsonSerializer.Serialize(new { username, password });
 
         try
         {
-            HttpResponseMessage response = await restApiClient.SendRequestAsync(HttpMethod.Post, url, useAuth: false, content: json);
+            HttpResponseMessage response = await this.restApiClient.SendRequestAsync(HttpMethod.Post, url, useAuth: false, content: json);
             return (int)response.StatusCode;
         }
         catch (Exception e)
@@ -59,13 +61,13 @@ public class AuthClient : AuthInterface
     public async Task<(int, string, string)> Login(string serverUrl, string username, string password)
     {
         logger.Log($"Login with Username: {username}, Password: {password}");
-        var restApiClient = GameManager.instance.RestApiClient;
+
         string url = $"{serverUrl}/auth/login";
         string json = JsonSerializer.Serialize(new { username, password });
 
         try
         {
-            HttpResponseMessage response = await restApiClient.SendRequestAsync(HttpMethod.Post, url, useAuth: false, content: json);
+            HttpResponseMessage response = await this.restApiClient.SendRequestAsync(HttpMethod.Post, url, useAuth: false, content: json);
 
             // Status 코드가 200인 경우에만 토큰을 추출합니다.
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
