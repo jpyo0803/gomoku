@@ -33,9 +33,11 @@ public class RestApiClient
     {
         var request = new HttpRequestMessage(method, url);
 
-        if (useAuth && !string.IsNullOrEmpty(GameManager.instance.AccessToken))
+        var accessToken = await GameManager.instance._tokenStorage.GetAccessTokenAsync();
+
+        if (useAuth && !string.IsNullOrEmpty(accessToken))
         {
-            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", GameManager.instance.AccessToken);
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         }
 
         if (!string.IsNullOrEmpty(content))
@@ -55,7 +57,8 @@ public class RestApiClient
             if (tokenRefreshed)
             {
                 // 토큰이 갱신되었으므로 다시 요청을 시도
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", GameManager.instance.AccessToken);
+                var newAccessToken = await GameManager.instance._tokenStorage.GetAccessTokenAsync();
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", newAccessToken);
                 return await SendRequestAsync(method, url, useAuth, content);
             }
         }
@@ -67,7 +70,8 @@ public class RestApiClient
         try
         {
             // 서버의 /auth/refresh 엔드포인트에 요청
-            var refreshContent = new { refreshToken = GameManager.instance.RefreshToken };
+            var refreshToken = await GameManager.instance._tokenStorage.GetRefreshTokenAsync();
+            var refreshContent = new { refreshToken = refreshToken };
             var jsonContent = Newtonsoft.Json.JsonConvert.SerializeObject(refreshContent);
             var requestContent = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
 
@@ -79,14 +83,14 @@ public class RestApiClient
             var newTokens = Newtonsoft.Json.JsonConvert.DeserializeObject<RefreshResponse>(responseString);
 
             // 새 토큰 저장
-            GameManager.instance.AccessToken = newTokens.accessToken;
+            await GameManager.instance._tokenStorage.UpdateAccessTokenAsync(newTokens.accessToken);
 
             logger.Log("Access token refreshed successfully.");
             return true;
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
-            logger.LogError($"Failed to refresh access token: {ex.Message}");
+            logger.LogError($"Failed to refresh access token: {e.Message}");
             // NOTE(jpyo0803): 리프레시 토큰도 만료된 경우 로그아웃 처리 필요. 현재는 예외 처리만 함
             return false;
         }

@@ -16,7 +16,7 @@ public class GameSettingSceneManager : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI matchHistoryDisplay; // 매치 히스토리 표시용 텍스트
 
-    void Start()
+    async void Start()
     {
         // 매치 히스토리 업데이트
         DisplayMatchHistoryAsync();
@@ -28,9 +28,10 @@ public class GameSettingSceneManager : MonoBehaviour
             return;
         }
 
+        var accessToken = await GameManager.instance._tokenStorage.GetAccessTokenAsync();
         // WebSocket 연결
         // TODO(jpyo0803): WebSocket 연결시 GameManager에서 WebSocketServerUrl과 AccessToken을 가져오는 구조가 좋은지 생각해보기
-        websocketClient.Connect(GameManager.instance.WebSocketServerUrl, GameManager.instance.AccessToken);
+        websocketClient.Connect(GameManager.instance.WebSocketServerUrl, accessToken);
 
         // 버튼 클릭 이벤트 등록
         okButton.onClick.AddListener(OnOkClicked);

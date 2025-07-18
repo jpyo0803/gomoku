@@ -36,9 +36,7 @@ public class GameManager : MonoBehaviour
 
     private AuthClient authClient; // 인증 클라이언트 인스턴스
 
-    public string AccessToken { get; set; } // JWT access 토큰
-
-    public string RefreshToken { get; set; } // JWT refresh 토큰
+    public ITokenStorage _tokenStorage = new TokenStorage(); // 토큰 저장소 인터페이스
 
     public string AuthServerUrl { get; set; } = "http://localhost:3000";
 
@@ -175,8 +173,13 @@ public class GameManager : MonoBehaviour
         // AuthClient를 통해 로그인 요청
         var (statusCode, accessToken, refreshToken) = await authClient.Login(AuthServerUrl, username, password);
 
-        this.AccessToken = accessToken;
-        this.RefreshToken = refreshToken;
+        // 로그인 성공 시 토큰 저장
+        if (statusCode == (int)System.Net.HttpStatusCode.OK)
+        {
+            var t1 = _tokenStorage.UpdateAccessTokenAsync(accessToken);
+            var t2 = _tokenStorage.UpdateRefreshTokenAsync(refreshToken);
+            await Task.WhenAll(t1, t2);
+        }
 
         return statusCode;
     }

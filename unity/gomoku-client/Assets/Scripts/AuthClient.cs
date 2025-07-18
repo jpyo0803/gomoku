@@ -68,7 +68,7 @@ public class AuthClient : AuthInterface
         try
         {
             HttpResponseMessage response = await this.restApiClient.SendRequestAsync(HttpMethod.Post, url, useAuth: false, content: json);
-
+            logger.Log($"Login response status code: {response.StatusCode}");
             // Status 코드가 200인 경우에만 토큰을 추출합니다.
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
