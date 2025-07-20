@@ -32,6 +32,8 @@ public class GameManager : MonoBehaviour
 
     private RestApiClient restApiClient;// REST API 클라이언트 인스턴스
 
+    private IHttpProxy _httpProxy;
+
     public WebSocketClient WebSocketClient { get; private set; } // WebSocket 클라이언트 인스턴스
 
     private AuthClient authClient; // 인증 클라이언트 인스턴스
@@ -57,16 +59,20 @@ public class GameManager : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(gameObject); // 씬 전환 시에도 GameManager 유지
-
-            // Logger 서비스 등록을 위해 여기서 객체 생성
-            restApiClient = new RestApiClient(); // REST API 클라이언트 초기화
-            WebSocketClient = new WebSocketClient(); // WebSocket 클라이언트 초기화
-            authClient = new AuthClient(); // 인증 클라이언트 초기화
         }
         else
         {
             Destroy(gameObject); // 이미 존재하는 GameManager가 있으면 현재 오브젝트 삭제
         }
+    }
+
+    public void Start()
+    {
+        // ServiceLocator에 Register는 BootSceneManager에서 Awake에서 이루어지므로 Start에서 아래 코드를 호출해야함.
+        restApiClient = new RestApiClient(); // REST API 클라이언트 초기화
+        WebSocketClient = new WebSocketClient(); // WebSocket 클라이언트 초기화
+        authClient = new AuthClient(); // 인증 클라이언트 초기화
+        _httpProxy = new HttpProxy(); // HTTP 프록시 초기화
     }
 
 
@@ -186,19 +192,17 @@ public class GameManager : MonoBehaviour
 
     public async Task<MatchHistory> GetMatchHistoryAsync()
     {
-        if (restApiClient == null)
-        {
-            Debug.LogError("[Log Error] RestApiClient is not initialized properly.");
-            return null;
-        }
-
-        HttpMethod method = HttpMethod.Get;
         string url = $"{backendServerUrl}/Sql/my-match-history";
+        string accessToken = await _tokenStorage.GetAccessTokenAsync();
 
         try
         {
             // JWT 토큰을 Authorization 헤더에 추가하여 요청
-            HttpResponseMessage response = await restApiClient.SendRequestAsync(method, url, useAuth: true);
+            HttpResponseMessage response = await _httpProxy.GetAsync(new HttpArgs
+            {
+                Url = url,
+                Token = accessToken
+            });
             var responseBody = await response.Content.ReadAsStringAsync();
 
             // 응답을 MatchHistory 객체로 변환
