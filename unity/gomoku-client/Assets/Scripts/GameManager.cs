@@ -36,7 +36,7 @@ public class GameManager : MonoBehaviour
 
     public WebSocketClient WebSocketClient { get; private set; } // WebSocket 클라이언트 인스턴스
 
-    private AuthClient authClient; // 인증 클라이언트 인스턴스
+    private IAuth _authService; // 인증 클라이언트 인스턴스
 
     public ITokenStorage _tokenStorage = new TokenStorage(); // 토큰 저장소 인터페이스
 
@@ -71,7 +71,7 @@ public class GameManager : MonoBehaviour
         // ServiceLocator에 Register는 BootSceneManager에서 Awake에서 이루어지므로 Start에서 아래 코드를 호출해야함.
         restApiClient = new RestApiClient(); // REST API 클라이언트 초기화
         WebSocketClient = new WebSocketClient(); // WebSocket 클라이언트 초기화
-        authClient = new AuthClient(); // 인증 클라이언트 초기화
+        _authService = new AuthService(); // 인증 서비스 초기화
         _httpProxy = new HttpProxy(); // HTTP 프록시 초기화
     }
 
@@ -157,37 +157,46 @@ public class GameManager : MonoBehaviour
 
     public async Task<int> SignUp(string username, string password)
     {
-        if (authClient == null)
+        if (_authService == null)
         {
-            Debug.LogError("[Log Error] AuthClient is not initialized properly.");
+            Debug.LogError("[Log Error] AuthService is not initialized properly.");
             return -1;
         }
 
-        // AuthClient를 통해 회원가입 요청
-        int statusCode = await authClient.SignUp(AuthServerUrl, username, password);
-        return statusCode;
+        // AuthService를 통해 회원가입 요청
+        var response = await _authService.SignUp(new AuthArgs
+        {
+            ServerUrl = AuthServerUrl,
+            Username = username,
+            Password = password
+        });
+        return response.Code;
     }
 
     public async Task<int> Login(string username, string password)
     {
-        if (authClient == null)
+        if (_authService == null)
         {
-            Debug.LogError("[Log Error] AuthClient is not initialized properly.");
+            Debug.LogError("[Log Error] AuthService is not initialized properly.");
             return -1;
         }
-
-        // AuthClient를 통해 로그인 요청
-        var (statusCode, accessToken, refreshToken) = await authClient.Login(AuthServerUrl, username, password);
+        // AuthService를 통해 로그인 요청
+        var response = await _authService.Login(new AuthArgs
+        {
+            ServerUrl = AuthServerUrl,
+            Username = username,
+            Password = password
+        });
 
         // 로그인 성공 시 토큰 저장
-        if (statusCode == (int)System.Net.HttpStatusCode.OK)
+        if (response.Code == (int)System.Net.HttpStatusCode.OK)
         {
-            var t1 = _tokenStorage.UpdateAccessTokenAsync(accessToken);
-            var t2 = _tokenStorage.UpdateRefreshTokenAsync(refreshToken);
+            var t1 = _tokenStorage.UpdateAccessTokenAsync(response.AccessToken);
+            var t2 = _tokenStorage.UpdateRefreshTokenAsync(response.RefreshToken);
             await Task.WhenAll(t1, t2);
         }
 
-        return statusCode;
+        return response.Code;
     }
 
     public async Task<MatchHistory> GetMatchHistoryAsync()
