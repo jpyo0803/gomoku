@@ -114,9 +114,39 @@ namespace jpyo0803
 
         public async Task<RefreshResponse> RefreshToken(RefreshDto dto)
         {
-            // Not implemented yet
-            _logger.Log("RefreshToken method is not implemented yet.");
-            return new RefreshResponse { Code = -1 };
+            var refreshContent = new { refreshToken = dto.RefreshToken };
+            var jsonContent = JsonSerializer.Serialize(refreshContent);
+            string url = $"{dto.ServerUrl}/auth/refresh";
+            try
+            {
+                HttpResponseMessage response = await _httpProxy.PostAsync(new HttpArgs
+                {
+                    Url = url,
+                    Content = jsonContent,
+                    Token = null // Refresh 시 토큰은 필요하지 않음
+                });
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    string accessToken = AuthJsonUtils.ExtractValueFromJson("accessToken", content);
+
+                    return new RefreshResponse
+                    {
+                        Code = (int)response.StatusCode,
+                        AccessToken = accessToken
+                    };
+                }
+                else
+                {
+                    return new RefreshResponse { Code = (int)response.StatusCode };
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"RefreshToken error: {e.Message}");
+                return new RefreshResponse { Code = -1 };
+            }
         }
     }
 }

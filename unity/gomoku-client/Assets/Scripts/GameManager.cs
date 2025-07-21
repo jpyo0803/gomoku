@@ -204,6 +204,7 @@ namespace jpyo0803
         public async Task<MatchHistory> GetMatchHistoryAsync()
         {
             string url = $"{backendServerUrl}/Sql/my-match-history";
+
             string accessToken = await _tokenStorage.GetAccessTokenAsync();
 
             try
