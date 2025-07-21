@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
+using System.Text.Json.Serialization;
 
 namespace jpyo0803
 {
@@ -25,6 +26,18 @@ namespace jpyo0803
         public int wins;
         public int draws;
         public int losses;
+    }
+
+    public class ErrorResponse
+    {
+        [JsonPropertyName("statusCode")]
+        public int StatusCode { get; set; }
+
+        [JsonPropertyName("message")]
+        public string Message { get; set; }
+
+        [JsonPropertyName("error")]
+        public string Error { get; set; }
     }
 
     public class GameManager : MonoBehaviour
@@ -215,7 +228,13 @@ namespace jpyo0803
                     Url = url,
                     Token = accessToken
                 });
+
                 var responseBody = await response.Content.ReadAsStringAsync();
+                // if (!response.IsSuccessStatusCode)
+                // {
+                //     var error = JsonSerializer.Deserialize<ErrorResponse>(responseBody);
+                //     Debug.LogError($"[Log Error] GetMatchHistoryAsync failed: {error.Message} (Status Code: {error.StatusCode})");
+                // }
 
                 // 응답을 MatchHistory 객체로 변환
                 MatchHistory history = JsonUtility.FromJson<MatchHistory>(responseBody);
