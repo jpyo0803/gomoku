@@ -1,34 +1,38 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-public class HttpProxy : IHttpProxy
+
+namespace jpyo0803
 {
-    private readonly HttpService _httpService; // HttpService 인스턴스 생성
-    private readonly ILogger _logger;
-
-    public HttpProxy()
+    public class HttpProxy : IHttpProxy
     {
-        _httpService = ServiceLocator.Get<HttpService>();
-        if (_httpService == null)
+        private readonly HttpService _httpService; // HttpService 인스턴스 생성
+        private readonly ILogger _logger;
+
+        public HttpProxy()
         {
-            throw new Exception("HttpService is not registered.");
+            _httpService = ServiceLocator.Get<HttpService>();
+            if (_httpService == null)
+            {
+                throw new Exception("HttpService is not registered.");
+            }
+
+            // ILogger 서비스 가져오기
+            _logger = ServiceLocator.Get<ILogger>();
+            if (_logger == null)
+            {
+                throw new Exception("ILogger service is not registered.");
+            }
         }
 
-        // ILogger 서비스 가져오기
-        _logger = ServiceLocator.Get<ILogger>();
-        if (_logger == null)
+        public async Task<HttpResponseMessage> GetAsync(HttpArgs args)
         {
-            throw new Exception("ILogger service is not registered.");
+            return await _httpService.GetAsync(args);
         }
-    }
 
-    public async Task<HttpResponseMessage> GetAsync(HttpArgs args)
-    {
-        return await _httpService.GetAsync(args);
-    }
-
-    public async Task<HttpResponseMessage> PostAsync(HttpArgs args)
-    {
-        return await _httpService.PostAsync(args);
+        public async Task<HttpResponseMessage> PostAsync(HttpArgs args)
+        {
+            return await _httpService.PostAsync(args);
+        }
     }
 }

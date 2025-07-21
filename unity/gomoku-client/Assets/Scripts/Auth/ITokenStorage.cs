@@ -1,12 +1,15 @@
 using System.Threading.Tasks;
 
-public interface ITokenStorage
+namespace jpyo0803
 {
-    Task<string> GetAccessTokenAsync();
-    
-    Task<string> GetRefreshTokenAsync();
+    public interface ITokenStorage
+    {
+        Task<string> GetAccessTokenAsync();
 
-    Task UpdateAccessTokenAsync(string newAccessToken);
+        Task<string> GetRefreshTokenAsync();
 
-    Task UpdateRefreshTokenAsync(string newRefreshToken);
+        Task UpdateAccessTokenAsync(string newAccessToken);
+
+        Task UpdateRefreshTokenAsync(string newRefreshToken);
+    }
 }

@@ -6,13 +6,16 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class BootSceneManager : MonoBehaviour
+namespace jpyo0803
 {
-    private void Awake()
+    public class BootSceneManager : MonoBehaviour
     {
-        ServiceLocator.Register<ILogger>(new UnityDebugLogger()); // ILogger 서비스 등록
-        ServiceLocator.Register<HttpService>(new HttpService());
+        private void Awake()
+        {
+            ServiceLocator.Register<ILogger>(new UnityDebugLogger()); // ILogger 서비스 등록
+            ServiceLocator.Register<HttpService>(new HttpService());
 
-        SceneManager.LoadScene("AuthScene"); // AuthScene 로드
+            SceneManager.LoadScene("AuthScene"); // AuthScene 로드
+        }
     }
 }

@@ -24,91 +24,99 @@ internal static class AuthJsonUtils
     }
 }
 
-public class AuthService : IAuth
+namespace jpyo0803
 {
-    private IHttpProxy _httpProxy;
-
-    private readonly ILogger _logger;
-
-    public AuthService()
+    public class AuthService : IAuth
     {
-        _httpProxy = new HttpProxy();
+        private IHttpProxy _httpProxy;
 
-        this._logger = ServiceLocator.Get<ILogger>();
-        if (this._logger == null)
+        private readonly ILogger _logger;
+
+        public AuthService()
         {
-            throw new Exception("ILogger service is not registered.");
+            _httpProxy = new HttpProxy();
+
+            this._logger = ServiceLocator.Get<ILogger>();
+            if (this._logger == null)
+            {
+                throw new Exception("ILogger service is not registered.");
+            }
         }
-    }
 
-    public async Task<AuthResponse> SignUp(AuthArgs args)
-    {
-        _logger.Log($"Signup with Username: {args.Username}, Password: {args.Password}");
-
-        string url = $"{args.ServerUrl}/auth/signup";
-        string json = JsonSerializer.Serialize(new { username = args.Username, password = args.Password });
-
-
-        try
+        public async Task<SignupResponse> SignUp(SignUpLoginDto dto)
         {
-            HttpResponseMessage response = await _httpProxy.PostAsync(new HttpArgs
+            _logger.Log($"Signup with Username: {dto.Username}, Password: {dto.Password}");
+
+            string url = $"{dto.ServerUrl}/auth/signup";
+            string json = JsonSerializer.Serialize(new { username = dto.Username, password = dto.Password });
+
+
+            try
             {
-                Url = url,
-                Content = json,
-                Token = null // SignUp 시 토큰은 필요하지 않음
-            });
-            return new AuthResponse
-            {
-                Code = (int)response.StatusCode,
-                AccessToken = null,
-                RefreshToken = null
-            };
-        }
-        catch (Exception e)
-        {
-            _logger.LogError($"SignUp error: {e.Message}");
-            return new AuthResponse { Code = -1 };
-        }
-    }
-
-    public async Task<AuthResponse> Login(AuthArgs args)
-    {
-        _logger.Log($"Login with Username: {args.Username}, Password: {args.Password}");
-
-        string url = $"{args.ServerUrl}/auth/login";
-        string json = JsonSerializer.Serialize(new { username = args.Username, password = args.Password });
-
-        try
-        {
-            HttpResponseMessage response = await _httpProxy.PostAsync(new HttpArgs
-            {
-                Url = url,
-                Content = json,
-                Token = null // Login 시 토큰은 필요하지 않음
-            });
-
-            if (response.IsSuccessStatusCode)
-            {
-                string content = await response.Content.ReadAsStringAsync();
-                string accessToken = AuthJsonUtils.ExtractValueFromJson("accessToken", content);
-                string refreshToken = AuthJsonUtils.ExtractValueFromJson("refreshToken", content);
-
-                return new AuthResponse
+                HttpResponseMessage response = await _httpProxy.PostAsync(new HttpArgs
                 {
-                    Code = (int)response.StatusCode,
-                    AccessToken = accessToken,
-                    RefreshToken = refreshToken
+                    Url = url,
+                    Content = json,
+                    Token = null // SignUp 시 토큰은 필요하지 않음
+                });
+                return new SignupResponse
+                {
+                    Code = (int)response.StatusCode
                 };
             }
-            else
+            catch (Exception e)
             {
-                return new AuthResponse { Code = (int)response.StatusCode };
+                _logger.LogError($"SignUp error: {e.Message}");
+                return new SignupResponse { Code = -1 };
             }
         }
-        catch (Exception e)
+
+        public async Task<LoginResponse> Login(SignUpLoginDto dto)
         {
-            _logger.LogError($"Login error: {e.Message}");
-            return new AuthResponse { Code = -1 };
+            _logger.Log($"Login with Username: {dto.Username}, Password: {dto.Password}");
+
+            string url = $"{dto.ServerUrl}/auth/login";
+            string json = JsonSerializer.Serialize(new { username = dto.Username, password = dto.Password });
+
+            try
+            {
+                HttpResponseMessage response = await _httpProxy.PostAsync(new HttpArgs
+                {
+                    Url = url,
+                    Content = json,
+                    Token = null // Login 시 토큰은 필요하지 않음
+                });
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    string accessToken = AuthJsonUtils.ExtractValueFromJson("accessToken", content);
+                    string refreshToken = AuthJsonUtils.ExtractValueFromJson("refreshToken", content);
+
+                    return new LoginResponse
+                    {
+                        Code = (int)response.StatusCode,
+                        AccessToken = accessToken,
+                        RefreshToken = refreshToken
+                    };
+                }
+                else
+                {
+                    return new LoginResponse { Code = (int)response.StatusCode };
+                }
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Login error: {e.Message}");
+                return new LoginResponse { Code = -1 };
+            }
+        }
+
+        public async Task<RefreshResponse> RefreshToken(RefreshDto dto)
+        {
+            // Not implemented yet
+            _logger.Log("RefreshToken method is not implemented yet.");
+            return new RefreshResponse { Code = -1 };
         }
     }
 }

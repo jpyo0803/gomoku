@@ -1,21 +1,42 @@
 using System.Threading.Tasks;
 
-public class AuthArgs
+namespace jpyo0803
 {
-    public string ServerUrl { get; set; }
-    public string Username { get; set; }
-    public string Password { get; set; }
-}
+    public class SignUpLoginDto
+    {
+        public string ServerUrl { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
 
-public class AuthResponse
-{
-    public int Code { get; set; }
-    public string AccessToken { get; set; }
-    public string RefreshToken { get; set; }
-}
+    public class SignupResponse
+    {
+        public int Code { get; set; }
+    }
 
-public interface IAuth
-{
-    Task<AuthResponse> SignUp(AuthArgs args);
-    Task<AuthResponse> Login(AuthArgs args);
+    public class LoginResponse
+    {
+        public int Code { get; set; }
+        public string AccessToken { get; set; }
+        public string RefreshToken { get; set; }
+    }
+
+    public class RefreshDto
+    {
+        public string ServerUrl { get; set; }
+        public string RefreshToken { get; set; }
+    }
+
+    public class RefreshResponse
+    {
+        public int Code { get; set; }
+        public string AccessToken { get; set; }
+    }
+
+    public interface IAuth
+    {
+        Task<SignupResponse> SignUp(SignUpLoginDto dto);
+        Task<LoginResponse> Login(SignUpLoginDto dto);
+        Task<RefreshResponse> RefreshToken(RefreshDto args);
+    }
 }
