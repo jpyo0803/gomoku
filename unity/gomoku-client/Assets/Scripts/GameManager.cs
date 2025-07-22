@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace jpyo0803
 {
@@ -214,6 +215,37 @@ namespace jpyo0803
             return response.Code;
         }
 
+        public async Task<int> RefreshToken()
+        {
+            if (_authService == null)
+            {
+                Debug.LogError("[Log Error] AuthService is not initialized properly.");
+                return -1;
+            }
+
+            string refreshToken = await _tokenStorage.GetRefreshTokenAsync();
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                Debug.LogError("[Log Error] Refresh token is not available.");
+                return -1;
+            }
+
+            // AuthService를 통해 토큰 갱신 요청
+            var response = await _authService.RefreshToken(new RefreshDto
+            {
+                ServerUrl = AuthServerUrl,
+                RefreshToken = refreshToken
+            });
+
+            // 갱신 성공 시 새로운 액세스 토큰 저장
+            if (response.Code == (int)System.Net.HttpStatusCode.OK)
+            {
+                await _tokenStorage.UpdateAccessTokenAsync(response.AccessToken);
+            }
+
+            return response.Code;
+        }
+
         public async Task<MatchHistory> GetMatchHistoryAsync()
         {
             string url = $"{backendServerUrl}/Sql/my-match-history";
@@ -230,11 +262,25 @@ namespace jpyo0803
                 });
 
                 var responseBody = await response.Content.ReadAsStringAsync();
-                // if (!response.IsSuccessStatusCode)
-                // {
-                //     var error = JsonSerializer.Deserialize<ErrorResponse>(responseBody);
-                //     Debug.LogError($"[Log Error] GetMatchHistoryAsync failed: {error.Message} (Status Code: {error.StatusCode})");
-                // }
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = JsonSerializer.Deserialize<ErrorResponse>(responseBody);
+                    if (error.Message == "Token expired")
+                    {
+                        Debug.LogWarning("[Log Warning] Access token expired, refreshing token.");
+                        int refreshResult = await RefreshToken();
+                        if (refreshResult == (int)System.Net.HttpStatusCode.OK)
+                        {
+                            // 토큰 갱신 후 다시 요청
+                            return await GetMatchHistoryAsync();
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogError($"[Log Error] Failed to get match history: {error.Message}");
+                        return null; // 예외 발생 시 null 반환
+                    }
+                }
 
                 // 응답을 MatchHistory 객체로 변환
                 MatchHistory history = JsonUtility.FromJson<MatchHistory>(responseBody);
