@@ -46,8 +46,6 @@ namespace jpyo0803
         // GameManager는 싱글턴 패턴을 통해 전역에서 접근 가능
         public static GameManager instance = null;
 
-        private RestApiClient restApiClient;// REST API 클라이언트 인스턴스
-
         private IHttpProxy _httpProxy;
 
         public WebSocketClient WebSocketClient { get; private set; } // WebSocket 클라이언트 인스턴스
@@ -85,7 +83,6 @@ namespace jpyo0803
         public void Start()
         {
             // ServiceLocator에 Register는 BootSceneManager에서 Awake에서 이루어지므로 Start에서 아래 코드를 호출해야함.
-            restApiClient = new RestApiClient(); // REST API 클라이언트 초기화
             WebSocketClient = new WebSocketClient(); // WebSocket 클라이언트 초기화
             _authService = new AuthService(); // 인증 서비스 초기화
             _httpProxy = new HttpProxy(); // HTTP 프록시 초기화
