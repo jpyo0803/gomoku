@@ -92,14 +92,16 @@ namespace jpyo0803
                 Transport = SocketIOClient.Transport.TransportProtocol.WebSocket,
                 Reconnection = false,
                 Query = new Dictionary<string, string>
-        {
-            { "token", accessToken }
-        }
+                {
+                    { "token", accessToken }
+                }
             });
 
             socket.OnConnected += (_, _) =>
             {
                 logger.Log("WebSocket connected successfully.");
+                // 소켓을 통해 서버에 바인딩 요청
+                Bind().Wait();
             };
 
             socket.On("match_making_success", res =>
@@ -227,6 +229,25 @@ namespace jpyo0803
                 {
                     logger.LogError($"Error sending command {command.GetEventName()}: {ex.Message}");
                 }
+            }
+        }
+
+        public async Task Bind()
+        {
+            if (socket == null)
+            {
+                logger.LogError("WebSocket is not initialized. Cannot bind.");
+                return;
+            }
+
+            try
+            {
+                await socket.EmitAsync("bind", new { });
+                logger.Log("WebSocket bound successfully.");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"Error binding WebSocket: {ex.Message}");
             }
         }
 
