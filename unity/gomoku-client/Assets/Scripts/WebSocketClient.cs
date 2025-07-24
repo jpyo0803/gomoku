@@ -73,6 +73,8 @@ namespace jpyo0803
 
         private readonly ILogger logger;
 
+        private bool _waitingForResponse = false;
+
         public WebSocketClient()
         {
             this.logger = ServiceLocator.Get<ILogger>();
@@ -200,6 +202,29 @@ namespace jpyo0803
                 string result = map["result"];
                 string message = map["message"];
                 logger.Log($"Request result received: {result}, Message: {message}");
+
+                if (result == "ok")
+                {
+                    // 커맨드 큐에서 처리된 커맨드를 제거
+                    if (commandQueue.Count > 0)
+                    {
+                        commandQueue.Dequeue();
+                        _waitingForResponse = false; // 응답 대기 상태 해제
+                        logger.Log("Command processed successfully and removed from queue.");
+                    }
+                    else
+                    {
+                        logger.LogWarning("Command queue is empty, nothing to dequeue.");
+                    }
+                }
+                else if (result == "error")
+                {
+                    logger.LogError($"Command processing failed: {message}");
+                }
+                else
+                {
+                    logger.LogError($"Command processing failed: {message}");
+                }
             });
 
             socket.ConnectAsync(); // 비동기로 연결
@@ -232,9 +257,10 @@ namespace jpyo0803
         */
         public async Task ProcessCommands()
         {
-            while (commandQueue.Count > 0)
+            if (commandQueue.Count > 0 && !_waitingForResponse)
             {
-                var command = commandQueue.Dequeue();
+                var command = commandQueue.Peek();
+                _waitingForResponse = true; // 응답 대기 상태로 설정
                 logger.Log($"Processing command: {command.GetEventName()}");
 
                 try
