@@ -18,8 +18,14 @@ export class WsJwtAuthGuard implements CanActivate {
       console.log(`[Log] WebSocket connection authenticated for user: ${client.data.user.username}`);
       return true;
     } catch (err) {
-      console.error('[Auth Error] Invalid or expired token:', token);
-      throw new WsException('Invalid or expired token');
+      if (err.name === 'TokenExpiredError') {
+        throw new WsException('Token expired');
+      } else if (err.name === 'JsonWebTokenError') {
+        throw new WsException('Invalid token');
+      } else if (err.name === 'NotBeforeError') {
+        throw new WsException('Token not active yet');
+      }
+      throw new UnauthorizedException('Authentication failed');
     }
   }
 }

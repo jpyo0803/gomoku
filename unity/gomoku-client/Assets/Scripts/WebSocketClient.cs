@@ -185,6 +185,23 @@ namespace jpyo0803
                 }
             });
 
+            socket.On("request_result", res =>
+            {
+                /*
+                    NestJS 서버로부터 Request 수행 결과를 수신
+
+                    예로 착수 성공시 아래와 같은 형태로 응답을 받음:
+                    {
+                        "result": "ok",
+                        "message": "Stone placed successfully"
+                    }
+                */
+                var map = res.GetValue<Dictionary<string, string>>();
+                string result = map["result"];
+                string message = map["message"];
+                logger.Log($"Request result received: {result}, Message: {message}");
+            });
+
             socket.ConnectAsync(); // 비동기로 연결
         }
 

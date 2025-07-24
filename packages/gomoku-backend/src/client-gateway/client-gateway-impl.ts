@@ -12,6 +12,8 @@ import { ClientGatewayInterface } from './client-gateway-interface';
 import type { PlayerInfo } from './client-gateway-interface';
 import { UseGuards } from '@nestjs/common';
 import { WsJwtAuthGuard } from 'src/jwt/ws-jwt-auth-guard';
+import { UseFilters } from '@nestjs/common';
+import { WsAuthExceptionFilter } from 'src/jwt/ws-jwt-exception-filter';
 
 @WebSocketGateway({ cors: true })
 @Injectable()
@@ -43,20 +45,22 @@ export class ClientGatewayImpl implements ClientGatewayInterface {
     console.log(`[Log] Client bound: ${playerId}`);
   }
 
-  @SubscribeMessage('match_request')
-  @UseGuards(WsJwtAuthGuard)
-  handleMatchRequest(
+  @SubscribeMessage('match_request') // handle match request from client
+  @UseFilters(WsAuthExceptionFilter) // handle exceptions for this event
+  @UseGuards(WsJwtAuthGuard) // first check JWT authentication
+  async handleMatchRequest(
     @ConnectedSocket() socket: Socket,
     @MessageBody() data: { wantAiOpponent: boolean },
   ) {
     // playerId는 JWT 토큰에서 가져옴 (username)
     const playerId = socket.data.user.username;
     console.log(`[Log] Receive 'match_request' from \'${playerId}\' (playerId), want AI: ${data.wantAiOpponent}`);
-    
-    this.gameService.handleMatchRequest(playerId, data.wantAiOpponent);
+    await this.gameService.handleMatchRequest(playerId, data.wantAiOpponent);
+    socket?.emit('request_result', { result: 'ok', message: 'Match request handled successfully' });
   }
 
   @SubscribeMessage('place_stone')
+  @UseFilters(WsAuthExceptionFilter)
   @UseGuards(WsJwtAuthGuard)
   async handlePlaceStone(
     @ConnectedSocket() socket: Socket,
@@ -66,6 +70,7 @@ export class ClientGatewayImpl implements ClientGatewayInterface {
     const playerId = socket.data.user.username;
     console.log(`[Log] Receive 'place_stone' from \'${playerId}\' (playerId), x: ${data.x}, y: ${data.y}`);
     await this.gameService.handlePlaceStone(playerId, data.x, data.y);
+    socket?.emit('request_result', { result: 'ok', message: 'Stone placed successfully' });
   }
 
   sendMatchMakingSuccess(myInfo: PlayerInfo, opponentInfo: PlayerInfo, gameId: string): void {
