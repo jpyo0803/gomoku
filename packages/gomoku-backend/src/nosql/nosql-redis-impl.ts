@@ -135,7 +135,13 @@ export class NosqlRedisImpl implements NosqlInterface {
 
         try {
             // Lock을 획득할 때까지 대기
-            lock = await this.redlock.acquire([lockKey], 600000); // 10분 동안 Lock 획득
+            lock = await this.redlock.acquire([lockKey], 600000,
+                {
+                    retryCount: 0, // 재시도 횟수
+                    retryDelay: 0, // 재시도 간격(ms)
+                    retryJitter: 0, // 지연 랜덤화
+                }
+            ); // 10분 동안 Lock 획득
             console.log(`[Log] CheckOut Lock for game '${gameId}' acquired successfully.`);
         } catch (err) {
             // Lock 획득 실패 시 null 반환

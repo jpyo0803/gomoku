@@ -70,6 +70,7 @@ export class ClientGatewayImpl implements ClientGatewayInterface {
     const playerId = socket.data.user.username;
     console.log(`[Log] Receive 'place_stone' from \'${playerId}\' (playerId), x: ${data.x}, y: ${data.y}`);
     await this.gameService.handlePlaceStone(playerId, data.x, data.y);
+    console.log(`[Log] Place stone request processed for playerId: ${playerId}, x: ${data.x}, y: ${data.y}`);
     socket?.emit('request_result', { result: 'ok', message: 'Stone placed successfully' });
   }
 

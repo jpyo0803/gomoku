@@ -155,7 +155,7 @@ namespace jpyo0803
 
                 if (result == "ok")
                 {
-
+                    logger.Log("Command processed successfully.");
                 }
                 else if (result == "error")
                 {
@@ -164,6 +164,7 @@ namespace jpyo0803
                         GameManager.instance.RunOnMainThread(async () =>
                         {
                             await GameManager.instance.RefreshToken();
+                            await GameManager.instance.ConnectWebSocketAsync();
                         });
                     }
                     else

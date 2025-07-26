@@ -150,11 +150,11 @@ export class GameService {
 
   async handlePlaceStone(playerId: string, x: number, y: number) {
     const gameLease =  await this.nosqlService.checkOutGameInstance(playerId);
-
-    const game = gameLease?.gameInstance;
-    if (!game) {
-      throw new Error(`No game instance found for player ${playerId}`);
+    if (!gameLease) {
+      console.warn(`[Warn] No game instance found for player '${playerId}' or lock could not be acquired.`);
+      return;
     }
+    const game = gameLease.gameInstance;
     const opponentPlayer = game.getOpponentPlayer();
     const opponentPlayerId = opponentPlayer.getId();
 
@@ -164,7 +164,6 @@ export class GameService {
       this.clientGateway.sendPlaceStoneResp(playerId, 'invalid');
       return;
     }
-
 
     // 업데이트된 보드 상태를 현재 플레이어와 상대 플레이어에게 전송
     await this.boardcastUpdateBoardStateByGameInstance(game);
@@ -198,10 +197,10 @@ export class GameService {
 
         this.clientGateway.sendYourTurn(opponentPlayerId, 30); // time limit is not used for now
       } else {
-        console.log(`[Log] AI opponent's turn, playerId: ${opponentPlayerId}`);
+        // console.log(`[Log] AI opponent's turn, playerId: ${opponentPlayerId}`);
 
         const { x: x_ai, y: y_ai } = await this.aiGateway.sendYourTurn(game.getBoardString());
-        console.log(`[Log] AI placed stone at (${x_ai}, ${y_ai})`);
+        // console.log(`[Log] AI placed stone at (${x_ai}, ${y_ai})`);
 
         const result_after_ai_turn = game.play(x_ai, y_ai, opponentPlayerId);
 

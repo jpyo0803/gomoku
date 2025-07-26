@@ -262,6 +262,7 @@ namespace jpyo0803
 
         public async Task<int> RefreshToken()
         {
+            Debug.Log("[Log] Refreshing access token...");
             if (_authService == null)
             {
                 Debug.LogError("[Log Error] AuthService is not initialized properly.");
@@ -286,6 +287,7 @@ namespace jpyo0803
             if (response.Code == (int)System.Net.HttpStatusCode.OK)
             {
                 await _tokenStorage.UpdateAccessTokenAsync(response.AccessToken);
+                Debug.Log("[Log] Access token refreshed successfully.");
             }
 
             return response.Code;
