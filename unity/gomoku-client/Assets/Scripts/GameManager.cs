@@ -40,7 +40,51 @@ namespace jpyo0803
         [JsonPropertyName("error")]
         public string Error { get; set; }
     }
+ 
+    public abstract class Command
+    {
+        protected string EventName;
+        public string GetEventName()
+        {
+            return EventName;
+        }
 
+        public abstract object[] GetPayload();
+    }
+
+    public class MatchRequestCommand : Command
+    {
+        private bool wantAiOpponent;
+
+        public MatchRequestCommand(bool wantAiOpponent)
+        {
+            this.EventName = "match_request";
+            this.wantAiOpponent = wantAiOpponent;
+        }
+
+        public override object[] GetPayload()
+        {
+            return new object[] { new { wantAiOpponent = this.wantAiOpponent } };
+        }
+    }
+
+    public class PlaceStoneCommand : Command
+    {
+        private int x;
+        private int y;
+
+        public PlaceStoneCommand(int x, int y)
+        {
+            this.EventName = "place_stone";
+            this.x = x;
+            this.y = y;
+        }
+
+        public override object[] GetPayload()
+        {
+            return new object[] { new { x = this.x, y = this.y } };
+        }
+    }
     public class GameManager : MonoBehaviour
     {
         // GameManager는 싱글턴 패턴을 통해 전역에서 접근 가능
@@ -66,6 +110,10 @@ namespace jpyo0803
         public PlayerInfo opponentInfo; // 상대 정보
 
         private readonly Queue<Action> mainThreadActions = new Queue<Action>();
+
+        private WebSocketClient _websocketClient; // WebSocket 클라이언트 인스턴스
+
+        private Command _currentWsCommand = null; // 현재 처리 중인 WebSocket 커맨드
 
         private void Awake()
         {
@@ -161,10 +209,10 @@ namespace jpyo0803
             }
 
             // WebSocket 클라이언트의 Command 처리
-            if (WebSocketClient != null)
+            if (_currentWsCommand != null)
             {
-                // 비동기로 백그라운드 처리
-                WebSocketClient.ProcessCommands();
+                _websocketClient.SendRequest(_currentWsCommand);
+                _currentWsCommand = null; // 커맨드 전송 후 초기화
             }
         }
 
@@ -288,6 +336,36 @@ namespace jpyo0803
                 Debug.LogError($"[Log Error] GetMatchHistoryAsync error: {e.Message}");
                 return null; // 예외 발생 시 null 반환
             }
+        }
+
+        public async Task ConnectWebSocketAsync()
+        {
+            if (_websocketClient != null)
+            {
+                await _websocketClient.DisconnectAsync();
+            }
+            _websocketClient = new WebSocketClient();
+
+            string accessToken = await _tokenStorage.GetAccessTokenAsync();
+            await _websocketClient.ConnectAsync(WebSocketServerUrl, accessToken);
+        }
+
+        public void SendMatchRequestAsync(bool wantAiOpponent)
+        {
+            _currentWsCommand = new MatchRequestCommand(wantAiOpponent);
+            Debug.Log($"[Log] Set Match request with AI opponent: {wantAiOpponent}");
+        }
+
+        public void SendPlaceStoneAsync(int rowIndex, int colIndex)
+        {
+            if (isGameDone)
+            {
+                Debug.LogError("[Log Error] Cannot place stone, game is already done.");
+                return;
+            }
+
+            _currentWsCommand = new PlaceStoneCommand(rowIndex, colIndex);
+            Debug.Log($"[Log] Set Place stone command at ({rowIndex}, {colIndex})");
         }
     }
 }

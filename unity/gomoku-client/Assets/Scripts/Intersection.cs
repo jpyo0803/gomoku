@@ -17,16 +17,7 @@ namespace jpyo0803
 
             if (GameManager.instance != null)
             {
-                var websocketClient = GameManager.instance.WebSocketClient;
-
-                if (websocketClient == null)
-                {
-                    Debug.LogError("[Log Error] WebSocketClient is not initialized properly.");
-                    return;
-                }
-
-                // Send the place stone request to the server
-                websocketClient.SendPlaceStone(row_index, col_index);
+                GameManager.instance.SendPlaceStoneAsync(row_index, col_index);
             }
             else
             {

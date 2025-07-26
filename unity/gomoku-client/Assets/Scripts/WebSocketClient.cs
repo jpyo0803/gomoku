@@ -19,61 +19,11 @@ namespace jpyo0803
         public string game_id;
     }
 
-    public abstract class Command
-    {
-        protected string EventName;
-        public string GetEventName()
-        {
-            return EventName;
-        }
-
-        public abstract object[] GetPayload();
-    }
-
-    public class MatchRequestCommand : Command
-    {
-        private bool wantAiOpponent;
-
-        public MatchRequestCommand(bool wantAiOpponent)
-        {
-            this.EventName = "match_request";
-            this.wantAiOpponent = wantAiOpponent;
-        }
-
-        public override object[] GetPayload()
-        {
-            return new object[] { new { wantAiOpponent = this.wantAiOpponent } };
-        }
-    }
-
-    public class PlaceStoneCommand : Command
-    {
-        private int x;
-        private int y;
-
-        public PlaceStoneCommand(int x, int y)
-        {
-            this.EventName = "place_stone";
-            this.x = x;
-            this.y = y;
-        }
-
-        public override object[] GetPayload()
-        {
-            return new object[] { new { x = this.x, y = this.y } };
-        }
-    }
-
     public class WebSocketClient
     {
         private SocketIO socket;
 
-        // Command queue
-        private Queue<Command> commandQueue = new Queue<Command>();
-
         private readonly ILogger logger;
-
-        private bool _waitingForResponse = false;
 
         public WebSocketClient()
         {
@@ -84,7 +34,7 @@ namespace jpyo0803
             }
         }
 
-        public void Connect(string url, string accessToken)
+        public async Task ConnectAsync(string url, string accessToken)
         {
             var uri = new Uri(url);
 
@@ -205,21 +155,21 @@ namespace jpyo0803
 
                 if (result == "ok")
                 {
-                    // 커맨드 큐에서 처리된 커맨드를 제거
-                    if (commandQueue.Count > 0)
-                    {
-                        commandQueue.Dequeue();
-                        _waitingForResponse = false; // 응답 대기 상태 해제
-                        logger.Log("Command processed successfully and removed from queue.");
-                    }
-                    else
-                    {
-                        logger.LogWarning("Command queue is empty, nothing to dequeue.");
-                    }
+
                 }
                 else if (result == "error")
                 {
-                    logger.LogError($"Command processing failed: {message}");
+                    if (message == "Token expired")
+                    {
+                        GameManager.instance.RunOnMainThread(async () =>
+                        {
+                            await GameManager.instance.RefreshToken();
+                        });
+                    }
+                    else
+                    {
+                        logger.LogError($"Error processing command: {message}");
+                    }
                 }
                 else
                 {
@@ -227,52 +177,20 @@ namespace jpyo0803
                 }
             });
 
-            socket.ConnectAsync(); // 비동기로 연결
+            await socket.ConnectAsync(); // 비동기로 연결
         }
 
         // 매치 요청 커맨드를 큐에 추가
-        public void SendMatchRequest(bool wantAiOpponent)
+        public async Task SendRequest(Command command)
         {
-            logger.Log($"Enqueue MatchRequest command (wantAiOpponent: {wantAiOpponent})");
-            commandQueue.Enqueue(new MatchRequestCommand(wantAiOpponent));
-        }
-
-        // 착수 커맨드를 큐에 추가
-        public void SendPlaceStone(int rowIndex, int colIndex)
-        {
-            if (GameManager.instance.isGameDone)
+            if (socket == null)
             {
-                logger.LogError("Cannot place stone, game is already done.");
+                logger.LogError("WebSocket is not initialized. Cannot send request.");
                 return;
             }
 
-            logger.Log($"Enqueue PlaceStone command at ({rowIndex}, {colIndex})");
-            commandQueue.Enqueue(new PlaceStoneCommand(rowIndex, colIndex));
-        }
-
-        /*
-            커맨드 큐에서 커맨드를 처리.
-
-            GameManager의 Update 메서드에서 주기적으로 비동기 호출됨.
-        */
-        public async Task ProcessCommands()
-        {
-            if (commandQueue.Count > 0 && !_waitingForResponse)
-            {
-                var command = commandQueue.Peek();
-                _waitingForResponse = true; // 응답 대기 상태로 설정
-                logger.Log($"Processing command: {command.GetEventName()}");
-
-                try
-                {
-                    await socket.EmitAsync(command.GetEventName(), command.GetPayload());
-                    logger.Log($"Command {command.GetEventName()} sent successfully.");
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError($"Error sending command {command.GetEventName()}: {ex.Message}");
-                }
-            }
+            logger.Log($"Sending command: {command.GetEventName()}");
+            await socket.EmitAsync(command.GetEventName(), command.GetPayload());
         }
 
         public async Task Bind()
@@ -294,7 +212,7 @@ namespace jpyo0803
             }
         }
 
-        public async Task Disconnect()
+        public async Task DisconnectAsync()
         {
             if (socket == null) return;
 

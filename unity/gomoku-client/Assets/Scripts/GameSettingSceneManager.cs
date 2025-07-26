@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Threading.Tasks;
 
 namespace jpyo0803
 {
@@ -20,23 +21,15 @@ namespace jpyo0803
 
         async void Start()
         {
+            var t1 = GameManager.instance.ConnectWebSocketAsync();
             // 매치 히스토리 업데이트
-            DisplayMatchHistoryAsync();
-
-            var websocketClient = GameManager.instance.WebSocketClient;
-            if (websocketClient == null)
-            {
-                Debug.LogError("[Log Error] WebSocketClient is not initialized properly.");
-                return;
-            }
-
-            var accessToken = await GameManager.instance._tokenStorage.GetAccessTokenAsync();
-            // WebSocket 연결
-            // TODO(jpyo0803): WebSocket 연결시 GameManager에서 WebSocketServerUrl과 AccessToken을 가져오는 구조가 좋은지 생각해보기
-            websocketClient.Connect(GameManager.instance.WebSocketServerUrl, accessToken);
+            var t2 = DisplayMatchHistoryAsync();
 
             // 버튼 클릭 이벤트 등록
             okButton.onClick.AddListener(OnOkClicked);
+
+            // 매치 히스토리 표시와 웹소켓 연결을 완료할 때까지 대기
+            await Task.WhenAll(t1, t2);
         }
 
         private void OnOkClicked()
@@ -44,11 +37,10 @@ namespace jpyo0803
             // AI 상대 희망 여부에 따라 게임 설정을 저장
             bool wantAiOpponent = wantAiOpponentToggle.isOn;
 
-            var websocketClient = GameManager.instance.WebSocketClient;
-            websocketClient.SendMatchRequest(wantAiOpponent);
+            GameManager.instance.SendMatchRequestAsync(wantAiOpponent);
         }
 
-        private async void DisplayMatchHistoryAsync()
+        private async Task DisplayMatchHistoryAsync()
         {
             var matchHistory = await GameManager.instance.GetMatchHistoryAsync();
 
