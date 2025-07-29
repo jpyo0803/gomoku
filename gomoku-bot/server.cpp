@@ -14,6 +14,8 @@ namespace {
 constexpr int kPortNumber = 8080;  // 서버가 리스닝할 포트 번호
 
 constexpr int kNumThreads = 4;
+
+constexpr int kMaxDepth = 4;  // 4 이상일때 Bot 충분히 똑똑함
 }  // namespace
 
 class GomokuBotServer {
@@ -31,7 +33,7 @@ class GomokuBotServer {
             gomoku::Board board(flat_board);
             gomoku::GomokuBot bot;
             bot.set_strategy(std::make_unique<gomoku::MinimaxWithAlphaBetaPruning>());
-            auto [x, y] = bot.Solve(board, 4);
+            auto [x, y] = bot.Solve(board, kMaxDepth);
 
             std::cout << "Task ID: " << task_id << ", Move: (" << x << ", " << y << ")"
                       << std::endl;
