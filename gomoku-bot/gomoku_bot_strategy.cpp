@@ -1,4 +1,5 @@
 #include "gomoku_bot_strategy.h"
+#include <algorithm>
 #include <array>
 #include <cassert>
 #include <iostream>
@@ -9,7 +10,9 @@
 
 namespace {
 int64_t call_count = 0;
-}
+
+constexpr int kMarkWidth = 2;
+}  // namespace
 
 namespace gomoku {
 
@@ -61,11 +64,138 @@ bool IsWin(const gomoku::Board& board, int x, int y, gomoku::Piece piece) {
 }
 
 namespace {
-// anonymous namespace for EvaluateBoard
 
-void EvaluateLine(const gomoku::Board& board, gomoku::Piece piece, int x, int y, int dx, int dy, 
-                  double& score, int& win,
-                  std::array<int, 5>& open_count_arr, std::array<int, 5>& half_open_count_arr) {
+//
+double EvaluatePlacement(const gomoku::Board& board, int x, int y, gomoku::Piece piece) {
+  double score = 0.0;
+
+  {
+    // Horizontal evaluation
+    int cnt = 1;
+    int curr_x = x - 1;
+    while (!OutOfRange(curr_x, y) && board.GetCell(curr_x, y) == piece) {
+      cnt++;
+      curr_x--;
+    }
+    bool is_left_open = !OutOfRange(curr_x, y) && board.GetCell(curr_x, y) == gomoku::Piece::kEmpty;
+
+    curr_x = x + 1;
+    while (!OutOfRange(curr_x, y) && board.GetCell(curr_x, y) == piece) {
+      cnt++;
+      curr_x++;
+    }
+    bool is_right_open =
+        !OutOfRange(curr_x, y) && board.GetCell(curr_x, y) == gomoku::Piece::kEmpty;
+    if (cnt >= 5) {
+      score += kWinScore;
+    } else if (cnt > 0) {
+      if (is_left_open && is_right_open) {
+        score += kOpenScores[cnt];
+      } else if (is_left_open || is_right_open) {
+        score += kHalfOpenScores[cnt];
+      }
+    }
+  }
+
+  {
+    // Vertical evaluation
+    int cnt = 1;
+    int curr_y = y - 1;
+    while (!OutOfRange(x, curr_y) && board.GetCell(x, curr_y) == piece) {
+      cnt++;
+      curr_y--;
+    }
+    bool is_top_open = !OutOfRange(x, curr_y) && board.GetCell(x, curr_y) == gomoku::Piece::kEmpty;
+
+    curr_y = y + 1;
+    while (!OutOfRange(x, curr_y) && board.GetCell(x, curr_y) == piece) {
+      cnt++;
+      curr_y++;
+    }
+    bool is_bottom_open =
+        !OutOfRange(x, curr_y) && board.GetCell(x, curr_y) == gomoku::Piece::kEmpty;
+    if (cnt >= 5) {
+      score += kWinScore;
+    } else if (cnt > 0) {
+      if (is_top_open && is_bottom_open) {
+        score += kOpenScores[cnt];
+      } else if (is_top_open || is_bottom_open) {
+        score += kHalfOpenScores[cnt];
+      }
+    }
+  }
+
+  {
+    // Diagonal evaluation (top-left to bottom-right)
+    int cnt = 1;
+    int curr_x = x - 1;
+    int curr_y = y - 1;
+    while (!OutOfRange(curr_x, curr_y) && board.GetCell(curr_x, curr_y) == piece) {
+      cnt++;
+      curr_x--;
+      curr_y--;
+    }
+    bool is_top_left_open =
+        !OutOfRange(curr_x, curr_y) && board.GetCell(curr_x, curr_y) == gomoku::Piece::kEmpty;
+
+    curr_x = x + 1;
+    curr_y = y + 1;
+    while (!OutOfRange(curr_x, curr_y) && board.GetCell(curr_x, curr_y) == piece) {
+      cnt++;
+      curr_x++;
+      curr_y++;
+    }
+    bool is_bottom_right_open =
+        !OutOfRange(curr_x, curr_y) && board.GetCell(curr_x, curr_y) == gomoku::Piece::kEmpty;
+    if (cnt >= 5) {
+      score += kWinScore;
+    } else if (cnt > 0) {
+      if (is_top_left_open && is_bottom_right_open) {
+        score += kOpenScores[cnt];
+      } else if (is_top_left_open || is_bottom_right_open) {
+        score += kHalfOpenScores[cnt];
+      }
+    }
+  }
+
+  {
+    // Diagonal evaluation (top-right to bottom-left)
+    int cnt = 1;
+    int curr_x = x + 1;
+    int curr_y = y - 1;
+    while (!OutOfRange(curr_x, curr_y) && board.GetCell(curr_x, curr_y) == piece) {
+      cnt++;
+      curr_x++;
+      curr_y--;
+    }
+    bool is_top_right_open =
+        !OutOfRange(curr_x, curr_y) && board.GetCell(curr_x, curr_y) == gomoku::Piece::kEmpty;
+
+    curr_x = x - 1;
+    curr_y = y + 1;
+    while (!OutOfRange(curr_x, curr_y) && board.GetCell(curr_x, curr_y) == piece) {
+      cnt++;
+      curr_x--;
+      curr_y++;
+    }
+    bool is_bottom_left_open =
+        !OutOfRange(curr_x, curr_y) && board.GetCell(curr_x, curr_y) == gomoku::Piece::kEmpty;
+    if (cnt >= 5) {
+      score += kWinScore;
+    } else if (cnt > 0) {
+      if (is_top_right_open && is_bottom_left_open) {
+        score += kOpenScores[cnt];
+      } else if (is_top_right_open || is_bottom_left_open) {
+        score += kHalfOpenScores[cnt];
+      }
+    }
+  }
+
+  return score;
+}
+void EvaluateLine(const gomoku::Board& board, gomoku::Piece piece, int x, int y, int dx, int dy,
+                  double& score, int& win, std::array<int, 5>& open_count_arr,
+                  std::array<int, 5>& half_open_count_arr) {
   int cnt = 0;
 
   int curr_x = x;
@@ -76,9 +206,11 @@ void EvaluateLine(const gomoku::Board& board, gomoku::Piece piece, int x, int y,
     if (curr_piece == piece) {
       cnt++;
     } else {
-      bool is_start_open = !OutOfRange(curr_x - (cnt + 1) * dx, curr_y - (cnt + 1) * dy) &&
-                           board.GetCell(curr_x - (cnt + 1) * dx, curr_y - (cnt + 1) * dy) == Piece::kEmpty;
-      bool is_end_open = !OutOfRange(curr_x, curr_y) && board.GetCell(curr_x, curr_y) == Piece::kEmpty;
+      bool is_start_open =
+          !OutOfRange(curr_x - (cnt + 1) * dx, curr_y - (cnt + 1) * dy) &&
+          board.GetCell(curr_x - (cnt + 1) * dx, curr_y - (cnt + 1) * dy) == Piece::kEmpty;
+      bool is_end_open =
+          !OutOfRange(curr_x, curr_y) && board.GetCell(curr_x, curr_y) == Piece::kEmpty;
       if (cnt >= 5) {
         win++;
         score += kWinScore;
@@ -100,8 +232,9 @@ void EvaluateLine(const gomoku::Board& board, gomoku::Piece piece, int x, int y,
   }
 
   if (cnt > 0) {
-    bool is_start_open = !OutOfRange(curr_x - cnt * dx - 1, curr_y - cnt * dy - 1) &&
-                         board.GetCell(curr_x - cnt * dx - 1, curr_y - cnt * dy - 1) == Piece::kEmpty;
+    bool is_start_open =
+        !OutOfRange(curr_x - cnt * dx - 1, curr_y - cnt * dy - 1) &&
+        board.GetCell(curr_x - cnt * dx - 1, curr_y - cnt * dy - 1) == Piece::kEmpty;
     bool is_end_open = false;  // end is always closed in this case
     if (cnt >= 5) {
       win++;
@@ -184,7 +317,7 @@ std::pair<int, int> MinimaxWithAlphaBetaPruning::Solve(Board board, int max_dept
         continue;
       }
 
-      candidate_map.SetSquare(i, j, 2);  // mark as candidate for next moves
+      candidate_map.SetSquare(i, j, kMarkWidth);  // mark as candidate for next moves
     }
   }
 
@@ -206,91 +339,100 @@ std::pair<std::pair<int, int>, double> MinimaxWithAlphaBetaPruning::Minimax(
     return {{-1, -1}, score};
   }
 
+  std::vector<std::tuple<double, int, int>> search_order;
+  search_order.reserve(kBoardSize * kBoardSize);
+  for (int i = 0; i < kBoardSize; ++i) {
+    if (candidate_map.GetRow(i) == 0) {
+      continue;  // skip rows with no candidates
+    }
+
+    for (int j = 0; j < kBoardSize; ++j) {
+      if (!candidate_map.Test(i, j)) {
+        continue;  // skip if not a candidate
+      }
+      if (board.GetCell(i, j) != Piece::kEmpty) {
+        continue;  // skip if not empty
+      }
+
+      double placement_score =
+          EvaluatePlacement(board, i, j, maximizing_player ? Piece::kWhite : Piece::kBlack);
+      search_order.emplace_back(placement_score, i, j);
+    }
+  }
+
+  // Sort by placement score in descending order
+  std::sort(search_order.begin(), search_order.end(),
+            [](const std::tuple<double, int, int>& a,
+               const std::tuple<double, int, int>& b) { return std::get<0>(a) > std::get<0>(b); });
+
   if (maximizing_player) {
     double max_eval = -std::numeric_limits<double>::infinity();
     std::pair<int, int> best_move = {-1, -1};
 
-    for (int i = 0; i < kBoardSize; ++i) {
-      if (candidate_map.GetRow(i) == 0) {
-        continue;  // skip rows with no candidates
+    for (auto [placement_score, i, j] : search_order) {
+      auto next_candidate_map = candidate_map;
+      auto next_board = board;
+
+      next_board.SetCell(i, j, Piece::kWhite);
+
+      // check if the move is winning
+      if (IsWin(next_board, i, j, Piece::kWhite)) {
+        return {{i, j}, kWinScore};
       }
-      for (int j = 0; j < kBoardSize; ++j) {
-        if (candidate_map.Test(i, j) == false) {
-          continue;
-        }
-        if (board.GetCell(i, j) != Piece::kEmpty) {
-          continue;  // skip if not empty
-        }
 
-        auto next_candidate_map = candidate_map;
-        auto next_board = board;
+      next_candidate_map.SetSquare(i, j, kMarkWidth);  // mark as candidate for next moves
 
-        next_board.SetCell(i, j, Piece::kWhite);
-
-        // check if the move is winning
-        if (IsWin(next_board, i, j, Piece::kWhite)) {
-          return {{i, j}, kWinScore};
-        }
-
-        next_candidate_map.SetSquare(i, j, 2);  // mark as candidate for next moves
-
-        auto result = Minimax(next_board, depth - 1, alpha, beta, false, next_candidate_map);
-        auto eval = result.second;
-        if (eval > max_eval) {
-          max_eval = eval;
-          best_move = {i, j};
-        }
+      auto result = Minimax(next_board, depth - 1, alpha, beta, false, next_candidate_map);
+      auto eval = result.second;
+      if (eval > max_eval) {
+        max_eval = eval;
+        best_move = {i, j};
+      }
 
 #if ALPHA_BETA_PRUNING == 1
-        alpha = std::max(alpha, eval);
-        if (beta <= alpha) {
-          return {best_move, max_eval};  // beta cut-off
-        }
-#endif
+      alpha = std::max(alpha, eval);
+      if (beta <= alpha) {
+        return {best_move, max_eval};  // beta cut-off
       }
+#endif
     }
     return {best_move, max_eval};
   } else {
     double min_eval = std::numeric_limits<double>::infinity();
     std::pair<int, int> best_move = {-1, -1};
 
-    for (int i = 0; i < kBoardSize; ++i) {
-      if (candidate_map.GetRow(i) == 0) {
-        continue;  // skip rows with no candidates
+    for (auto [placement_score, i, j] : search_order) {
+      if (candidate_map.Test(i, j) == false) {
+        continue;
       }
-      for (int j = 0; j < kBoardSize; ++j) {
-        if (candidate_map.Test(i, j) == false) {
-          continue;
-        }
-        if (board.GetCell(i, j) != Piece::kEmpty) {
-          continue;  // skip if not empty
-        }
+      if (board.GetCell(i, j) != Piece::kEmpty) {
+        continue;  // skip if not empty
+      }
 
-        auto next_candidate_map = candidate_map;
-        auto next_board = board;
+      auto next_candidate_map = candidate_map;
+      auto next_board = board;
 
-        next_board.SetCell(i, j, Piece::kBlack);
+      next_board.SetCell(i, j, Piece::kBlack);
 
-        if (IsWin(next_board, i, j, Piece::kBlack)) {
-          return {{i, j}, -kWinScore};
-        }
+      if (IsWin(next_board, i, j, Piece::kBlack)) {
+        return {{i, j}, -kWinScore};
+      }
 
-        next_candidate_map.SetSquare(i, j, 2);  // mark as candidate for next moves
+      next_candidate_map.SetSquare(i, j, kMarkWidth);  // mark as candidate for next moves
 
-        auto result = Minimax(next_board, depth - 1, alpha, beta, true, next_candidate_map);
-        auto eval = result.second;
-        if (eval < min_eval) {
-          min_eval = eval;
-          best_move = {i, j};
-        }
+      auto result = Minimax(next_board, depth - 1, alpha, beta, true, next_candidate_map);
+      auto eval = result.second;
+      if (eval < min_eval) {
+        min_eval = eval;
+        best_move = {i, j};
+      }
 
 #if ALPHA_BETA_PRUNING == 1
-        beta = std::min(beta, eval);
-        if (beta <= alpha) {
-          return {best_move, min_eval};  // alpha cut-off
-        }
-#endif
+      beta = std::min(beta, eval);
+      if (beta <= alpha) {
+        return {best_move, min_eval};  // alpha cut-off
       }
+#endif
     }
     return {best_move, min_eval};
   }
