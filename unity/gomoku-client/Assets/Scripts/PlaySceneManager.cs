@@ -119,7 +119,7 @@ namespace jpyo0803
 
         private void Update()
         {
-            if (GameManager.instance.isGameDone == false && !string.IsNullOrEmpty(this.latestBoardStateStr))
+            if (!string.IsNullOrEmpty(this.latestBoardStateStr))
             {
                 Debug.Log("[Log] Updating board with latest state...");
                 // 최신 보드 상태로 업데이트
