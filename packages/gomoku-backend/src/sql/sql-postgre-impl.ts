@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
@@ -9,14 +9,25 @@ export class SqlPostgreImpl implements SqlInterface {
   constructor(
     @InjectRepository(User)
     private SqlRepository: Repository<User>,
-  ) {
-    console.log('SqlPostgreImpl initialized');
-  }
+  ) {}
 
   // 유저 생성
   async createUser(username: string, password: string): Promise<User> {
-    const user = this.SqlRepository.create({ username, password }); // password는 실제로는 해싱해서 저장해야 함
-    return this.SqlRepository.save(user);
+    try {
+      // 바로 사용자 생성 시도
+      const user = this.SqlRepository.create({ username, password });
+      const savedUser = await this.SqlRepository.save(user);
+
+      return savedUser;
+    } catch (error) {
+      // PostgreSQL UNIQUE 제약조건 위반 에러 코드: 23505
+      if (error.code === '23505' && error.detail?.includes('(username)')) {
+        throw new ConflictException('Username already exists');
+      }
+
+      // 기타 데이터베이스 에러
+      throw new InternalServerErrorException('Database error occurred during user creation');
+    }
   }
 
   // 유저 정보 조회 

@@ -1,4 +1,4 @@
-import { Injectable, ConflictException, UnauthorizedException, Inject } from '@nestjs/common';
+import { Injectable, ConflictException, UnauthorizedException, InternalServerErrorException, Inject } from '@nestjs/common';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
 import { SqlInterface } from '../sql/sql-interface';
@@ -11,27 +11,20 @@ export class AuthService {
   constructor(
     @Inject('SqlInterface') private readonly sqlService: SqlInterface,
     private readonly jwtService: JwtService,
-  ) {
-    console.log('AuthService initialized');
-  }
+  ) {}
 
   async signup(dto: SignupDto) {
     const { username, password } = dto;
 
     // 형식 오류는 class-validator가 자동으로 잡아줌 (400 Bad Request)
 
-    const existing = await this.sqlService.findUserByUsername(username);
-    if (existing) {
-      // 409 Conflict: 이미 존재하는 사용자
-      throw new ConflictException('Username already exists');
-    }
-
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await this.sqlService.createUser(username, hashedPassword);
 
-    // 201 Created + 유저 정보 반환
+    // 201 Created + 표준 응답
     return {
       message: 'User successfully registered',
+      username: user.username,
     };
   }
 
