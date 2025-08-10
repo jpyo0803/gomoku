@@ -1,4 +1,4 @@
-import { Injectable, ConflictException, UnauthorizedException, InternalServerErrorException, Inject } from '@nestjs/common';
+import { Injectable, UnauthorizedException, Inject } from '@nestjs/common';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
 import { SqlInterface } from '../sql/sql-interface';
@@ -19,12 +19,25 @@ export class AuthService {
     // 형식 오류는 class-validator가 자동으로 잡아줌 (400 Bad Request)
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await this.sqlService.createUser(username, hashedPassword);
+    const result = await this.sqlService.createUser(username, hashedPassword);
+
+    if (!result.success) {
+      // Result 객체 방식으로 에러 정보 반환
+      return {
+        success: false,
+        message: result.message,
+
+        errorCode: result.error
+      };
+    }
 
     // 201 Created + 표준 응답
     return {
-      message: 'User successfully registered',
-      username: user.username,
+      success: true,
+      message: result.message,
+
+      username: result.user!.username,
+      createdAt: result.user!.createdAt, // createdAt은 User 엔티티에 자동 포함됨
     };
   }
 

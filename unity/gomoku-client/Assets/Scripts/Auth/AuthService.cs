@@ -8,7 +8,9 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-internal static class AuthJsonUtils 
+using UnityEngine;
+
+internal static class AuthJsonUtils
 {
     public static string ExtractValueFromJson(string key, string json)
     {
@@ -59,15 +61,39 @@ namespace jpyo0803
                     Content = json,
                     Token = null // SignUp 시 토큰은 필요하지 않음
                 });
-                return new SignupResponse
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                // JSON 파싱
+                SignupApiResponse apiResponse = JsonUtility.FromJson<SignupApiResponse>(responseBody);
+                
+                if (apiResponse.content.success)
                 {
-                    Code = (int)response.StatusCode
-                };
+                    return new SignupResponse
+                    {
+                        HttpStatusCode = apiResponse.statusCode,
+                        Success = true,
+                        Message = apiResponse.content.message,
+                        Username = apiResponse.content.data.username,
+                        CreatedAt = apiResponse.content.data.createdAt
+                    };
+                }
+                else
+                {
+                    return new SignupResponse
+                    {
+                        HttpStatusCode = apiResponse.statusCode,
+                        Success = false,
+                        Message = apiResponse.content.message,         // 실패 메시지
+                        ErrorCode = apiResponse.content.error.code,    // 에러 코드
+                        ErrorDetails = apiResponse.content.error.details // 에러 상세
+                    };
+                }
             }
             catch (Exception e)
             {
                 _logger.LogError($"SignUp error: {e.Message}");
-                return new SignupResponse { Code = -1 };
+                return new SignupResponse { HttpStatusCode = -1 };
             }
         }
 

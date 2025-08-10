@@ -41,9 +41,14 @@ namespace jpyo0803
 
             Debug.Log($"[Log; Signup Attempt] Username: {username}, Password: {password}");
 
-            int code = await GameManager.instance.SignUp(username, password);
+            var signupResponse = await GameManager.instance.SignUp(username, password);
+            Debug.Log($"[DEBUG] Signup Response: {signupResponse.HttpStatusCode}");
+            Debug.Log($"[DEBUG] Signup Response Success: {signupResponse.Success}");
+            Debug.Log($"[DEBUG] Signup Response Message: {signupResponse.Message}");
+            Debug.Log($"[DEBUG] Signup Response Username: {signupResponse.Username}");
+            Debug.Log($"[DEBUG] Signup Response CreatedAt: {signupResponse.CreatedAt}");
 
-            UpdateResponseDisplay(code);
+            UpdateResponseDisplay(signupResponse.HttpStatusCode);
         }
 
         private async void OnLoginClickedAsync()

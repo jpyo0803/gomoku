@@ -216,12 +216,12 @@ namespace jpyo0803
             }
         }
 
-        public async Task<int> SignUp(string username, string password)
+        public async Task<SignupResponse> SignUp(string username, string password)
         {
             if (_authService == null)
             {
                 Debug.LogError("[Log Error] AuthService is not initialized properly.");
-                return -1;
+                return new SignupResponse { HttpStatusCode = -1 };
             }
 
             // AuthService를 통해 회원가입 요청
@@ -231,7 +231,7 @@ namespace jpyo0803
                 Username = username,
                 Password = password
             });
-            return response.Code;
+            return response;
         }
 
         public async Task<int> Login(string username, string password)

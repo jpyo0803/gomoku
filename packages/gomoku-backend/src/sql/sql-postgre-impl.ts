@@ -11,22 +11,48 @@ export class SqlPostgreImpl implements SqlInterface {
     private SqlRepository: Repository<User>,
   ) {}
 
-  // 유저 생성
-  async createUser(username: string, password: string): Promise<User> {
+  /*
+    유저 생성 메서드
+
+    반환값:
+    - success: 생성 성공 여부
+    - user: 생성된 사용자 객체 (성공 시)
+    - error: 오류 메시지 (실패 시)
+    - errorType: 오류 유형 (실패 시)
+  */
+  async createUser(username: string, password: string): Promise<{
+    success: boolean;
+    message?: string;
+    user?: User;
+    errorCode?: 'CONFLICT' | 'INTERNAL_ERROR';
+  }> {
     try {
       // 바로 사용자 생성 시도
       const user = this.SqlRepository.create({ username, password });
       const savedUser = await this.SqlRepository.save(user);
 
-      return savedUser;
+      // savedUser에는 이미 createdAt, updatedAt이 포함되어 있음
+      return {
+        success: true,
+        message: 'User successfully created',
+        user: savedUser,  // savedUser.createdAt 자동 포함
+      };
     } catch (error) {
       // PostgreSQL UNIQUE 제약조건 위반 에러 코드: 23505
       if (error.code === '23505' && error.detail?.includes('(username)')) {
-        throw new ConflictException('Username already exists');
+        return {
+          success: false,
+          message: 'Username already exists',
+          errorCode: 'CONFLICT'
+        };
       }
 
       // 기타 데이터베이스 에러
-      throw new InternalServerErrorException('Database error occurred during user creation');
+      return {
+        success: false,
+        message: 'Database error occurred during user creation',
+        errorCode: 'INTERNAL_ERROR'
+      };
     }
   }
 
