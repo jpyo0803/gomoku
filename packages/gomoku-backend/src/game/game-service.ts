@@ -115,23 +115,24 @@ export class GameService {
 
     if (!blackPlayer.isAIPlayer()) {
       // Match History 조회 후 Info 업데이트
-      const blackPlayerRecord = await this.sqlService.findUserByUsername(blackPlayerId);
-      if (blackPlayerRecord) {
-        blackPlayerInfo.totalGames = blackPlayerRecord.totalGames;
-        blackPlayerInfo.wins = blackPlayerRecord.wins;
-        blackPlayerInfo.losses = blackPlayerRecord.losses;
-        blackPlayerInfo.draws = blackPlayerRecord.draws;
+      const blackPlayerResult = await this.sqlService.findUserByUsername(blackPlayerId);
+
+      if (blackPlayerResult.success && blackPlayerResult.user) {
+        blackPlayerInfo.totalGames = blackPlayerResult.user.totalGames;
+        blackPlayerInfo.wins = blackPlayerResult.user.wins;
+        blackPlayerInfo.losses = blackPlayerResult.user.losses;
+        blackPlayerInfo.draws = blackPlayerResult.user.draws;
       }
     }
 
     if (!whitePlayer.isAIPlayer()) {
       // Match History 조회 후 Info 업데이트
-      const whitePlayerRecord = await this.sqlService.findUserByUsername(whitePlayerId);
-      if (whitePlayerRecord) {
-        whitePlayerInfo.totalGames = whitePlayerRecord.totalGames;
-        whitePlayerInfo.wins = whitePlayerRecord.wins;
-        whitePlayerInfo.losses = whitePlayerRecord.losses;
-        whitePlayerInfo.draws = whitePlayerRecord.draws;
+      const whitePlayerResult = await this.sqlService.findUserByUsername(whitePlayerId);
+      if (whitePlayerResult.success && whitePlayerResult.user) {
+        whitePlayerInfo.totalGames = whitePlayerResult.user.totalGames;
+        whitePlayerInfo.wins = whitePlayerResult.user.wins;
+        whitePlayerInfo.losses = whitePlayerResult.user.losses;
+        whitePlayerInfo.draws = whitePlayerResult.user.draws;
       }
     }
 

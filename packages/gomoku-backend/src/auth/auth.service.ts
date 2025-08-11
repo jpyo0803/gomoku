@@ -27,7 +27,7 @@ export class AuthService {
         success: false,
         message: result.message,
 
-        errorCode: result.error
+        errorCode: result.errorCode
       };
     }
 
@@ -44,22 +44,41 @@ export class AuthService {
   async login(dto: LoginDto) {
     const { username, password } = dto;
 
-    const user = await this.sqlService.findUserByUsername(username);
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      // 401 Unauthorized: 사용자 없음 or 비밀번호 틀림
-      throw new UnauthorizedException('Invalid credentials');
+    const userResult = await this.sqlService.findUserByUsername(username);
+    if (!userResult.success) {
+      // 존재하지 않는 사용자이거나 DB 오류
+      return {
+        success: false,
+        message: userResult.message,
+        errorCode: userResult.errorCode
+      };
     }
 
-    const payload = { username: user.username, sub: user.id };
+    // 이 밑으로 user는 항상 존재함 
+
+    if (!(await bcrypt.compare(password, userResult.user!.password))) {
+      // 비밀번호 틀림
+      return {
+        success: false,
+        message: 'Invalid credentials',
+        errorCode: 'INVALID_CREDENTIALS'
+      };
+    }
+
+    const user = userResult.user;
+    const payload = { username: user!.username, sub: user!.id };
     const accessToken = this.jwtService.sign(payload, { expiresIn: '1h' });
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
 
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-    await this.sqlService.updateUserRefreshToken(user.username, hashedRefreshToken);
+    await this.sqlService.updateUserRefreshToken(user!.username, hashedRefreshToken);
 
     // 200 OK + 유저 정보 반환
     return {
+      success: true,
       message: 'Login successful',
+
+      username: user!.username,
       accessToken,
       refreshToken,
     };  
@@ -71,11 +90,13 @@ export class AuthService {
       const payload = this.jwtService.verify(refreshToken);
 
       const userId = payload.sub;
-      const user = await this.sqlService.findUserByUsername(payload.username);
+      const userResult = await this.sqlService.findUserByUsername(payload.username);
 
-      if (!user || !user.refreshToken) {
+      if (!userResult.success || !userResult.user || !userResult.user.refreshToken) {
         throw new UnauthorizedException('Invalid refresh token');
       }
+
+      const user = userResult.user;
 
       // 2. DB에 저장된 해시와 비교
       const isValid = await bcrypt.compare(refreshToken, user.refreshToken);

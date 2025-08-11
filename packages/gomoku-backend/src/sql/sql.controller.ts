@@ -17,18 +17,18 @@ export class SqlController {
 
     console.log(`[Log] Get match history for user: ${username}`);
 
-    const history = await this.SqlService.findUserByUsername(username);
+    const userResult = await this.SqlService.findUserByUsername(username);
 
-    if (!history) {
+    if (!userResult.success || !userResult.user) {
       return { message: `No match history found for user '${username}'` };
     }
 
     return {
       username,
-      totalGames: history.totalGames,
-      wins: history.wins,
-      draws: history.draws,
-      losses: history.losses,
+      totalGames: userResult.user!.totalGames,
+      wins: userResult.user!.wins,
+      draws: userResult.user!.draws,
+      losses: userResult.user!.losses,
     };
   }
 }

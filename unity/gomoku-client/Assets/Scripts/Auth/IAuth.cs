@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 namespace jpyo0803
 {
     [System.Serializable]
-    public class SignupApiResponse
+    public class SignupAndLoginApiResponse
     {
         public ResponseContent content;
         public int statusCode;
@@ -26,6 +26,8 @@ namespace jpyo0803
     {
         public string username;
         public string createdAt;
+        public string accessToken;
+        public string refreshToken;
     }
 
     [System.Serializable]
@@ -55,9 +57,14 @@ namespace jpyo0803
 
     public class LoginResponse
     {
-        public int Code { get; set; }
+        public int HttpStatusCode { get; set; }
+        public bool Success { get; set; }
+        public string Message { get; set; }
+        public string Username { get; set; }
         public string AccessToken { get; set; }
         public string RefreshToken { get; set; }
+        public string ErrorCode { get; set; }
+        public string ErrorDetails { get; set; }
     }
 
     public class RefreshDto

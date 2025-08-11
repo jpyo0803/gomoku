@@ -57,8 +57,35 @@ export class SqlPostgreImpl implements SqlInterface {
   }
 
   // 유저 정보 조회 
-  async findUserByUsername(username: string): Promise<User | null> {
-    return this.SqlRepository.findOneBy({ username });
+  async findUserByUsername(username: string): Promise<{
+    success: boolean;
+    message: string;
+    user?: User;
+    errorCode?: 'USER_NOT_FOUND' | 'INTERNAL_ERROR';
+  }> {
+    try {
+      const user = await this.SqlRepository.findOneBy({ username });
+      
+      if (user) {
+        return {
+          success: true,
+          message: 'User found successfully',
+          user: user
+        };
+      } else {
+        return {
+          success: false,
+          message: 'User not found',
+          errorCode: 'USER_NOT_FOUND'
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: 'Database error occurred while finding user',
+        errorCode: 'INTERNAL_ERROR'
+      };
+    }
   }
 
   // 유저 결과 업데이트
@@ -82,12 +109,12 @@ export class SqlPostgreImpl implements SqlInterface {
   }
 
   async updateUserRefreshToken(username: string, refreshToken: string): Promise<void> {
-    const user = await this.findUserByUsername(username);
-    if (!user) {
+    const result = await this.findUserByUsername(username);
+    if (!result.success || !result.user) {
       throw new Error(`User with username ${username} not found`);
     }
 
-    user.refreshToken = refreshToken;
-    await this.SqlRepository.save(user);
+    result.user.refreshToken = refreshToken;
+    await this.SqlRepository.save(result.user);
   }
 }

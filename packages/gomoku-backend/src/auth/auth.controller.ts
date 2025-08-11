@@ -38,8 +38,22 @@ export class AuthController {
            version: '1.1'
          });
     } else {
-      // 실패 응답 (비즈니스 로직 에러)
-      res.status(409)
+      // 실패 응답 분기 처리
+      let statusCode = 500;
+      let reasonPhrase = 'Internal Server Error';
+      let errorDetails = 'An unexpected error occurred';
+
+      if (result.errorCode === 'CONFLICT') {
+        statusCode = 409;
+        reasonPhrase = 'Conflict';
+        errorDetails = 'Please choose a different username';
+      } else if (result.errorCode === 'INTERNAL_ERROR') {
+        statusCode = 500;
+        reasonPhrase = 'Internal Server Error';
+        errorDetails = 'A server error occurred. Please try again later';
+      }
+
+      res.status(statusCode)
          .header('Content-Type', 'application/json')
          .header('Server', 'NestJS/1.0')
          .header('Date', new Date().toUTCString())
@@ -49,11 +63,11 @@ export class AuthController {
              message: result.message,
              error: {
                code: result.errorCode,
-               details: 'Please choose a different username'
+               details: errorDetails
              }
            },
-           statusCode: 409,
-           reasonPhrase: 'Conflict',
+           statusCode: statusCode,
+           reasonPhrase: reasonPhrase,
            isSuccessStatusCode: false,
            version: '1.1'
          });
@@ -61,9 +75,64 @@ export class AuthController {
   }
 
   @Post('login')
-  @HttpCode(200) // 200 OK 응답을 명시적으로 설정
-  login(@Body() dto: LoginDto) {
-    return this.authService.login(dto);
+  async login(@Body() dto: LoginDto, @Res() res: Response) {
+    const result = await this.authService.login(dto);
+    
+    if (result.success) {
+      // 성공 응답 - Unity HttpResponseMessage 구조에 맞춤
+      res.status(200)
+         .header('Content-Type', 'application/json')
+         .header('Server', 'NestJS/1.0')
+         .header('Date', new Date().toUTCString())
+         .json({
+           content: {
+             success: true,
+             message: result.message,
+             data: {
+               accessToken: result.accessToken,
+               refreshToken: result.refreshToken
+             },
+           },
+           statusCode: 200,
+           reasonPhrase: 'OK',
+           isSuccessStatusCode: true,
+           version: '1.1'
+         });
+    } else {
+      // 실패 응답 분기 처리
+      let statusCode = 500;
+      let reasonPhrase = 'Internal Server Error';
+      let errorDetails = 'An unexpected error occurred';
+
+      if (result.errorCode === 'USER_NOT_FOUND' || result.errorCode === 'INVALID_CREDENTIALS') {
+        statusCode = 401;
+        reasonPhrase = 'Unauthorized';
+        errorDetails = 'Please check your username and password';
+      } else if (result.errorCode === 'DATABASE_ERROR') {
+        statusCode = 500;
+        reasonPhrase = 'Internal Server Error';
+        errorDetails = 'A server error occurred. Please try again later';
+      }
+
+      res.status(statusCode)
+         .header('Content-Type', 'application/json')
+         .header('Server', 'NestJS/1.0')
+         .header('Date', new Date().toUTCString())
+         .json({
+           content: {
+             success: false,
+             message: result.message,
+             error: {
+               code: result.errorCode,
+               details: errorDetails
+             }
+           },
+           statusCode: statusCode,
+           reasonPhrase: reasonPhrase,
+           isSuccessStatusCode: false,
+           version: '1.1'
+         });
+    }
   }
 
   @Post('refresh')

@@ -65,7 +65,7 @@ namespace jpyo0803
                 string responseBody = await response.Content.ReadAsStringAsync();
 
                 // JSON 파싱
-                SignupApiResponse apiResponse = JsonUtility.FromJson<SignupApiResponse>(responseBody);
+                SignupAndLoginApiResponse apiResponse = JsonUtility.FromJson<SignupAndLoginApiResponse>(responseBody);
                 
                 if (apiResponse.content.success)
                 {
@@ -113,28 +113,39 @@ namespace jpyo0803
                     Token = null // Login 시 토큰은 필요하지 않음
                 });
 
-                if (response.IsSuccessStatusCode)
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-                    string accessToken = AuthJsonUtils.ExtractValueFromJson("accessToken", content);
-                    string refreshToken = AuthJsonUtils.ExtractValueFromJson("refreshToken", content);
+                string responseBody = await response.Content.ReadAsStringAsync();
 
+                // JSON 파싱
+                SignupAndLoginApiResponse apiResponse = JsonUtility.FromJson<SignupAndLoginApiResponse>(responseBody);
+
+                if (apiResponse.content.success)
+                {
                     return new LoginResponse
                     {
-                        Code = (int)response.StatusCode,
-                        AccessToken = accessToken,
-                        RefreshToken = refreshToken
+                        HttpStatusCode = apiResponse.statusCode,
+                        Success = true,
+                        Message = apiResponse.content.message,
+                        Username = apiResponse.content.data.username,
+                        AccessToken = apiResponse.content.data.accessToken,
+                        RefreshToken = apiResponse.content.data.refreshToken
                     };
                 }
                 else
                 {
-                    return new LoginResponse { Code = (int)response.StatusCode };
+                    return new LoginResponse
+                    {
+                        HttpStatusCode = apiResponse.statusCode,
+                        Success = false,
+                        Message = apiResponse.content.message,
+                        ErrorCode = apiResponse.content.error.code,
+                        ErrorDetails = apiResponse.content.error.details
+                    };
                 }
             }
             catch (Exception e)
             {
                 _logger.LogError($"Login error: {e.Message}");
-                return new LoginResponse { Code = -1 };
+                return new LoginResponse { HttpStatusCode = -1 };
             }
         }
 

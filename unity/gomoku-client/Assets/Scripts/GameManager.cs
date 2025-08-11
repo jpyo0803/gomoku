@@ -234,12 +234,12 @@ namespace jpyo0803
             return response;
         }
 
-        public async Task<int> Login(string username, string password)
+        public async Task<LoginResponse> Login(string username, string password)
         {
             if (_authService == null)
             {
                 Debug.LogError("[Log Error] AuthService is not initialized properly.");
-                return -1;
+                return new LoginResponse { HttpStatusCode = -1 };
             }
             // AuthService를 통해 로그인 요청
             var response = await _authService.Login(new SignUpLoginDto
@@ -250,14 +250,13 @@ namespace jpyo0803
             });
 
             // 로그인 성공 시 토큰 저장
-            if (response.Code == (int)System.Net.HttpStatusCode.OK)
+            if (response.Success == true)
             {
                 var t1 = _tokenStorage.UpdateAccessTokenAsync(response.AccessToken);
                 var t2 = _tokenStorage.UpdateRefreshTokenAsync(response.RefreshToken);
                 await Task.WhenAll(t1, t2);
             }
-
-            return response.Code;
+            return response;
         }
 
         public async Task<int> RefreshToken()

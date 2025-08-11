@@ -63,11 +63,17 @@ namespace jpyo0803
 
             Debug.Log($"[Log; Login Attempt] Username: {username}, Password: {password}");
 
-            int code = await GameManager.instance.Login(username, password);
+            var loginResponse = await GameManager.instance.Login(username, password);
+            Debug.Log($"[DEBUG] Login Response: {loginResponse.HttpStatusCode}");
+            Debug.Log($"[DEBUG] Login Response Success: {loginResponse.Success}");
+            Debug.Log($"[DEBUG] Login Response Message: {loginResponse.Message}");
+            Debug.Log($"[DEBUG] Login Response Username: {loginResponse.Username}");
+            Debug.Log($"[DEBUG] Login Response CreatedAt: {loginResponse.AccessToken}");
+            Debug.Log($"[DEBUG] Login Response ExpiresAt: {loginResponse.RefreshToken}");
 
-            UpdateResponseDisplay(code);
+            UpdateResponseDisplay(loginResponse.HttpStatusCode);
 
-            if (code == 200) // 로그인 성공 시
+            if (loginResponse.Success == true) // 로그인 성공 시
             {
                 SceneManager.LoadScene("GameSettingScene"); // 게임 설정 씬으로 이동
             }
