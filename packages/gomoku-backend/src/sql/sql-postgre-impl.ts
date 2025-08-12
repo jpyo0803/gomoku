@@ -108,13 +108,9 @@ export class SqlPostgreImpl implements SqlInterface {
     }
   }
 
-  async updateUserRefreshToken(username: string, refreshToken: string): Promise<void> {
-    const result = await this.findUserByUsername(username);
-    if (!result.success || !result.user) {
-      throw new Error(`User with username ${username} not found`);
-    }
-
-    result.user.refreshToken = refreshToken;
-    await this.SqlRepository.save(result.user);
+  // 이미 조회한 User 객체를 받아서 refreshToken을 업데이트 (효율적)
+  async updateUserRefreshTokenByUser(user: User, refreshToken: string): Promise<void> {
+    user.refreshToken = refreshToken;
+    await this.SqlRepository.save(user);
   }
 }

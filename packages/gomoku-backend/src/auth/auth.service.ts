@@ -71,7 +71,8 @@ export class AuthService {
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
 
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-    await this.sqlService.updateUserRefreshToken(user!.username, hashedRefreshToken);
+    // 이미 조회한 user 객체를 직접 사용 (불필요한 재조회 방지)
+    await this.sqlService.updateUserRefreshTokenByUser(user!, hashedRefreshToken);
 
     // 200 OK + 유저 정보 반환
     return {

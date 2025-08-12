@@ -14,5 +14,5 @@ export interface SqlInterface {
         errorCode?: 'USER_NOT_FOUND' | 'INTERNAL_ERROR';
     }>;
     updateUserStatsByUsername(username: string, result: 'win' | 'draw' | 'loss'): Promise<void>;
-    updateUserRefreshToken(username: string, refreshToken: string): Promise<void>;
+    updateUserRefreshTokenByUser(user: User, refreshToken: string): Promise<void>;
 }
