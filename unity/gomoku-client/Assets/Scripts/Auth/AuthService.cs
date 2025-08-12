@@ -65,7 +65,7 @@ namespace jpyo0803
                 string responseBody = await response.Content.ReadAsStringAsync();
 
                 // JSON 파싱
-                SignupAndLoginApiResponse apiResponse = JsonUtility.FromJson<SignupAndLoginApiResponse>(responseBody);
+                ApiResponse apiResponse = JsonUtility.FromJson<ApiResponse>(responseBody);
                 
                 if (apiResponse.content.success)
                 {
@@ -116,7 +116,7 @@ namespace jpyo0803
                 string responseBody = await response.Content.ReadAsStringAsync();
 
                 // JSON 파싱
-                SignupAndLoginApiResponse apiResponse = JsonUtility.FromJson<SignupAndLoginApiResponse>(responseBody);
+                ApiResponse apiResponse = JsonUtility.FromJson<ApiResponse>(responseBody);
 
                 if (apiResponse.content.success)
                 {
@@ -163,26 +163,36 @@ namespace jpyo0803
                     Token = null // Refresh 시 토큰은 필요하지 않음
                 });
 
-                if (response.IsSuccessStatusCode)
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-                    string accessToken = AuthJsonUtils.ExtractValueFromJson("accessToken", content);
+                string responseBody = await response.Content.ReadAsStringAsync();
 
+                ApiResponse apiResponse = JsonUtility.FromJson<ApiResponse>(responseBody);
+
+                if (apiResponse.content.success)
+                {
                     return new RefreshResponse
                     {
-                        Code = (int)response.StatusCode,
-                        AccessToken = accessToken
+                        HttpStatusCode = apiResponse.statusCode,
+                        Success = true,
+                        Message = apiResponse.content.message,
+                        AccessToken = apiResponse.content.data.accessToken
                     };
                 }
                 else
                 {
-                    return new RefreshResponse { Code = (int)response.StatusCode };
+                    return new RefreshResponse
+                    {
+                        HttpStatusCode = apiResponse.statusCode,
+                        Success = false,
+                        Message = apiResponse.content.message,
+                        ErrorCode = apiResponse.content.error.code,
+                        ErrorDetails = apiResponse.content.error.details
+                    };
                 }
             }
             catch (Exception e)
             {
                 _logger.LogError($"RefreshToken error: {e.Message}");
-                return new RefreshResponse { Code = -1 };
+                return new RefreshResponse { HttpStatusCode = -1 };
             }
         }
     }

@@ -86,35 +86,56 @@ export class AuthService {
   }
 
   async refresh(refreshToken: string) {
+    // 1. refreshToken 검증
+    let payload;
     try {
-      // 1. refreshToken 검증 및 payload 추출
-      const payload = this.jwtService.verify(refreshToken);
-
-      const userId = payload.sub;
-      const userResult = await this.sqlService.findUserByUsername(payload.username);
-
-      if (!userResult.success || !userResult.user || !userResult.user.refreshToken) {
-        throw new UnauthorizedException('Invalid refresh token');
-      }
-
-      const user = userResult.user;
-
-      // 2. DB에 저장된 해시와 비교
-      const isValid = await bcrypt.compare(refreshToken, user.refreshToken);
-      if (!isValid) {
-        throw new UnauthorizedException('Invalid refresh token');
-      }
-
-      // 3. 새로운 access token 발급
-      const newPayload = { username: user.username, sub: user.id };
-      const accessToken = this.jwtService.sign(newPayload, { expiresIn: '1h' });
-
-      return {
-        message: 'Refresh successful',
-        accessToken,
-      };
+      payload = this.jwtService.verify(refreshToken);
     } catch (err) {
-      throw new UnauthorizedException('Invalid or expired refresh token');
+      return {
+        success: false,
+        message: 'Invalid or expired refresh token',
+        errorCode: 'INVALID_TOKEN'
+      };
     }
+
+    // 2. 사용자 조회
+    const userResult = await this.sqlService.findUserByUsername(payload.username);
+    if (!userResult.success) {
+      return {
+        success: false,
+        message: userResult.message,
+        errorCode: userResult.errorCode
+      };
+    }
+
+    if (!userResult.user || !userResult.user.refreshToken) {
+      return {
+        success: false,
+        message: 'User has no refresh token',
+        errorCode: 'NO_REFRESH_TOKEN'
+      };
+    }
+
+    const user = userResult.user;
+
+    // 3. DB에 저장된 해시와 비교
+    const isValid = await bcrypt.compare(refreshToken, user.refreshToken);
+    if (!isValid) {
+      return {
+        success: false,
+        message: 'Invalid refresh token',
+        errorCode: 'INVALID_CREDENTIALS'
+      };
+    }
+
+    // 4. 새로운 access token 발급
+    const newPayload = { username: user.username, sub: user.id };
+    const accessToken = this.jwtService.sign(newPayload, { expiresIn: '1h' });
+
+    return {
+      success: true,
+      message: 'Refresh successful',
+      accessToken,
+    };
   }
 }

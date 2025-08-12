@@ -136,8 +136,66 @@ export class AuthController {
   }
 
   @Post('refresh')
-  @HttpCode(200) // 200 OK 응답을 명시적으로 설정
-  async refresh(@Body('refreshToken') refreshToken: string) {
-    return this.authService.refresh(refreshToken);
+  async refresh(@Body('refreshToken') refreshToken: string, @Res() res: Response) {
+    const result = await this.authService.refresh(refreshToken);
+    
+    if (result.success) {
+      // 성공 응답 - Unity HttpResponseMessage 구조에 맞춤
+      res.status(200)
+         .header('Content-Type', 'application/json')
+         .header('Server', 'NestJS/1.0')
+         .header('Date', new Date().toUTCString())
+         .json({
+           content: {
+             success: true,
+             message: result.message,
+             data: {
+               accessToken: result.accessToken
+             },
+           },
+           statusCode: 200,
+           reasonPhrase: 'OK',
+           isSuccessStatusCode: true,
+           version: '1.1'
+         });
+    } else {
+      // 실패 응답 분기 처리
+      let statusCode = 500;
+      let reasonPhrase = 'Internal Server Error';
+      let errorDetails = 'An unexpected error occurred';
+
+      if (result.errorCode === 'INVALID_TOKEN' || result.errorCode === 'INVALID_CREDENTIALS' || result.errorCode === 'NO_REFRESH_TOKEN') {
+        statusCode = 401;
+        reasonPhrase = 'Unauthorized';
+        errorDetails = 'Please login again to get a new refresh token';
+      } else if (result.errorCode === 'USER_NOT_FOUND') {
+        statusCode = 401;
+        reasonPhrase = 'Unauthorized';
+        errorDetails = 'User not found';
+      } else if (result.errorCode === 'DATABASE_ERROR') {
+        statusCode = 500;
+        reasonPhrase = 'Internal Server Error';
+        errorDetails = 'A server error occurred. Please try again later';
+      }
+
+      res.status(statusCode)
+         .header('Content-Type', 'application/json')
+         .header('Server', 'NestJS/1.0')
+         .header('Date', new Date().toUTCString())
+         .json({
+           content: {
+             success: false,
+             message: result.message,
+             error: {
+               code: result.errorCode,
+               details: errorDetails
+             }
+           },
+           statusCode: statusCode,
+           reasonPhrase: reasonPhrase,
+           isSuccessStatusCode: false,
+           version: '1.1'
+         });
+    }
   }
 }

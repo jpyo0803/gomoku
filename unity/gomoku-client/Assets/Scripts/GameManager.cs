@@ -259,20 +259,20 @@ namespace jpyo0803
             return response;
         }
 
-        public async Task<int> RefreshToken()
+        public async Task<RefreshResponse> RefreshToken()
         {
             Debug.Log("[Log] Refreshing access token...");
             if (_authService == null)
             {
                 Debug.LogError("[Log Error] AuthService is not initialized properly.");
-                return -1;
+                return new RefreshResponse { HttpStatusCode = -1 };
             }
 
             string refreshToken = await _tokenStorage.GetRefreshTokenAsync();
             if (string.IsNullOrEmpty(refreshToken))
             {
                 Debug.LogError("[Log Error] Refresh token is not available.");
-                return -1;
+                return new RefreshResponse { HttpStatusCode = -1 };
             }
 
             // AuthService를 통해 토큰 갱신 요청
@@ -283,13 +283,13 @@ namespace jpyo0803
             });
 
             // 갱신 성공 시 새로운 액세스 토큰 저장
-            if (response.Code == (int)System.Net.HttpStatusCode.OK)
+            if (response.Success == true)
             {
                 await _tokenStorage.UpdateAccessTokenAsync(response.AccessToken);
                 Debug.Log("[Log] Access token refreshed successfully.");
             }
 
-            return response.Code;
+            return response;
         }
 
         public async Task<MatchHistory> GetMatchHistoryAsync()
@@ -314,8 +314,8 @@ namespace jpyo0803
                     if (error.Message == "Token expired")
                     {
                         Debug.LogWarning("[Log Warning] Access token expired, refreshing token.");
-                        int refreshResult = await RefreshToken();
-                        if (refreshResult == (int)System.Net.HttpStatusCode.OK)
+                        var refreshResult = await RefreshToken();
+                        if (refreshResult.Success == true)
                         {
                             // 토큰 갱신 후 다시 요청
                             return await GetMatchHistoryAsync();
