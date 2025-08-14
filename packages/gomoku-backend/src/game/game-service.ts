@@ -163,6 +163,9 @@ export class GameService {
     if (result === 'invalid') {
       // 플레이어가 돌을 놓았을 때 유효하지 않은 경우
       this.clientGateway.sendPlaceStoneResp(playerId, 'invalid');
+
+      // 게임 상태 변경 없이 lock만 해제
+      this.nosqlService.checkInGameInstance(playerId, gameLease);
       return;
     }
 
