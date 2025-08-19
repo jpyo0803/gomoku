@@ -78,7 +78,8 @@ class GomokuBotServer {
   }
 
   void Run() {
-    std::cout << "Server is running on http://localhost:" << kPortNumber << std::endl;
+    std::cout << "Server is running on http://bot:" << kPortNumber << std::endl;
+    std::cout << "ID: " << GIT_COMMIT_ID << std::endl;
     svr_.listen("0.0.0.0", kPortNumber);
   };
 

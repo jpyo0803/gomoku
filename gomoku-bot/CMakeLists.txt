@@ -21,5 +21,15 @@ target_include_directories(gomoku_server PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/external/websocketpp
 )
 
+# Git Commit ID 출력용
+execute_process(
+    COMMAND git rev-parse --short HEAD
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE GIT_COMMIT_ID
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+target_compile_definitions(gomoku_server PRIVATE GIT_COMMIT_ID=\"${GIT_COMMIT_ID}\")
+
 # server가 gomoku_core를 링크하도록 설정
 target_link_libraries(gomoku_server PRIVATE gomoku_core)

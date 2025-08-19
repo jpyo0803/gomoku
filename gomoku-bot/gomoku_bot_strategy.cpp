@@ -11,7 +11,7 @@
 namespace {
 int64_t call_count = 0;
 
-constexpr int kMarkWidth = 2;
+constexpr int kMarkWidth = 3;
 }  // namespace
 
 namespace gomoku {
@@ -306,7 +306,7 @@ double EvaluateBoard(const gomoku::Board& board, gomoku::Piece piece) {
 std::pair<int, int> MinimaxWithAlphaBetaPruning::Solve(Board board, int max_depth) const {
   // Find candidates. Candiates are the empty cells +/- 2 from the black or white pieces.
   // std::vector<std::vector<bool>> candidate_map(kBoardSize, std::vector<bool>(kBoardSize, false));
-  assert(max_depth <= 4);
+  // assert(max_depth <= 4);
 
   // std::vector<std::bitset<kBoardSize>> candidate_map(kBoardSize, std::bitset<kBoardSize>(0));
   BitBoard candidate_map;
