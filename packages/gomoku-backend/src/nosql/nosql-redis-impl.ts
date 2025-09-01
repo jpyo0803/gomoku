@@ -34,28 +34,28 @@ export class NosqlRedisImpl implements NosqlInterface {
         // Lock을 획득할 때까지 대기
         
         try {
-        lock = await this.redlock.acquire([`lock:${queueKey}`], 600000); // 10분 동안 Lock 획득
-        console.log(`Lock for '${queueKey}' acquired successfully.`);
+            lock = await this.redlock.acquire([`lock:${queueKey}`], 600000); // 10분 동안 Lock 획득
+            console.log(`Lock for '${queueKey}' acquired successfully.`);
 
-        // Lock 획득 후 대기열에서 데이터 가져오기
-        data = await this.redisClient.lpop(queueKey);
+            // Lock 획득 후 대기열에서 데이터 가져오기
+            data = await this.redisClient.lpop(queueKey);
         } catch (err) {
-        console.warn(`Lock for '${queueKey}' could not be acquired: ${err.message}`);
-        return null; // Lock 획득 실패 시 null 반환
+            console.warn(`Lock for '${queueKey}' could not be acquired: ${err.message}`);
+            return null; // Lock 획득 실패 시 null 반환
         } finally {
-        if (lock) {
-            try {
-            await lock.release();
-            console.log(`Lock for '${queueKey}' released successfully.`);
-            } catch (releaseErr) {
-            console.error(`Failed to release lock for '${queueKey}': ${releaseErr.message}`);
+            if (lock) {
+                try {
+                    await lock.release();
+                    console.log(`Lock for '${queueKey}' released successfully.`);
+                } catch (releaseErr) {
+                    console.error(`Failed to release lock for '${queueKey}': ${releaseErr.message}`);
+                }
             }
-        }
         }
         // 대기열에서 가져온 데이터가 없으면 null 반환
         if (!data) {
-        console.log(`No data found in queue '${queueKey}'.`);
-        return null;
+            console.log(`No data found in queue '${queueKey}'.`);
+            return null;
         }
         console.log(`Data retrieved from queue '${queueKey}': ${data}`);
         return data;
@@ -65,23 +65,23 @@ export class NosqlRedisImpl implements NosqlInterface {
         let lock;
         // Lock을 획득할 때까지 대기
         try {
-        lock = await this.redlock.acquire([`lock:${queueKey}`], 600000); // 10분 동안 Lock 획득
-        console.log(`Lock for '${queueKey}' acquired successfully.`);
+            lock = await this.redlock.acquire([`lock:${queueKey}`], 600000); // 10분 동안 Lock 획득
+            console.log(`Lock for '${queueKey}' acquired successfully.`);
 
-        // Lock 획득 후 대기열에 데이터 추가
-        await this.redisClient.rpush(queueKey, data);
-        console.log(`Data pushed to queue '${queueKey}': ${data}`);
+            // Lock 획득 후 대기열에 데이터 추가
+            await this.redisClient.rpush(queueKey, data);
+            console.log(`Data pushed to queue '${queueKey}': ${data}`);
         } catch (err) {
-        console.warn(`Lock for '${queueKey}' could not be acquired: ${err.message}`);
+            console.warn(`Lock for '${queueKey}' could not be acquired: ${err.message}`);
         } finally {
-        if (lock) {
-            try {
-            await lock.release();
-            console.log(`Lock for '${queueKey}' released successfully.`);
-            } catch (releaseErr) {
-            console.error(`Failed to release lock for '${queueKey}': ${releaseErr.message}`);
+            if (lock) {
+                try {
+                    await lock.release();
+                    console.log(`Lock for '${queueKey}' released successfully.`);
+                } catch (releaseErr) {
+                    console.error(`Failed to release lock for '${queueKey}': ${releaseErr.message}`);
+                }
             }
-        }
         }
     }
 
