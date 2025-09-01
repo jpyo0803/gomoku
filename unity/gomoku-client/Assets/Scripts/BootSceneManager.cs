@@ -12,6 +12,8 @@ namespace jpyo0803
     {
         private void Awake()
         {
+            Application.runInBackground = true;
+
             ServiceLocator.Register<ILogger>(new UnityDebugLogger()); // ILogger 서비스 등록
             ServiceLocator.Register<HttpService>(new HttpService());
 
